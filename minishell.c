@@ -4,25 +4,7 @@
 #include <string.h>
 #include "minishell.h"
 
-void execute_command(char **cmd)
-{
-    if (!strcmp(cmd[0], "echo"))
-        ft_echo(cmd);
-    else if (!strcmp(cmd[0], "cd"))
-        ft_cd(cmd);
-    else if (!strcmp(cmd[0], "pwd"))
-        ft_pwd();
-    else if (!strcmp(cmd[0], "export"))
-        ft_export();
-    else if (!strcmp(cmd[0], "unset"))
-        ft_unset();
-    else if (!strcmp(cmd[0], "env"))
-        ft_env();
-    else if (!strcmp(cmd[0], "exit"))
-        ft_exit();
-    else
-        printf("Error. Command not found\n");
-}
+
 
 char* ft_wait_for_input()
 {
@@ -39,7 +21,7 @@ int main()
     while (1)
     {
         input = ft_wait_for_input();
-        ft_lexer(input);
+        ft_lex(input);
         add_history(input); 
     }
     return 0;

@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+
 int ft_count_tokens(char* input)
 {
     int i = 0;
@@ -117,7 +118,21 @@ int ft_get_token_len(char* input, int i)
 }
 
 
-void ft_lexer(char* input)
+
+/*int ft_cmd_in_path(char* cmd)
+{
+    char *path;
+
+    path = getenv("PATH");
+
+    printf("path = %s\n", path);
+    return 1;
+}*/
+
+
+
+
+void ft_lex(char* input)
 {
     char** cmd_line;
     int i; 
@@ -135,14 +150,15 @@ void ft_lexer(char* input)
         return;
     }
     tokens_total = ft_count_tokens(input);
-    printf("Numero di tokens = %d\n", tokens_total);
+    //printf("Numero di tokens = %d\n", tokens_total);
     
-    cmd_line = (char**)malloc(sizeof(char*) * (token_num + 1));
-
+    cmd_line = (char**)malloc(sizeof(char*) * (tokens_total + 1));
+    if (!cmd_line)
+        printf("malloc error");
     i = 0;
 
-
-    while (token_num < tokens_total)
+    //salvo e stampo i token
+    while (token_num < tokens_total && input[i])
     {
         //skippo eventuali spazi iniziali
         while (input[i] && (input[i] == ' ' || input[i] == '\t'))
@@ -150,9 +166,17 @@ void ft_lexer(char* input)
 
         token_len = ft_get_token_len(input, i);
         cmd_line[token_num] = ft_substr(input, i, token_len);
-        printf("stringa = %s\n", cmd_line[token_num]);
+        //printf("stringa = %s\n", cmd_line[token_num]);
         i += token_len;
         token_num++;
     }
+    cmd_line[token_num] = NULL;
+    ft_parse(cmd_line, tokens_total);
+    
+    //execute_command(cmd_line);
+
+
+
 
 }
+
