@@ -24,7 +24,27 @@ void ft_exec_builtin(t_command** cmd)
 
 void ft_exec_systemcmd(t_command** cmd)
 {
-    printf("System Command Exec\n");
+    //printf("System Command Exec\n");
+    char *path = "/bin";
+    char **dirs;
+    int i = 0;
+
+    dirs = ft_split(path, ':');
+    
+    path = ft_strjoin(path, "/");
+    path = ft_strjoin(path, (*cmd)->argv[0]);
+
+    //if ((*cmd)->argv[1])
+    //    printf("arg = %s\n", (*cmd)->argv[1]);
+
+    //printf("path= %s\n", path);
+    
+    if (execve(path, (*cmd)->argv, NULL) == -1)
+    {
+        printf("Comando non trovato\n");
+    }
+  
+    
 }
 
 void ft_execute(t_command **cmd)

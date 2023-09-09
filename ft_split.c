@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include <stdlib.h>
+#include "minishell.h"
 
 static int	ft_string_size(char const *str, char c)
 {
