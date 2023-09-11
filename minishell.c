@@ -14,14 +14,16 @@ char* ft_wait_for_input()
     return (input);
 }
 
-int main() 
+int main(int argc, char** argv, char** envp) 
 {
     char* input;
+
+    int i = 0;
 
     while (1)
     {
         input = ft_wait_for_input();
-        ft_lex(input);
+        ft_lex(input, envp);
         add_history(input); 
     }
     return 0;

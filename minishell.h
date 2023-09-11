@@ -8,6 +8,7 @@ typedef struct s_command
 {
     int argc;
     char **argv;
+    char **envp;
     int is_builtin;
 } t_command;
 
@@ -28,6 +29,6 @@ void ft_env(t_command **cmd);
 void ft_exit(t_command **cmd);
 
 //SHELL CORE
-void ft_lex(char* input);
-void ft_parse(char** cmd_line, int num_tokens);
+void ft_lex(char* input, char **envp);
+void ft_parse(char** cmd_line, int num_tokens, char **envp);
 void ft_execute(t_command **cmd);

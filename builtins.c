@@ -33,7 +33,14 @@ void ft_unset(t_command **cmd)
 
 void ft_env(t_command **cmd)
 {
-    printf("env\n");
+    int i; 
+
+    i = 0;
+    while ((*cmd)->envp[i])
+    {
+        printf("%s\n", (*cmd)->envp[i]);
+        i++;
+    }
 }
 
 void ft_exit(t_command **cmd)

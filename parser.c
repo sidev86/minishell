@@ -20,7 +20,29 @@ int ft_cmd_builtin(char* cmd)
         return 0;
 }
 
-void ft_parse(char** cmd_line, int num_tokens)
+int ft_count_environment_vars(char **envp)
+{
+    int i = 0;
+    while (envp[i])
+        i++;
+    return (i);
+}
+
+char **ft_get_environment_vars(char **envp)
+{
+    char **env;
+    int i = 0;
+    env = (char**)malloc(sizeof(char*) * ft_count_environment_vars(envp) + 1);
+    while (envp[i])
+    {
+        env[i] = ft_strjoin(envp[i], "\0");
+        i++;
+    }
+    env[i] = NULL;
+    return (env);
+}
+
+void ft_parse(char** cmd_line, int num_tokens, char **envp)
 {
     t_command *command;
     int arg_index;
@@ -32,6 +54,8 @@ void ft_parse(char** cmd_line, int num_tokens)
      
     command->argv = (char**)malloc(sizeof(char*) * num_tokens + 1);
     command->argc = num_tokens;
+    if (!command->envp)
+        command->envp = ft_get_environment_vars(envp);
     if (!command->argv)
         printf("Malloc error");
     command->is_builtin = 0;
