@@ -4,8 +4,6 @@
 #include <string.h>
 #include "minishell.h"
 
-
-
 char* ft_wait_for_input()
 {
     char* input;
@@ -14,17 +12,23 @@ char* ft_wait_for_input()
     return (input);
 }
 
-int main(int argc, char** argv, char** envp) 
+int main(int argc, char **argv, char **envp) 
 {
     char* input;
-
+    t_env_vars *first_env;
     int i = 0;
+    first_env = 0; 
 
+    ft_create_env_list(&first_env, envp);
+    //ft_print_env_list(&first_env); 
     while (1)
     {
         input = ft_wait_for_input();
-        ft_lex(input, envp);
-        add_history(input); 
+        if (input)
+        {
+            ft_lex(input, &first_env);
+            add_history(input);
+        }    
     }
     return 0;
 }

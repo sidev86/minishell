@@ -132,7 +132,7 @@ int ft_get_token_len(char* input, int i)
 
 
 
-void ft_lex(char* input, char **envp)
+void ft_lex(char* input, t_env_vars **env_list)
 {
     char** cmd_line;
     int i; 
@@ -171,7 +171,7 @@ void ft_lex(char* input, char **envp)
         token_num++;
     }
     cmd_line[token_num] = NULL;
-    ft_parse(cmd_line, tokens_total, envp);
+    ft_parse(cmd_line, tokens_total, env_list);
     
     //execute_command(cmd_line);
 

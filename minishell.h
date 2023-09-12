@@ -12,23 +12,37 @@ typedef struct s_command
     int is_builtin;
 } t_command;
 
+typedef struct s_env_vars
+{
+    char *env_str;
+    char *var;
+    char *value;
+    struct s_env_vars *next;
+} t_env_vars;
+
 
 char	**ft_split(char const *s, char c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *s);
+
 
 
 //BUILTINS
 void ft_echo(t_command **cmd);
 void ft_cd(t_command **cmd);
 void ft_pwd(t_command **cmd);
-void ft_export(t_command **cmd);
+void ft_export(t_command **cmd, t_env_vars **env_list);
 void ft_unset(t_command **cmd);
-void ft_env(t_command **cmd);
+void ft_env(t_command **cmd, t_env_vars **env_list);
 void ft_exit(t_command **cmd);
 
 //SHELL CORE
-void ft_lex(char* input, char **envp);
-void ft_parse(char** cmd_line, int num_tokens, char **envp);
-void ft_execute(t_command **cmd);
+void ft_lex(char* input, t_env_vars **env_list);
+void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list);
+void ft_execute(t_command **cmd, t_env_vars **env_list);
+
+void ft_create_env_list(t_env_vars **first, char **envp);
+void ft_print_env_list(t_env_vars **first);
+int ft_env_var_exists(t_env_vars **env_list, char *var);

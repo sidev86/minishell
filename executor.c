@@ -1,9 +1,9 @@
 #include "minishell.h"
 
 
-void ft_exec_builtin(t_command** cmd)
+void ft_exec_builtin(t_command** cmd, t_env_vars **env_list)
 {
-    //printf("comando da eseguire= %s\n", (*cmd)->argv[0]);
+    printf("variavbile env = %s\n", (*env_list)->env_str);
     if (!strcmp((*cmd)->argv[0], "echo"))
         ft_echo(cmd);
     else if (!strcmp((*cmd)->argv[0], "cd"))
@@ -11,11 +11,11 @@ void ft_exec_builtin(t_command** cmd)
     else if (!strcmp((*cmd)->argv[0], "pwd"))
         ft_pwd(cmd);
     else if (!strcmp((*cmd)->argv[0], "export"))
-        ft_export(cmd);
+        ft_export(cmd, env_list);
     else if (!strcmp((*cmd)->argv[0], "unset"))
         ft_unset(cmd);
     else if (!strcmp((*cmd)->argv[0], "env"))
-        ft_env(cmd);
+        ft_env(cmd, env_list);
     else if (!strcmp((*cmd)->argv[0], "exit"))
         ft_exit(cmd);
     else
@@ -25,7 +25,7 @@ void ft_exec_builtin(t_command** cmd)
 void ft_exec_systemcmd(t_command** cmd)
 {
     //printf("System Command Exec\n");
-    char *path = "/usr/bin";
+    char *path = "/bin";
     char **dirs;
     int i = 0;
 
@@ -50,11 +50,12 @@ void ft_exec_systemcmd(t_command** cmd)
     
 }
 
-void ft_execute(t_command **cmd)
+void ft_execute(t_command **cmd, t_env_vars **env_list)
 {
     pid_t childPid;
 
     childPid = fork();
+    printf("env list = %s\n", (*env_list)->env_str);
     //printf("parola chiave= %s\n", (*cmd)->argv[0]);
     if (childPid < 0)
         perror("Fork() error");
@@ -62,7 +63,7 @@ void ft_execute(t_command **cmd)
     {
         //printf("parola chiave child= %s\n", (*cmd)->argv[0]);
         if ((*cmd)->is_builtin)
-            ft_exec_builtin(cmd);
+            ft_exec_builtin(cmd, env_list);
         else
             ft_exec_systemcmd(cmd);
     }
