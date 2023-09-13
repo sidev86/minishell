@@ -46,3 +46,6 @@ void ft_execute(t_command **cmd, t_env_vars **env_list);
 void ft_create_env_list(t_env_vars **first, char **envp);
 void ft_print_env_list(t_env_vars **first);
 int ft_env_var_exists(t_env_vars **env_list, char *var);
+void ft_set_env_var(t_env_vars **env_list, char *env_str, int var_len);
+void ft_update_env_var(t_env_vars **env_list, char *env_str, int var_len);
+

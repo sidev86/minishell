@@ -3,7 +3,7 @@
 
 void ft_exec_builtin(t_command** cmd, t_env_vars **env_list)
 {
-    printf("variavbile env = %s\n", (*env_list)->env_str);
+    //printf("variabile env = %s\n", (*env_list)->env_str);
     if (!strcmp((*cmd)->argv[0], "echo"))
         ft_echo(cmd);
     else if (!strcmp((*cmd)->argv[0], "cd"))
@@ -55,7 +55,7 @@ void ft_execute(t_command **cmd, t_env_vars **env_list)
     pid_t childPid;
 
     childPid = fork();
-    printf("env list = %s\n", (*env_list)->env_str);
+    //printf("env list = %s\n", (*env_list)->env_str);
     //printf("parola chiave= %s\n", (*cmd)->argv[0]);
     if (childPid < 0)
         perror("Fork() error");
