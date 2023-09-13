@@ -89,3 +89,37 @@ void ft_update_env_var(t_env_vars **env_list, char *env_str, int var_len)
     //printf("curr var = %s\n", curr->var); 
     //printf("curr value = %s\n", curr->value);
 }
+
+void ft_remove_env_var(t_env_vars **env_list, char *env_str, int var_len)
+{
+    t_env_vars *curr;
+    curr = *env_list;
+    //printf("rimuovo env var\n");
+    while(strcmp(curr->var, ft_substr(env_str, 0, var_len)))
+        curr = curr->next;
+
+    //printf("curr var = %s\n", curr->var);
+    curr->env_str = NULL;
+    curr->var = NULL;
+    curr->value = NULL;
+    if (curr->next != NULL)
+    {
+        //printf("elemento in mezzo\n");
+        curr = *env_list;
+        while(curr->next->env_str)
+            curr = curr->next;
+        //printf("env corrente = %s\n", curr->env_str);
+        //printf("env next next = %s\n", curr->next->next->env_str);
+        curr->next = curr->next->next;
+    }
+    else
+    {
+        //printf("ultimo elemento\n");
+        curr = *env_list;
+        while (curr->next->env_str)
+            curr = curr->next;
+        //printf("env corrente = %s\n", curr->env_str);
+        curr->next = NULL;   
+    }
+        
+}

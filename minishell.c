@@ -8,7 +8,8 @@ char* ft_wait_for_input()
 {
     char* input;
     input = readline("minishell$ ");
-    
+    if (input[0] == '\0')
+        return NULL;
     return (input);
 }
 
@@ -24,7 +25,7 @@ int main(int argc, char **argv, char **envp)
     while (1)
     {
         input = ft_wait_for_input();
-        if (input)
+        if (input != NULL)
         {
             ft_lex(input, &first_env);
             add_history(input);

@@ -51,9 +51,19 @@ void ft_export(t_command **cmd, t_env_vars **env_list)
     }   */
 }
 
-void ft_unset(t_command **cmd)
+void ft_unset(t_command **cmd, t_env_vars **env_list)
 {
-    printf("unset\n");
+    char *env_arg;
+    int var_len;
+    t_env_vars *curr;
+    env_arg = (*cmd)->argv[1];
+    var_len = ft_strlen(env_arg);
+    if (ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
+    {
+        //printf("variabile trovata\n");
+        ft_remove_env_var(env_list, env_arg, var_len);
+    }
+        
 }
 
 void ft_env(t_command **cmd, t_env_vars **env_list)

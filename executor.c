@@ -13,7 +13,7 @@ void ft_exec_builtin(t_command** cmd, t_env_vars **env_list)
     else if (!strcmp((*cmd)->argv[0], "export"))
         ft_export(cmd, env_list);
     else if (!strcmp((*cmd)->argv[0], "unset"))
-        ft_unset(cmd);
+        ft_unset(cmd, env_list);
     else if (!strcmp((*cmd)->argv[0], "env"))
         ft_env(cmd, env_list);
     else if (!strcmp((*cmd)->argv[0], "exit"))

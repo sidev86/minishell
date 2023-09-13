@@ -34,7 +34,7 @@ void ft_echo(t_command **cmd);
 void ft_cd(t_command **cmd);
 void ft_pwd(t_command **cmd);
 void ft_export(t_command **cmd, t_env_vars **env_list);
-void ft_unset(t_command **cmd);
+void ft_unset(t_command **cmd, t_env_vars **env_list);
 void ft_env(t_command **cmd, t_env_vars **env_list);
 void ft_exit(t_command **cmd);
 
@@ -48,4 +48,5 @@ void ft_print_env_list(t_env_vars **first);
 int ft_env_var_exists(t_env_vars **env_list, char *var);
 void ft_set_env_var(t_env_vars **env_list, char *env_str, int var_len);
 void ft_update_env_var(t_env_vars **env_list, char *env_str, int var_len);
+void ft_remove_env_var(t_env_vars **env_list, char *env_str, int var_len);
 
