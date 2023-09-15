@@ -14,8 +14,8 @@ int ft_cmd_builtin(char* cmd)
         return 1;
     else if (!strcmp(cmd, "env"))
         return 1;
-    else if (!strcmp(cmd, "exit"))
-        return 1;
+    //else if (!strcmp(cmd, "exit"))
+    //    return 1;
     else
         return 0;
 }

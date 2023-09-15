@@ -13,13 +13,32 @@ char* ft_wait_for_input()
     return (input);
 }
 
+int ft_command_is_exit(char *input)
+{
+   
+    int cmd_len; 
+    int i; 
+    cmd_len = 0;
+    i = 0; 
+    while (input[i] != ' ' && input[i] != '\t' && input[i])
+    {
+        cmd_len++;
+        i++; 
+    }
+
+    //printf("cmd len = %d\n", cmd_len);
+    if (cmd_len == 4 && !strcmp(ft_substr(input, 0, cmd_len), "exit"))    
+        return(1);
+    return(0);        
+}
+
 int main(int argc, char **argv, char **envp) 
 {
     char* input;
+    char* cmd_key;
     t_env_vars *first_env;
     int i = 0;
-    first_env = 0; 
-
+    first_env = 0;
     ft_create_env_list(&first_env, envp);
     //ft_print_env_list(&first_env); 
     while (1)
@@ -27,8 +46,13 @@ int main(int argc, char **argv, char **envp)
         input = ft_wait_for_input();
         if (input != NULL)
         {
-            ft_lex(input, &first_env);
-            add_history(input);
+            if (ft_command_is_exit(input))
+                return 1; 
+        
+                ft_lex(input, &first_env);
+                add_history(input);
+            //if (cmd_line[0] && (strcmp(cmd_line, "exit") == 0))
+            //    break; 
         }    
     }
     return 0;

@@ -32,7 +32,7 @@ size_t	ft_strlen(const char *s);
 //BUILTINS
 void ft_echo(t_command **cmd);
 void ft_cd(t_command **cmd);
-void ft_pwd(t_command **cmd);
+void ft_pwd();
 void ft_export(t_command **cmd, t_env_vars **env_list);
 void ft_unset(t_command **cmd, t_env_vars **env_list);
 void ft_env(t_command **cmd, t_env_vars **env_list);

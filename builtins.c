@@ -1,14 +1,24 @@
 #include "minishell.h"
 
-void ft_echo(t_command **cmd)
+void ft_echo(t_command **cmd) //t_command cmd
 {
     int i = 1;
+    int no_newline = 0;
+    
+    if (i < (*cmd)->argc && strcmp((*cmd)->argv[i], "-n") == 0)
+    {
+        no_newline = 1;
+        i++; // Se l'opzione -n è presente, passa al prossimo argomento
+    }
     while (i < (*cmd)->argc)
     {
-        printf("%s ", (*cmd)->argv[i]);
+        printf("%s", (*cmd)->argv[i]);
+        if (i < (*cmd)->argc - 1)
+        printf(" ");
         i++;
     }
-    printf("\n");
+    if (i < (*cmd)->argc || no_newline == 0) 
+        printf("\n"); // Aggiungi una nuova linea se l'opzione -n non è presente o se ci sono più argomenti
 }
 
 void ft_cd(t_command **cmd)
@@ -16,9 +26,17 @@ void ft_cd(t_command **cmd)
     printf("cd\n");
 }
 
-void ft_pwd(t_command **cmd)
+void ft_pwd()
 {
-    printf("pwd\n");
+    char *current_dir = getcwd(NULL, 0);
+    if (current_dir == NULL)
+    {
+        perror("getcwd");
+        return;
+    }
+
+    printf("%s\n", current_dir);
+    free(current_dir);
 }
 
 void ft_export(t_command **cmd, t_env_vars **env_list)
@@ -81,4 +99,5 @@ void ft_env(t_command **cmd, t_env_vars **env_list)
 void ft_exit(t_command **cmd)
 {
     printf("exit\n");
+    exit(0);
 }
