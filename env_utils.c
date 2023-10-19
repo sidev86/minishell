@@ -39,10 +39,10 @@ void ft_print_env_list(t_env_vars **first)
     }
 }
 
-int ft_env_var_exists(t_env_vars **env_list, char *var)
+int ft_env_var_exists(t_env_vars ***env_list, char *var)
 {
     t_env_vars *curr;
-    curr = *env_list;
+    curr = **env_list;
     //printf("curent var = %s\n", curr->var);
     while (curr)
     {
@@ -53,13 +53,16 @@ int ft_env_var_exists(t_env_vars **env_list, char *var)
     return 0;
 }
 
-void ft_set_env_var(t_env_vars **env_list, char *env_str, int var_len)
+void ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 {
     t_env_vars *curr;
-    curr = *env_list;
+    curr = **env_list;
+    printf("set env curr str = %s\n", curr->env_str);
     while(curr->next)
             curr = curr->next; 
     curr->next = malloc(sizeof(t_env_vars));
+    if (curr->next)
+        printf("allocation success\n");
     curr = curr->next; 
     curr->env_str = env_str;
     
@@ -73,10 +76,10 @@ void ft_set_env_var(t_env_vars **env_list, char *env_str, int var_len)
     curr->next = NULL;
 }
 
-void ft_update_env_var(t_env_vars **env_list, char *env_str, int var_len)
+void ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 {
     t_env_vars *curr;
-    curr = *env_list;
+    curr = **env_list;
     while(strcmp(curr->var, ft_substr(env_str, 0, var_len)))
             curr = curr->next; 
     curr->env_str = env_str;
@@ -90,10 +93,10 @@ void ft_update_env_var(t_env_vars **env_list, char *env_str, int var_len)
     //printf("curr value = %s\n", curr->value);
 }
 
-void ft_remove_env_var(t_env_vars **env_list, char *env_str, int var_len)
+void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 {
     t_env_vars *curr;
-    curr = *env_list;
+    curr = **env_list;
     //printf("rimuovo env var\n");
     while(strcmp(curr->var, ft_substr(env_str, 0, var_len)))
         curr = curr->next;
@@ -105,7 +108,7 @@ void ft_remove_env_var(t_env_vars **env_list, char *env_str, int var_len)
     if (curr->next != NULL)
     {
         //printf("elemento in mezzo\n");
-        curr = *env_list;
+        curr = **env_list;
         while(curr->next->env_str)
             curr = curr->next;
         //printf("env corrente = %s\n", curr->env_str);
@@ -115,7 +118,7 @@ void ft_remove_env_var(t_env_vars **env_list, char *env_str, int var_len)
     else
     {
         //printf("ultimo elemento\n");
-        curr = *env_list;
+        curr = **env_list;
         while (curr->next->env_str)
             curr = curr->next;
         //printf("env corrente = %s\n", curr->env_str);

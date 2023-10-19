@@ -23,7 +23,37 @@ void ft_echo(t_command **cmd) //t_command cmd
 
 void ft_cd(t_command **cmd)
 {
-    printf("cd\n");
+	if ((*cmd)->argc == 1 || (strcmp((*cmd)->argv[1], "~") == 0))
+	{
+		// Nessun argomento, torna alla home directory
+		char *home_directory = getenv("HOME");
+		
+		if (home_directory == NULL)
+		{
+			printf("La variabile HOME non è impostata.\n");
+			return;
+		}
+
+		if (chdir(home_directory) == -1)
+		{
+			perror("chdir");
+			return;
+		}
+	}
+	else if ((*cmd)->argc == 2)
+	{
+		char *new_directory = (*cmd)->argv[1];
+
+		if (chdir(new_directory) == -1)
+		{
+			perror("chdir");
+			return;
+		}
+	}
+	else
+	{
+		printf("Utilizzo: cd [percorso]\n");
+	}
 }
 
 void ft_pwd()
@@ -39,14 +69,13 @@ void ft_pwd()
     free(current_dir);
 }
 
-void ft_export(t_command **cmd, t_env_vars **env_list)
+void ft_export(t_command **cmd, t_env_vars ***env_list)
 {
     char *env_arg;
     int var_len;
-    t_env_vars *curr; 
     env_arg = (*cmd)->argv[1];
-    curr = *env_list;
-    var_len = (ft_strlen(env_arg) - ft_strlen(ft_strchr(env_arg,'=')));
+    //printf("export env list = %s\n", (**env_list)->env_str);
+   var_len = (ft_strlen(env_arg) - ft_strlen(ft_strchr(env_arg,'=')));
     if(!ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
             ft_set_env_var(env_list, env_arg, var_len);
     else if (ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
@@ -69,7 +98,7 @@ void ft_export(t_command **cmd, t_env_vars **env_list)
     }   */
 }
 
-void ft_unset(t_command **cmd, t_env_vars **env_list)
+void ft_unset(t_command **cmd, t_env_vars ***env_list)
 {
     char *env_arg;
     int var_len;
@@ -84,11 +113,11 @@ void ft_unset(t_command **cmd, t_env_vars **env_list)
         
 }
 
-void ft_env(t_command **cmd, t_env_vars **env_list)
+void ft_env(t_command **cmd, t_env_vars ***env_list)
 {
     t_env_vars *curr; 
 
-    curr = *env_list; 
+    curr = **env_list; 
     while (curr != NULL)
     {
         printf("%s\n", curr->env_str);

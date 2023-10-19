@@ -42,7 +42,7 @@ char **ft_get_environment_vars(char **envp)
     return (env);
 }
 
-void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list)
+void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list, char **envp)
 {
     t_command *command;
     int arg_index;
@@ -54,8 +54,6 @@ void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list)
      
     command->argv = (char**)malloc(sizeof(char*) * num_tokens + 1);
     command->argc = num_tokens;
-    /*if (!command->envp)
-        command->envp = ft_get_environment_vars(envp);*/
     if (!command->argv)
         printf("Malloc error");
     command->is_builtin = 0;
@@ -70,7 +68,7 @@ void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list)
         command->is_builtin = 1; 
     command->argv[num_tokens] = NULL;
 
-    ft_execute(&command, env_list);
+    ft_execute(&command, env_list, envp);
 
     //if (!ft_cmd_builtin(command->argv[0]) && !ft_cmd_in_path(command->argv[0]))
     //    perror("Command not found");

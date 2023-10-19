@@ -1,9 +1,9 @@
 #include "minishell.h"
 
 
-void ft_exec_builtin(t_command** cmd, t_env_vars **env_list)
+void ft_exec_builtin(t_command** cmd, t_env_vars ***env_list)
 {
-    //printf("variabile env = %s\n", (*env_list)->env_str);
+    //printf("variabile env = %s\n", (**env_list)->env_str);
     if (!strcmp((*cmd)->argv[0], "echo"))
         ft_echo(cmd);
     else if (!strcmp((*cmd)->argv[0], "cd"))
@@ -22,28 +22,28 @@ void ft_exec_builtin(t_command** cmd, t_env_vars **env_list)
         printf("Error. Commando not found\n");
 }
 
-void ft_exec_systemcmd(t_command** cmd)
+void ft_exec_systemcmd(t_command **cmd, char **envp)
 {
     //printf("System Command Exec\n");
-    char *path = "/bin";
+    char *path = getenv("PATH");
     char **dirs;
-    int i = 0;
+    int i;
 
+    i = 0; 
     dirs = ft_split(path, ':');
-    path = ft_strjoin(path, "/");
-    path = ft_strjoin(path, (*cmd)->argv[0]);
-
-    if (execve(path, (*cmd)->argv, (*cmd)->envp) == -1)
+    while (dirs[i])
     {
-        printf("Comando non trovato\n");
+        path = ft_strjoin(dirs[i], "/");
+        path = ft_strjoin(path, (*cmd)->argv[0]);
+        //printf("path= %s\n", path);
+        
+        execve(path, (*cmd)->argv, envp);
+        i++;
     }
-    //if ((*cmd)->argv[1])
-    //    printf("arg = %s\n", (*cmd)->argv[1]);
-
-    //printf("path= %s\n", path);  
+    printf("Command not found\n");
 }
 
-void ft_execute(t_command **cmd, t_env_vars **env_list)
+void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 {
     pid_t childPid;
     int status;
@@ -54,12 +54,16 @@ void ft_execute(t_command **cmd, t_env_vars **env_list)
         perror("Fork() error");
     else if (childPid == 0) //Child Process
     {
+        //printf("childpid = %d\n", childPid);
         //printf("parola chiave child= %s\n", (*cmd)->argv[0]);
+        printf("env list = %s\n", (*env_list)->env_str);
         if ((*cmd)->is_builtin)
-            ft_exec_builtin(cmd, env_list);
+            ft_exec_builtin(cmd, &env_list);
         else
-            ft_exec_systemcmd(cmd);
-        exit(0);
+            ft_exec_systemcmd(cmd, envp);
+    
+        //exit(0);
+        
     }
     else //Parent Process 
     {

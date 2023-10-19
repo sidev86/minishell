@@ -33,20 +33,20 @@ size_t	ft_strlen(const char *s);
 void ft_echo(t_command **cmd);
 void ft_cd(t_command **cmd);
 void ft_pwd();
-void ft_export(t_command **cmd, t_env_vars **env_list);
-void ft_unset(t_command **cmd, t_env_vars **env_list);
-void ft_env(t_command **cmd, t_env_vars **env_list);
+void ft_export(t_command **cmd, t_env_vars ***env_list);
+void ft_unset(t_command **cmd, t_env_vars ***env_list);
+void ft_env(t_command **cmd, t_env_vars ***env_list);
 void ft_exit(t_command **cmd);
 
 //SHELL CORE
-void ft_lex(char* input, t_env_vars **env_list);
-void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list);
-void ft_execute(t_command **cmd, t_env_vars **env_list);
+void ft_lex(char* input, t_env_vars **env_list, char **envp);
+void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list, char **envp);
+void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp);
 
 void ft_create_env_list(t_env_vars **first, char **envp);
 void ft_print_env_list(t_env_vars **first);
-int ft_env_var_exists(t_env_vars **env_list, char *var);
-void ft_set_env_var(t_env_vars **env_list, char *env_str, int var_len);
-void ft_update_env_var(t_env_vars **env_list, char *env_str, int var_len);
-void ft_remove_env_var(t_env_vars **env_list, char *env_str, int var_len);
+int ft_env_var_exists(t_env_vars ***env_list, char *var);
+void ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len);
+void ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len);
+void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len);
 

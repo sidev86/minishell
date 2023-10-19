@@ -1,42 +1,55 @@
 #include "minishell.h"
 
 
-int ft_count_tokens(char* input)
+int	ft_count_tokens(char* input)
 {
-    int i = 0;
-    int tokens;
-    char q;
-    tokens = 0;
+	int	i = 0;
+	int	tokens = 0;
+	char	q = '\0';
 
-    while(input[i] == ' ' || input[i] == '\t')
-        i++;
-    while (input[i])
-    {
-        if (input[i] != ' ' && input[i] != '\t' && input[i + 1] != '\0')
-        {
-            if(input[i] == '\'' || input[i] == '"')
-            {
-                q = input[i];
-                i++;
-                //printf("q = %c\n", q);
-                while(input[i] && input[i] != q)
-                    i++;
-                i++;
-                if (!input[i])
-                    tokens++;
-            }
-            else
-                i++;
-        }
-        else
-        {
-            tokens++;
-            while ((input[i] == ' ' || input[i] == '\t' || !input[i + 1]) && input[i])
-                i++;
-        }
-    }
-    return (tokens);
+	while (input[i])
+	{
+		if ((input[i] == ' ' || input[i] == '\t') && q == '\0')
+		{
+		    // Trovato uno spazio o una tabulazione non racchiusi da citazioni, ignoralo
+		}
+		else if (input[i] == '\'' || input[i] == '"')
+		{
+			if (q == '\0')
+			{
+		        	// Inizia una citazione
+		        	q = input[i];
+			}
+			else if (q == input[i])
+			{
+				// Chiudi la citazione
+		        q = '\0';
+		        }
+		}
+		else
+		{
+			// Trovato un carattere diverso dagli spazi, consideralo come parte di un token
+			if (q == '\0')
+			{
+				tokens++;
+				// Avanzo per contare solo un carattere alla volta
+				while (input[i + 1] && (input[i + 1] != ' ' && input[i + 1] != '\t'))
+					i++;
+			}
+		}
+		i++;
+	}
+
+	// Controlla se una citazione è rimasta aperta
+	if (q != '\0')
+	{
+		printf("Errore: citazione non chiusa correttamente\n");
+		return 1;
+	}
+	
+	return tokens;
 }
+
 
 int ft_check_missing_quotes(char* input)
 {
@@ -132,7 +145,7 @@ int ft_get_token_len(char* input, int i)
 
 
 
-void ft_lex(char* input, t_env_vars **env_list)
+void ft_lex(char* input, t_env_vars **env_list, char **envp)
 {
     char **cmd_line; 
     int i; 
@@ -150,7 +163,7 @@ void ft_lex(char* input, t_env_vars **env_list)
         return;
     }
     tokens_total = ft_count_tokens(input);
-    //printf("Numero di tokens = %d\n", tokens_total);
+    printf("Numero di tokens = %d\n", tokens_total);
     cmd_line = (char**)malloc(sizeof(char*) * (tokens_total + 1));
     if (*cmd_line)
         printf("malloc error");
@@ -164,12 +177,12 @@ void ft_lex(char* input, t_env_vars **env_list)
 
         token_len = ft_get_token_len(input, i);
         cmd_line[token_num] = ft_substr(input, i, token_len);
-        //printf("stringa = %s\n", cmd_line[token_num]);
+        printf("stringa = %s\n", cmd_line[token_num]);
         i += token_len;
         token_num++;
     }
     cmd_line[token_num] = NULL;
     if (strcmp(cmd_line[0], "exit") != 0)
-        ft_parse(cmd_line, tokens_total, env_list);
+        ft_parse(cmd_line, tokens_total, env_list, envp);
 }
 

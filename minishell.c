@@ -15,7 +15,6 @@ char* ft_wait_for_input()
 
 int ft_command_is_exit(char *input)
 {
-   
     int cmd_len; 
     int i; 
     cmd_len = 0;
@@ -40,6 +39,8 @@ int main(int argc, char **argv, char **envp)
     int i = 0;
     first_env = 0;
     ft_create_env_list(&first_env, envp);
+    setenv("TERM", "xterm", 1); // Imposta la variabile TERM a un valore valido
+
     //ft_print_env_list(&first_env); 
     while (1)
     {
@@ -49,7 +50,7 @@ int main(int argc, char **argv, char **envp)
             if (ft_command_is_exit(input))
                 return 1; 
         
-                ft_lex(input, &first_env);
+                ft_lex(input, &first_env, envp);
                 add_history(input);
             //if (cmd_line[0] && (strcmp(cmd_line, "exit") == 0))
             //    break; 
