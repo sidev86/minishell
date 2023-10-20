@@ -102,7 +102,7 @@ void ft_unset(t_command **cmd, t_env_vars ***env_list)
 {
     char *env_arg;
     int var_len;
-    t_env_vars *curr;
+    //t_env_vars *curr;
     env_arg = (*cmd)->argv[1];
     var_len = ft_strlen(env_arg);
     if (ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
@@ -113,7 +113,7 @@ void ft_unset(t_command **cmd, t_env_vars ***env_list)
         
 }
 
-void ft_env(t_command **cmd, t_env_vars ***env_list)
+void ft_env(t_env_vars ***env_list)
 {
     t_env_vars *curr; 
 
@@ -125,8 +125,8 @@ void ft_env(t_command **cmd, t_env_vars ***env_list)
     }
 }
 
-void ft_exit(t_command **cmd)
+/*void ft_exit(t_command **cmd)
 {
     printf("exit\n");
     exit(0);
-}
+}*/

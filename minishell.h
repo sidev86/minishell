@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 //#include <errno.h>
 
 typedef struct s_command
@@ -35,7 +37,7 @@ void ft_cd(t_command **cmd);
 void ft_pwd();
 void ft_export(t_command **cmd, t_env_vars ***env_list);
 void ft_unset(t_command **cmd, t_env_vars ***env_list);
-void ft_env(t_command **cmd, t_env_vars ***env_list);
+void ft_env(t_env_vars ***env_list);
 void ft_exit(t_command **cmd);
 
 //SHELL CORE
