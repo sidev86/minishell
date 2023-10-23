@@ -71,15 +71,22 @@ void ft_pwd()
 
 void ft_export(t_command **cmd, t_env_vars ***env_list)
 {
-    char *env_arg;
-    int var_len;
-    env_arg = (*cmd)->argv[1];
-    //printf("export env list = %s\n", (**env_list)->env_str);
-   var_len = (ft_strlen(env_arg) - ft_strlen(ft_strchr(env_arg,'=')));
-    if(!ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
-            ft_set_env_var(env_list, env_arg, var_len);
-    else if (ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
-            ft_update_env_var(env_list, env_arg, var_len);
+	char *env_arg;
+	int var_len;
+	env_arg = (*cmd)->argv[1];
+	printf("export env list = %s\n", (**env_list)->env_str);
+	var_len = (ft_strlen(env_arg) - ft_strlen(ft_strchr(env_arg,'=')));
+	if(!ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
+	{
+		printf("env var non esistente\n");
+		ft_set_env_var(env_list, env_arg, var_len);
+	}
+	    
+	else if (ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
+	{
+		printf("env var già esistente\n");
+    		ft_update_env_var(env_list, env_arg, var_len);
+	}
     
     /*if(env_arg)
     {

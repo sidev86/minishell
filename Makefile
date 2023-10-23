@@ -11,7 +11,8 @@ SRCS =	minishell.c \
 	ft_substr.c \
 	ft_strjoin.c \
 	builtins.c \
-	ft_strchr.c
+	ft_strchr.c \
+	ft_quotes.c
 
 CC = gcc
 

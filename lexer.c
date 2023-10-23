@@ -5,46 +5,30 @@ int	ft_count_tokens(char* input)
 {
 	int	i = 0;
 	int	tokens = 0;
-	char	q = '\0';
-
+	char	c;
+	
 	while (input[i])
 	{
-		if ((input[i] == ' ' || input[i] == '\t') && q == '\0')
+		while((input[i] == ' ' || input[i] == '\t') && input[i])
+			i++;
+		if (input[i] == '\'' || input[i] == '"')
 		{
-		    // Trovato uno spazio o una tabulazione non racchiusi da citazioni, ignoralo
-		}
-		else if (input[i] == '\'' || input[i] == '"')
-		{
-			if (q == '\0')
-			{
-		        	// Inizia una citazione
-		        	q = input[i];
-			}
-			else if (q == input[i])
-			{
-				// Chiudi la citazione
-		        q = '\0';
-		        }
-		}
-		else
-		{
-			// Trovato un carattere diverso dagli spazi, consideralo come parte di un token
-			if (q == '\0')
-			{
+			c = input[i++];
+			while (input[i] != c && input[i])
+				i++;
+			if (input[i + 1] == ' ' || input[i + 1] == '\t' || !input[i + 1])
 				tokens++;
-				// Avanzo per contare solo un carattere alla volta
-				while (input[i + 1] && (input[i + 1] != ' ' && input[i + 1] != '\t'))
-					i++;
-			}
+		}
+		else if (input[i] != '\'' && input[i] != '"' && input[i])
+		{
+			while (input[i] == ' ' || input[i] == '\t')
+				i++;	
+			while(input[i] != '\'' && input[i] != '"' && input[i] != ' ' && input[i] != '\t' && input[i])
+				i++;
+			if (input[i] == ' ' || input[i] == '\t' || !input[i+1])
+				tokens++;
 		}
 		i++;
-	}
-
-	// Controlla se una citazione è rimasta aperta
-	if (q != '\0')
-	{
-		printf("Errore: citazione non chiusa correttamente\n");
-		return 1;
 	}
 	
 	return tokens;
@@ -163,10 +147,10 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
         return;
     }
     tokens_total = ft_count_tokens(input);
-    printf("Numero di tokens = %d\n", tokens_total);
+    //printf("Numero di tokens = %d\n", tokens_total);
     cmd_line = (char**)malloc(sizeof(char*) * (tokens_total + 1));
-    if (*cmd_line)
-        printf("malloc error");
+    if (!cmd_line)
+        printf("malloc erroreiii\n");
     i = 0;
     //salvo e stampo i token
     while (token_num < tokens_total && input[i])
@@ -177,7 +161,9 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
 
         token_len = ft_get_token_len(input, i);
         cmd_line[token_num] = ft_substr(input, i, token_len);
-        printf("stringa = %s\n", cmd_line[token_num]);
+        //printf("stringa prima = %s\n", cmd_line[token_num]);
+        cmd_line[token_num] = manipolaVirgolette(cmd_line[token_num]);
+        //printf("stringa dopo = %s\n", cmd_line[token_num]);
         i += token_len;
         token_num++;
     }
