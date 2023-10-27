@@ -1,21 +1,22 @@
 #include "minishell.h"
 
+extern int e_code;
 
 void ft_exec_builtin(t_command** cmd, t_env_vars ***env_list)
 {
     //printf("variabile env = %s\n", (**env_list)->env_str);
     if (!strcmp((*cmd)->argv[0], "echo"))
-        ft_echo(cmd);
+        e_code = ft_echo(cmd);
     else if (!strcmp((*cmd)->argv[0], "cd"))
-        ft_cd(cmd);
+        e_code = ft_cd(cmd);
     else if (!strcmp((*cmd)->argv[0], "pwd"))
-        ft_pwd();
+        e_code = ft_pwd();
     else if (!strcmp((*cmd)->argv[0], "export"))
-        ft_export(cmd, env_list);
+        e_code = ft_export(cmd, env_list);
     else if (!strcmp((*cmd)->argv[0], "unset"))
-        ft_unset(cmd, env_list);
+        e_code = ft_unset(cmd, env_list);
     else if (!strcmp((*cmd)->argv[0], "env"))
-        ft_env(env_list);
+        e_code = ft_env(env_list);
     //else if (!strcmp((*cmd)->argv[0], "exit"))
     //    ft_exit(cmd);
     else
@@ -45,8 +46,9 @@ void ft_exec_systemcmd(t_command **cmd, char **envp)
 
 void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 {
+    int status;
     pid_t pid;
-    //int status;
+
     pid = fork();
     //printf("env list = %s\n", (*env_list)->env_str);
     //printf("parola chiave= %s\n", (*cmd)->argv[0]);
@@ -74,7 +76,6 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
         //int exit_code = WEXITSTATUS(status);
 	//printf("Codice di uscita: %d\n", exit_code);
         //}
-        int status;
         wait(&status); // Attendere il processo figlio
         if (WIFEXITED(status)) {
             WEXITSTATUS(status);

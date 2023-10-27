@@ -1,8 +1,10 @@
 #include "minishell.h"
 
+extern int e_code; 
+
 int	is_alphanumeric(char c)
 {
-	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '?');
 }
 
 void	handle_variable(char *output, int *j, char *variabile)
@@ -10,10 +12,21 @@ void	handle_variable(char *output, int *j, char *variabile)
 	char	*valorevariabile;
 
 	valorevariabile = getenv(variabile);
+	//printf("valore variabile = %s\n", valorevariabile);
 	if (valorevariabile)
 	{
 		strcat(output, valorevariabile);
 		(*j) += strlen(valorevariabile);
+		
+	}
+	else 
+	{
+		//printf("valore variabile = %s\n", variabile);
+		if (!strcmp(variabile, "?"))
+		{
+			strcat(output, "0");
+			(*j) += strlen(variabile);
+		}
 	}
 }
 

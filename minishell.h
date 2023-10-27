@@ -12,7 +12,13 @@ typedef struct s_command
     char **argv;
     char **envp;
     int is_builtin;
+    int exit_code;
 } t_command;
+
+typedef struct s_last_command
+{
+	int exit_code;
+}	t_last_command;
 
 typedef struct s_env_vars
 {
@@ -32,13 +38,13 @@ size_t	ft_strlen(const char *s);
 
 
 //BUILTINS
-void ft_echo(t_command **cmd);
-void ft_cd(t_command **cmd);
-void ft_pwd();
-void ft_export(t_command **cmd, t_env_vars ***env_list);
-void ft_unset(t_command **cmd, t_env_vars ***env_list);
-void ft_env(t_env_vars ***env_list);
-void ft_exit(t_command **cmd);
+int ft_echo(t_command **cmd);
+int ft_cd(t_command **cmd);
+int ft_pwd();
+int ft_export(t_command **cmd, t_env_vars ***env_list);
+int ft_unset(t_command **cmd, t_env_vars ***env_list);
+int ft_env(t_env_vars ***env_list);
+int ft_exit(t_command **cmd);
 
 //SHELL CORE
 void ft_lex(char* input, t_env_vars **env_list, char **envp);

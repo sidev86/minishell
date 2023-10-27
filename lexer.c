@@ -131,44 +131,43 @@ int ft_get_token_len(char* input, int i)
 
 void ft_lex(char* input, t_env_vars **env_list, char **envp)
 {
-    char **cmd_line; 
-    int i; 
-    int token_num;
-    int tokens_total;
-    int token_len;
+	char **cmd_line; 
+	int i; 
+	int token_num;
+	int tokens_total;
+	int token_len;
 
-    token_num = 0; 
-    tokens_total = 0; 
-    token_len = 0; 
-    
-    if (ft_check_missing_quotes(input))
-    {
-        printf("Error. Missing quotes\n");
-        return;
-    }
-    tokens_total = ft_count_tokens(input);
-    //printf("Numero di tokens = %d\n", tokens_total);
-    cmd_line = (char**)malloc(sizeof(char*) * (tokens_total + 1));
-    if (!cmd_line)
-        printf("malloc erroreiii\n");
-    i = 0;
-    //salvo e stampo i token
-    while (token_num < tokens_total && input[i])
-    {
-        //skippo eventuali spazi iniziali
-        while (input[i] && (input[i] == ' ' || input[i] == '\t'))
-            i++;
+	token_num = 0; 
+	tokens_total = 0; 
+	token_len = 0; 
 
-        token_len = ft_get_token_len(input, i);
-        cmd_line[token_num] = ft_substr(input, i, token_len);
-        //printf("stringa prima = %s\n", cmd_line[token_num]);
-        cmd_line[token_num] = manipolaVirgolette(cmd_line[token_num]);
-        //printf("stringa dopo = %s\n", cmd_line[token_num]);
-        i += token_len;
-        token_num++;
-    }
-    cmd_line[token_num] = NULL;
-    if (strcmp(cmd_line[0], "exit") != 0)
-        ft_parse(cmd_line, tokens_total, env_list, envp);
+	if (ft_check_missing_quotes(input))
+	{
+		printf("Error. Missing quotes\n");
+		return;
+	}
+	tokens_total = ft_count_tokens(input);
+	//printf("Numero di tokens = %d\n", tokens_total);
+	cmd_line = (char**)malloc(sizeof(char*) * (tokens_total + 1));
+	if (!cmd_line)
+		printf("malloc erroreiii\n");
+	i = 0;
+	//salvo e stampo i token
+	while (token_num < tokens_total && input[i])
+	{
+		//skippo eventuali spazi iniziali
+		while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+		    i++;
+		token_len = ft_get_token_len(input, i);
+		cmd_line[token_num] = ft_substr(input, i, token_len);
+		//printf("stringa prima = %s\n", cmd_line[token_num]);
+		cmd_line[token_num] = manipolaVirgolette(cmd_line[token_num]);
+		//printf("stringa dopo = %s\n", cmd_line[token_num]);
+		i += token_len;
+		token_num++;
+	}
+	cmd_line[token_num] = NULL;
+	if (strcmp(cmd_line[0], "exit") != 0)
+        	ft_parse(cmd_line, tokens_total, env_list, envp);
 }
 

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void ft_echo(t_command **cmd) //t_command cmd
+int ft_echo(t_command **cmd) //t_command cmd
 {
     int i = 1;
     int no_newline = 0;
@@ -19,9 +19,10 @@ void ft_echo(t_command **cmd) //t_command cmd
     }
     if (i < (*cmd)->argc || no_newline == 0) 
         printf("\n"); // Aggiungi una nuova linea se l'opzione -n non è presente o se ci sono più argomenti
+    return (0);
 }
 
-void ft_cd(t_command **cmd)
+int ft_cd(t_command **cmd)
 {
 	if ((*cmd)->argc == 1 || (strcmp((*cmd)->argv[1], "~") == 0))
 	{
@@ -31,13 +32,13 @@ void ft_cd(t_command **cmd)
 		if (home_directory == NULL)
 		{
 			printf("La variabile HOME non è impostata.\n");
-			return;
+			return (130);
 		}
 
 		if (chdir(home_directory) == -1)
 		{
 			perror("chdir");
-			return;
+			return (130);
 		}
 	}
 	else if ((*cmd)->argc == 2)
@@ -47,29 +48,31 @@ void ft_cd(t_command **cmd)
 		if (chdir(new_directory) == -1)
 		{
 			perror("chdir");
-			return;
+			return (130);
 		}
 	}
 	else
 	{
 		printf("Utilizzo: cd [percorso]\n");
 	}
+	return (0);
 }
 
-void ft_pwd()
+int ft_pwd()
 {
     char *current_dir = getcwd(NULL, 0);
     if (current_dir == NULL)
     {
         perror("getcwd");
-        return;
+        return (130);
     }
 
     printf("%s\n", current_dir);
     free(current_dir);
+    return (0);
 }
 
-void ft_export(t_command **cmd, t_env_vars ***env_list)
+int ft_export(t_command **cmd, t_env_vars ***env_list)
 {
 	char *env_arg;
 	int var_len;
@@ -103,9 +106,10 @@ void ft_export(t_command **cmd, t_env_vars ***env_list)
         printf("curr var = %s\n", curr->var); 
         curr->next = NULL;
     }   */
+    return (0);
 }
 
-void ft_unset(t_command **cmd, t_env_vars ***env_list)
+int ft_unset(t_command **cmd, t_env_vars ***env_list)
 {
     char *env_arg;
     int var_len;
@@ -117,10 +121,10 @@ void ft_unset(t_command **cmd, t_env_vars ***env_list)
         //printf("variabile trovata\n");
         ft_remove_env_var(env_list, env_arg, var_len);
     }
-        
+    return (0);     
 }
 
-void ft_env(t_env_vars ***env_list)
+int ft_env(t_env_vars ***env_list)
 {
     t_env_vars *curr; 
 
@@ -130,6 +134,7 @@ void ft_env(t_env_vars ***env_list)
         printf("%s\n", curr->env_str);
         curr = curr->next; 
     }
+    return (0);
 }
 
 /*void ft_exit(t_command **cmd)
