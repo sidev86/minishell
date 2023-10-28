@@ -5,6 +5,7 @@
 #include "minishell.h"
 
 
+
 int e_code;
 
 char*	ft_wait_for_input()
