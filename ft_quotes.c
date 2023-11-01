@@ -10,22 +10,30 @@ int	is_alphanumeric(char c)
 void	handle_variable(char *output, int *j, char *variabile)
 {
 	char	*valorevariabile;
-
+	int	i;
+	
+	i = 0;
 	valorevariabile = getenv(variabile);
 	//printf("valore variabile = %s\n", valorevariabile);
+	//printf("strlen = %ld\n", strlen(valorevariabile));
 	if (valorevariabile)
 	{
 		strcat(output, valorevariabile);
 		(*j) += strlen(valorevariabile);
-		
 	}
 	else 
 	{
 		//printf("valore variabile = %s\n", variabile);
-		if (!strcmp(variabile, "?"))
+		if (variabile[i] == '?')
 		{
-			strcat(output, "0");
-			(*j) += strlen(variabile);
+			strcat(output, ft_itoa(e_code));
+			(*j) += strlen(ft_itoa(e_code));
+			if (variabile[i + 1] != ' ' && variabile[i + 1])
+			{
+				while(variabile[i + 1] != ' ' && variabile[i + 1])
+					output[(*j)++] = variabile[++i];
+			}
+			//(*j) += strlen(variabile);
 		}
 	}
 }
@@ -35,7 +43,7 @@ void	extract_and_handle(char *output, int *j, char *input, int *i)
 	int		k;
 	char	*variabile;
 
-	variabile = (char *)malloc(strlen(input) + 1);
+	variabile = (char *)malloc(strlen(input) * 100);
 	if (!variabile)
 	{
 		perror("Errore di allocazione di memoria");
@@ -48,7 +56,7 @@ void	extract_and_handle(char *output, int *j, char *input, int *i)
 	}
 	variabile[k] = '\0';
 	handle_variable(output, j, variabile);
-	free(variabile);
+	//free(variabile);
 }
 
 void handle_input(char *output, int *j, char *input, int *i)
@@ -60,7 +68,7 @@ void handle_input(char *output, int *j, char *input, int *i)
 		{
 			if (input[*i] == '\\')
 				(*i)++;
-			else if (input[*i] == '$')
+			else if (input[*i] == '$' && is_alphanumeric(input[*i+1]))
 			{
 				(*i)++;
 				extract_and_handle(output, j, input, i);
@@ -77,7 +85,7 @@ void handle_input(char *output, int *j, char *input, int *i)
 			output[(*j)++] = input[(*i)++];
 		(*i)++;
 	}
-	else if (input[*i] == '$')
+	else if (input[*i] == '$' && is_alphanumeric(input[*i+1]))
 	{
 		(*i)++;
 		extract_and_handle(output, j, input, i);
@@ -103,7 +111,7 @@ char	*manipolaVirgolette(char *input)
     j = 0;
     //ft_doppie = 0;
     //ft_singole = 0;
-    output = (char *)malloc(strlen(input) + 1);
+    output = (char *)malloc(strlen(input) * 100);
     if (!output)
     {
         perror("Errore di allocazione di memoria");

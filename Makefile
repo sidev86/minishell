@@ -10,9 +10,11 @@ SRCS =	minishell.c \
 	lexer.c \
 	ft_substr.c \
 	ft_strjoin.c \
+	ft_itoa.c \
 	builtins.c \
 	ft_strchr.c \
-	ft_quotes.c
+	ft_quotes.c \
+	var_check.c 
 
 CC = gcc
 

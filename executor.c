@@ -21,6 +21,7 @@ void ft_exec_builtin(t_command** cmd, t_env_vars ***env_list)
     //    ft_exit(cmd);
     else
         printf("Error. Commando not found\n");
+    //printf("exit code = %d\n", e_code);
 }
 
 void ft_exec_systemcmd(t_command **cmd, char **envp)

@@ -57,5 +57,7 @@ int ft_env_var_exists(t_env_vars ***env_list, char *var);
 void ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len);
 void ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len);
 void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len);
+char	*ft_itoa(int n);
 char	*manipolaVirgolette(char *input);
+int	var_not_valid(char *arg);
 
