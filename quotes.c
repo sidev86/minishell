@@ -99,7 +99,7 @@ void handle_input(char *output, int *j, char *input, int *i)
 	}
 }
 
-char	*manipolaVirgolette(char *input)
+char	*handle_quotes(char *input)
 {
     int		i;
     int		j;

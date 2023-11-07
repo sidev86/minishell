@@ -13,7 +13,7 @@ SRCS =	minishell.c \
 	ft_itoa.c \
 	builtins.c \
 	ft_strchr.c \
-	ft_quotes.c \
+	quotes.c \
 	var_check.c 
 
 CC = gcc
