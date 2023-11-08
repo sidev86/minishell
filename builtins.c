@@ -79,10 +79,18 @@ int ft_export(t_command **cmd, t_env_vars ***env_list)
 	int var_len;
 	
 	env_arg = (*cmd)->argv[1];
-	var_len = (ft_strlen(env_arg) - ft_strlen(ft_strchr(env_arg,'=')));
+	//printf("env arg= %s\n", env_arg);
+	if (!ft_strchr(env_arg, '='))
+		var_len = ft_strlen(env_arg);
+	else
+		var_len = (ft_strlen(env_arg) - ft_strlen(ft_strchr(env_arg,'=')));
+		
+	if (var_len == 0)
+		var_len = 1;
+	//printf("lunghezza nome var = %d\n",var_len);
 	var_name = ft_substr(env_arg, 0, var_len);
-	printf("lunghezza nome var = %d\n",var_len);
-	printf("var name = %s\n", var_name);
+	//printf("lunghezza nome var = %d\n",var_len);
+	//printf("var name = %s\n", var_name);
 	//printf("export env list = %s\n", (**env_list)->env_str);
 	//printf("env arg = %s\n", env_arg);
 	if (check_var_validity(var_name))

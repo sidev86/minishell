@@ -162,7 +162,7 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
 		cmd_line[token_num] = ft_substr(input, i, token_len);
 		//printf("stringa prima = %s\n", cmd_line[token_num]);
 		cmd_line[token_num] = handle_quotes(cmd_line[token_num]);
-		printf("stringa dopo = %s\n", cmd_line[token_num]);
+		//printf("stringa dopo = %s\n", cmd_line[token_num]);
 		i += token_len;
 		token_num++;
 	}
