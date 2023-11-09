@@ -47,45 +47,45 @@ void ft_exec_systemcmd(t_command **cmd, char **envp)
 
 void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 {
-    int status;
-    pid_t pid;
+	int status;
+	pid_t pid;
 
-    pid = fork();
-    //printf("env list = %s\n", (*env_list)->env_str);
-    //printf("parola chiave= %s\n", (*cmd)->argv[0]);
-    if (pid < 0)
-        perror("Fork() error");
-    else if (pid == 0) //Child Process
-    {
-        //printf("childpid = %d\n", childPid);
-        //printf("parola chiave child= %s\n", (*cmd)->argv[0]);
-        //printf("env list = %s\n", (*env_list)->env_str);
-        if ((*cmd)->is_builtin)
-            ft_exec_builtin(cmd, &env_list);
-        else
-            ft_exec_systemcmd(cmd, envp);
-    
-        //printf("child process end\n");
-	//exit(0);
-        //return ;
-        
-    }
-    else //Parent Process 
-    {
-        //if (WIFEXITED(status)) {
-        // Il processo figlio è terminato correttamente
-        //int exit_code = WEXITSTATUS(status);
-	//printf("Codice di uscita: %d\n", exit_code);
-        //}
-        wait(&status); // Attendere il processo figlio
-        if (WIFEXITED(status)) {
-            WEXITSTATUS(status);
-            //printf("Codice di uscita del processo figlio: %d\n", exit_code);
-        }
-        //}
-        // exit_code contiene il codice di uscita del comando
-       
-    }
+	if (!(*cmd)->is_builtin)
+	{
+		pid = fork();
+		//printf("env list = %s\n", (*env_list)->env_str);
+		//printf("parola chiave= %s\n", (*cmd)->argv[0]);
+		if (pid < 0)
+			perror("Fork() error");
+		else if (pid == 0) //Child Process
+		{
+			//printf("childpid = %d\n", childPid);
+			//printf("parola chiave child= %s\n", (*cmd)->argv[0]);
+			//printf("env list = %s\n", (*env_list)->env_str);
+			ft_exec_systemcmd(cmd, envp);
+			//printf("child process end\n");
+			exit(0);
+			//return ;
+		}
+		else //Parent Process 
+		{
+			//if (WIFEXITED(status)) {
+			// Il processo figlio è terminato correttamente
+			//int exit_code = WEXITSTATUS(status);
+			//printf("Codice di uscita: %d\n", exit_code);
+			//}
+			wait(&status); // Attendere il processo figlio
+			if (WIFEXITED(status)) {
+			    WEXITSTATUS(status);
+			    //printf("Codice di uscita del processo figlio: %d\n", exit_code);
+			}
+			//}
+			// exit_code contiene il codice di uscita del comando
+
+		}
+	}
+	else
+		ft_exec_builtin(cmd, &env_list);	
 }
 
 
