@@ -38,7 +38,7 @@ int ft_cd(t_command **cmd)
 		if (chdir(home_directory) == -1)
 		{
 			perror("chdir");
-			return (130);
+			return (1);
 		}
 	}
 	else if ((*cmd)->argc == 2)
@@ -48,12 +48,13 @@ int ft_cd(t_command **cmd)
 		if (chdir(new_directory) == -1)
 		{
 			perror("chdir");
-			return (130);
+			return (1);
 		}
 	}
 	else
 	{
-		printf("Utilizzo: cd [percorso]\n");
+		fprintf(stderr, " too many arguments"); 
+		return (1);
 	}
 	return (0);
 }
@@ -80,6 +81,8 @@ int ft_export(t_command **cmd, t_env_vars ***env_list)
 	
 	env_arg = (*cmd)->argv[1];
 	//printf("env arg= %s\n", env_arg);
+	if (!env_arg)
+		return 1;
 	if (!ft_strchr(env_arg, '='))
 		var_len = ft_strlen(env_arg);
 	else
@@ -131,6 +134,8 @@ int ft_unset(t_command **cmd, t_env_vars ***env_list)
 	int var_len;
 	//t_env_vars *curr;
 	env_arg = (*cmd)->argv[1];
+	if (!env_arg)
+		return (0);
 	var_len = ft_strlen(env_arg);
 	if (ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
 	{

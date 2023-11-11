@@ -57,6 +57,7 @@ void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list, char **env
 
 	command->argv = (char**)malloc(sizeof(char*) * num_tokens + 1);
 	command->argc = num_tokens;
+	
 	if (!command->argv)
 		printf("Malloc error");
 	command->is_builtin = 0;
@@ -64,13 +65,15 @@ void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list, char **env
 	{
 		command->argv[arg_index] = ft_substr(cmd_line[arg_index], 0, strlen(cmd_line[arg_index]));
 		//printf("token= %s\n", command->argv[arg_index]);
+		//printf("lunghezza token= %ld\n", strlen(command->argv[arg_index]));
 		arg_index++;
 	}
-
+	
 	if (ft_cmd_builtin(command->argv[0]))
 		command->is_builtin = 1; 
+	
 	command->argv[num_tokens] = NULL;
-
+	
 	ft_execute(&command, env_list, envp);
 	free(command);
 

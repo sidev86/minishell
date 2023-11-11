@@ -97,32 +97,45 @@ void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 {
     t_env_vars *curr;
     curr = **env_list;
+    int num_element;
+    
+    num_element = 1;
     //printf("rimuovo env var\n");
     while(strcmp(curr->var, ft_substr(env_str, 0, var_len)))
+    {
         curr = curr->next;
+        num_element++;
+    }
 
     //printf("curr var = %s\n", curr->var);
     curr->env_str = NULL;
     curr->var = NULL;
     curr->value = NULL;
-    if (curr->next != NULL)
+    if (curr->next && num_element == 1)
     {
-        //printf("elemento in mezzo\n");
+    	//primo elemento
+    	**env_list = curr->next;
+    	free(curr);
+    }
+    else if (curr->next && num_element > 1)
+    {
+        //elemento in mezzo a lista 
         curr = **env_list;
+        
         while(curr->next->env_str)
             curr = curr->next;
         //printf("env corrente = %s\n", curr->env_str);
         //printf("env next next = %s\n", curr->next->next->env_str);
+        free(curr->next);
         curr->next = curr->next->next;
     }
     else
     {
-        //printf("ultimo elemento\n");
+        //ultimo elemento
         curr = **env_list;
         while (curr->next->env_str)
             curr = curr->next;
         //printf("env corrente = %s\n", curr->env_str);
         curr->next = NULL;   
-    }
-        
+    }     
 }

@@ -46,7 +46,7 @@ void	extract_and_handle(char *output, int *j, char *input, int *i)
 	variabile = (char *)malloc(strlen(input) * 100);
 	if (!variabile)
 	{
-		perror("Errore di allocazione di memoria");
+		perror("Memory allocation error");
 		exit(1);
 	}
 	k = 0;
@@ -114,7 +114,7 @@ char	*handle_quotes(char *input)
     output = (char *)malloc(strlen(input) * 100);
     if (!output)
     {
-        perror("Errore di allocazione di memoria");
+        perror("Memory allocation error");
         exit(1);
     }
     while (input[i])

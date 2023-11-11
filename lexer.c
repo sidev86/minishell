@@ -25,6 +25,13 @@ int	ft_count_tokens(char* input)
 				i++;	
 			while(input[i] != '\'' && input[i] != '"' && input[i] != ' ' && input[i] != '\t' && input[i])
 				i++;
+			if (input[i] == '\'' || input[i] == '"')
+			{
+				c = input[i++];
+				while (input[i] != c && input[i])
+					i++;
+				i++;
+			}
 			if (input[i] == ' ' || input[i] == '\t' || !input[i+1])
 				tokens++;
 		}
@@ -150,7 +157,7 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
 	//printf("Numero di tokens = %d\n", tokens_total);
 	cmd_line = (char**)malloc(sizeof(char*) * (tokens_total + 1));
 	if (!cmd_line)
-		printf("malloc erroreiii\n");
+		printf("Malloc error\n");
 	i = 0;
 	//salvo e stampo i token
 	while (token_num < tokens_total && input[i])
