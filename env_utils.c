@@ -3,7 +3,7 @@
 void ft_create_env_list(t_env_vars **first, char **envp)
 {
     int i; 
-
+    
     i = 0; 
     t_env_vars *curr;
     
@@ -14,6 +14,7 @@ void ft_create_env_list(t_env_vars **first, char **envp)
     {
         curr->env_str = envp[i];
         curr->var = ft_substr(envp[i], 0, ft_strchr(envp[i], '=') - envp[i]);
+        curr->value = ft_substr(envp[i], ft_strlen(envp[i]) - ft_strlen(ft_strchr(envp[i], '=')) + 1, envp[i] - ft_strchr(envp[i], '='));
         //printf("corrente variabile = %s\n", curr->var);
         if (envp[i + 1])
         {

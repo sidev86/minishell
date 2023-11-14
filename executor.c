@@ -42,26 +42,50 @@ void ft_exec_builtin(t_command** cmd, t_env_vars ***env_list)
     //printf("exit code = %d\n", e_code);
 }
 
-void ft_exec_systemcmd(t_command **cmd, char **envp)
+char *ft_get_path(t_env_vars **env_list)
 {
-    char *path = getenv("PATH");
+	t_env_vars	*curr;
+	curr = *env_list;
+	
+	while(curr)
+	{
+		if (!strcmp(curr->var, "PATH"))
+			return (curr->value);
+		if (curr->next)
+			curr = curr->next;
+		else
+			break ;
+	}
+	
+	return(NULL);
+}
+
+void ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
+{
+    char *path = ft_get_path(env_list);
     char **dirs;
     int i;
 
     i = 0; 
+    //printf("env_list var is %s\n", (*env_list)->var);
+    //printf("env_list value is %s\n", (*env_list)->value);
+    //printf("path = %s\n", path);
     if (!ft_strchr((*cmd)->argv[0], '/'))
     {
-	dirs = ft_split(path, ':');
-	while (dirs[i])
+	if (path)
 	{
-		path = ft_strjoin(dirs[i], "/");
-		path = ft_strjoin(path, (*cmd)->argv[0]);
-		printf("path= %s\n", path);
-		//printf("cmd argv = %s\n", (*cmd)->argv);
-		execve(path, (*cmd)->argv, envp);
-		i++;
+		dirs = ft_split(path, ':');
+		while (dirs[i])
+		{
+			path = ft_strjoin(dirs[i], "/");
+			path = ft_strjoin(path, (*cmd)->argv[0]);
+			//printf("path= %s\n", path);
+			//printf("cmd argv = %s\n", (*cmd)->argv);
+			execve(path, (*cmd)->argv, envp);
+			i++;
+		}
 	}
-	printf("Comman not found\n");
+	printf("Command not found\n");
     }
     else 
     {
@@ -90,7 +114,7 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 			//printf("childpid = %d\n", childPid);
 			//printf("parola chiave child= %s\n", (*cmd)->argv[0]);
 			//printf("env list = %s\n", (*env_list)->env_str);
-			ft_exec_systemcmd(cmd, envp);
+			ft_exec_systemcmd(cmd, envp, env_list);
 			//printf("child process end\n");
 			exit(0);
 			//return ;
