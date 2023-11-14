@@ -12,6 +12,12 @@ char*	ft_wait_for_input()
 {
 	char* input;
 	input = readline("minishell$ ");
+	if (!input)
+	{
+    		if (isatty(STDIN_FILENO))
+			write(2, "exit\n", 6);
+	    	exit (e_code);
+	}
 	if (input[0] == '\0')
 		return NULL;
 	return (input);

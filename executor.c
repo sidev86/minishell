@@ -2,6 +2,24 @@
 
 extern int e_code;
 
+char *ft_get_cmdname(char *str)
+{
+	int	i; 
+	int	j;
+	char	*cmd;
+	i = 0; 
+	while(str[i])
+		i++;
+	i--;
+	j = i; 
+	while(str[j] != '/')
+		j--;
+	j++;
+	cmd = ft_substr(str, j, i - j + 1);
+	return (cmd);
+}
+
+
 void ft_exec_builtin(t_command** cmd, t_env_vars ***env_list)
 {
     //printf("variabile env = %s\n", (**env_list)->env_str);
@@ -26,23 +44,33 @@ void ft_exec_builtin(t_command** cmd, t_env_vars ***env_list)
 
 void ft_exec_systemcmd(t_command **cmd, char **envp)
 {
-    //printf("System Command Exec\n");
     char *path = getenv("PATH");
     char **dirs;
     int i;
 
     i = 0; 
-    dirs = ft_split(path, ':');
-    while (dirs[i])
+    if (!ft_strchr((*cmd)->argv[0], '/'))
     {
-        path = ft_strjoin(dirs[i], "/");
-        path = ft_strjoin(path, (*cmd)->argv[0]);
-        //printf("path= %s\n", path);
-        
-        execve(path, (*cmd)->argv, envp);
-        i++;
+	dirs = ft_split(path, ':');
+	while (dirs[i])
+	{
+		path = ft_strjoin(dirs[i], "/");
+		path = ft_strjoin(path, (*cmd)->argv[0]);
+		printf("path= %s\n", path);
+		//printf("cmd argv = %s\n", (*cmd)->argv);
+		execve(path, (*cmd)->argv, envp);
+		i++;
+	}
+	printf("Comman not found\n");
     }
-    printf("Command not found\n");
+    else 
+    {
+    	path = (*cmd)->argv[0];
+    	(*cmd)->argv[0] = ft_get_cmdname((*cmd)->argv[0]);
+    	//printf("command name = %s\n", (*cmd)->argv[0]);
+    	execve(path, (*cmd)->argv, envp);
+    	printf("Command not found\n");
+    }
 }
 
 void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
