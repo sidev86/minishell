@@ -4,8 +4,6 @@
 #include <string.h>
 #include "minishell.h"
 
-
-
 int e_code;
 
 char*	ft_wait_for_input()
@@ -72,9 +70,6 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return 0;
 }
-
-
-
 
 
 //FUNCTIONS THAT I DON'T USE ANymore

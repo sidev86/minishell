@@ -6,6 +6,13 @@
 #include <sys/wait.h>
 //#include <errno.h>
 
+typedef struct s_tokens
+{
+	char	*token;
+	int	is_word;
+}		t_tokens;
+
+
 typedef struct s_command
 {
     int argc;
@@ -13,6 +20,7 @@ typedef struct s_command
     char **envp;
     int is_builtin;
     int exit_code;
+    struct s_command *next;
 } t_command;
 
 typedef struct s_last_command
@@ -48,7 +56,7 @@ int ft_exit(t_command **cmd);
 
 //SHELL CORE
 void ft_lex(char* input, t_env_vars **env_list, char **envp);
-void ft_parse(char** cmd_line, int num_tokens, t_env_vars **env_list, char **envp);
+void ft_parse(t_tokens* cmd_line, int num_tokens, t_env_vars **env_list, char **envp);
 void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp);
 
 void ft_create_env_list(t_env_vars **first, char **envp);
