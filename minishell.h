@@ -9,7 +9,8 @@
 typedef struct s_tokens
 {
 	char	*token;
-	int	is_word;
+	int	is_symbol;
+	int	in_quotes;
 }		t_tokens;
 
 
@@ -20,6 +21,8 @@ typedef struct s_command
     char **envp;
     int is_builtin;
     int exit_code;
+    int fd_terminal;
+    int num_redirs;
     struct s_command *next;
 } t_command;
 
@@ -68,4 +71,5 @@ void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len);
 char	*ft_itoa(int n);
 char	*handle_quotes(char *input);
 int	check_var_validity(char *arg);
+void ft_check_for_redirections(t_command **cmd);
 

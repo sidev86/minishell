@@ -114,8 +114,8 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 	int i = 0;
 	
 	total_cmds = ft_get_num_cmds(cmd_line, total_tokens);
-
-	printf("num of commands = %d\n", total_cmds);
+	total_cmds = total_cmds + 1 - 1;
+	//printf("num of commands = %d\n", total_cmds);
 	command = (t_command*)malloc(sizeof(t_command));
 	curr_cmd = command;
 	arg_index = 0; 
@@ -133,6 +133,7 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 		while (i < tokens_cmd)
 		{
 			curr_cmd->argv[i] = ft_substr(cmd_line[arg_index + i].token, 0, strlen(cmd_line[arg_index + i].token));
+			
 			//printf("token= %s\n", command->argv[arg_index]);
 			//printf("lunghezza token= %ld\n", strlen(command->argv[arg_index]));
 			i++;
@@ -152,7 +153,7 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 		else
 			curr_cmd->next = NULL;
 	}
-	ft_print_all_commands(&command);  //funzione per testing
+	//ft_print_all_commands(&command);  //funzione per testing
 	ft_execute(&command, env_list, envp);
 	free(command);
 

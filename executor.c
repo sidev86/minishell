@@ -102,6 +102,8 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 	int status;
 	pid_t pid;
 
+
+	//printf("executionn\n");
 	if (!(*cmd)->is_builtin)
 	{
 		pid = fork();
@@ -111,6 +113,7 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 			perror("Fork() error");
 		else if (pid == 0) //Child Process
 		{
+			ft_check_for_redirections(cmd);
 			//printf("childpid = %d\n", childPid);
 			//printf("parola chiave child= %s\n", (*cmd)->argv[0]);
 			//printf("env list = %s\n", (*env_list)->env_str);
@@ -137,7 +140,15 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 		}
 	}
 	else
-		ft_exec_builtin(cmd, &env_list);	
+	{
+		ft_check_for_redirections(cmd);
+		ft_exec_builtin(cmd, &env_list);
+		if ((*cmd)->fd_terminal != -1)
+		{
+			dup2((*cmd)->fd_terminal, STDOUT_FILENO);
+		}
+		
+	}	
 }
 
 

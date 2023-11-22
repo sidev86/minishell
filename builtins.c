@@ -12,9 +12,12 @@ int ft_echo(t_command **cmd) //t_command cmd
 	}
 	while (i < (*cmd)->argc)
 	{
-		printf("%s", (*cmd)->argv[i]);
-		if (i < (*cmd)->argc - 1)
-			printf(" ");
+		if ((*cmd)->argv[i])
+		{
+			printf("%s", (*cmd)->argv[i]);
+			if (i < (*cmd)->argc - 1)
+				printf(" ");
+		}
 		i++;
 	}
 	if (i < (*cmd)->argc || no_newline == 0) 

@@ -51,7 +51,11 @@ int	ft_count_tokens(char* input)
 				tokens++;
 		}
 		if (ft_is_redir_pipe(input[i]))
+		{
 			tokens++;
+			if (input[i] == '>' && input[i+1] == '>')
+				i++;
+		}
 		i++;
 	}
 	return tokens;
@@ -149,7 +153,17 @@ int ft_get_token_len(char* input, int i)
     return 1;
 }*/
 
-
+int ft_get_redirpipe_len(char *input, int i)
+{
+	if (input[i])
+	{
+		if (input[i] == '>' && input[i + 1] == '>')
+			return (2);
+		else if (input[i] == '<' && input[i + 1] == '<')
+			return (2);
+	}
+	return (1);
+}
 
 
 void ft_lex(char* input, t_env_vars **env_list, char **envp)
@@ -182,18 +196,18 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
 		while (input[i] && (input[i] == ' ' || input[i] == '\t'))
 		    i++;
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
-			token_len = 1;
+			token_len = ft_get_redirpipe_len(input, i);
 		else
 			token_len = ft_get_token_len(input, i);
 		cmd_line[token_num].token = ft_substr(input, i, token_len);
-		//printf("stringa prima = %s\n", cmd_line[token_num]);
+		//printf("stringa prima = %s\n", cmd_line[token_num].token);
 		cmd_line[token_num].token = handle_quotes(cmd_line[token_num].token);
 		//printf("stringa dopo = %s\n", cmd_line[token_num].token);
 		i += token_len;
 		token_num++;
 	}
-	
 	if (strcmp(cmd_line[0].token, "exit") != 0)
         	ft_parse(cmd_line, tokens_total, env_list, envp);
+        free(cmd_line);
 }
 
