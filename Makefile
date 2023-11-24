@@ -5,7 +5,8 @@ INC = minishell.h
 SRCS =	minishell.c \
 	parser.c \
 	executor.c \
-	redirection.c \
+	redirection_out.c \
+	redirection_in.c \
 	ft_split.c \
 	env_utils.c \
 	lexer.c \

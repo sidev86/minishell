@@ -113,11 +113,14 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 			perror("Fork() error");
 		else if (pid == 0) //Child Process
 		{
-			ft_check_for_redirections(cmd);
+			ft_check_output_redirs(cmd);
+			ft_check_input_redirs(cmd);
+			//printf("argv 0 = %s\n",(*cmd)->argv[0]);
 			//printf("childpid = %d\n", childPid);
 			//printf("parola chiave child= %s\n", (*cmd)->argv[0]);
 			//printf("env list = %s\n", (*env_list)->env_str);
-			ft_exec_systemcmd(cmd, envp, env_list);
+			if (strcmp((*cmd)->argv[0], ">") && strcmp((*cmd)->argv[0], "<") && strcmp((*cmd)->argv[0], ">>") && strcmp((*cmd)->argv[0], "<<") && strcmp((*cmd)->argv[0], "|"))
+				ft_exec_systemcmd(cmd, envp, env_list);
 			//printf("child process end\n");
 			exit(0);
 			//return ;
@@ -141,11 +144,16 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 	}
 	else
 	{
-		ft_check_for_redirections(cmd);
+		ft_check_output_redirs(cmd);
+		ft_check_input_redirs(cmd);
 		ft_exec_builtin(cmd, &env_list);
 		if ((*cmd)->fd_terminal != -1)
 		{
 			dup2((*cmd)->fd_terminal, STDOUT_FILENO);
+		}
+		if ((*cmd)->fd_stdinput != -1)
+		{
+			dup2((*cmd)->fd_stdinput, STDIN_FILENO);
 		}
 		
 	}	

@@ -66,9 +66,9 @@ void handle_input(char *output, int *j, char *input, int *i)
 		(*i)++;
 		while (input[*i] != '"')
 		{
-			if (input[*i] == '\\')
-				(*i)++;
-			else if (input[*i] == '$' && is_alphanumeric(input[*i+1]))
+			//if (input[*i] == '\\')
+			//	(*i)++;
+			if (input[*i] == '$' && is_alphanumeric(input[*i+1]))
 			{
 				(*i)++;
 				extract_and_handle(output, j, input, i);

@@ -16,12 +16,14 @@ int ft_is_redir_pipe(char c)
 }
 
 
-int	ft_count_tokens(char* input)
+int ft_count_tokens(char* input)
 {
-	int	i = 0;
-	int	tokens = 0;
+	int		i;
+	int		tokens;
 	char	c;
-	
+
+	i = 0;
+	tokens = 0;
 	while (input[i])
 	{
 		while (ft_is_space(input[i]) && input[i])
@@ -31,32 +33,57 @@ int	ft_count_tokens(char* input)
 			c = input[i++];
 			while (input[i] != c && input[i])
 				i++;
-			if (ft_is_space(input[i + 1]) || ft_is_redir_pipe(input[i + 1]) || !input[i + 1])
+			// Conta le virgolette solo se sono strettamente accoppiate
+			if (input[i] == c)
+			{
 				tokens++;
+				i++;
+			}
+			else
+			{
+		        // Manca la chiusura delle virgolette, considera il resto della stringa come un token
+				tokens++;
+				//break;
+			}
 		}
 		else if (!ft_is_quote(input[i]) && !ft_is_redir_pipe(input[i]) && input[i])
 		{
-			while (ft_is_space(input[i]))
-				i++;	
-			while(!ft_is_quote(input[i]) && !ft_is_space(input[i]) && !ft_is_redir_pipe(input[i]) && input[i])
+			// Se non è una virgoletta e non è un carattere di redirezione/pipe
+			// allora è il primo carattere di un nuovo token
+			tokens++;
+			// Leggi fino alla fine del token
+			while (!ft_is_quote(input[i]) && !ft_is_space(input[i]) && !ft_is_redir_pipe(input[i]) && input[i])
 				i++;
-			if (ft_is_quote(input[i]))
+			// Se alla fine del token ci sono virgolette, contale come parte del token
+			while (ft_is_quote(input[i]))
 			{
 				c = input[i++];
 				while (input[i] != c && input[i])
 					i++;
-				i++;
+				// Conta le virgolette solo se sono strettamente accoppiate
+				if (input[i] == c)
+				{
+					tokens++;
+					i++;
+				}
+				else
+				{
+				// Manca la chiusura delle virgolette, considera il resto della stringa come un token
+					tokens++;
+					//break;
+				}
 			}
-			if (ft_is_space(input[i]) || ft_is_redir_pipe(input[i]) || !input[i + 1])
-				tokens++;
 		}
 		if (ft_is_redir_pipe(input[i]))
 		{
 			tokens++;
-			if (input[i] == '>' && input[i+1] == '>')
-				i++;
+			// Se è '>', verifica se c'è un altro '>' immediatamente dopo
+			if (input[i] == '>' && input[i + 1] == '>')
+		        	i++;
 		}
-		i++;
+		// Aggiunto il controllo per evitare l'accesso oltre la fine della stringa
+		if (input[i])
+			i++;
 	}
 	return tokens;
 }
@@ -117,31 +144,46 @@ int ft_next_token_index(char* input, int i)
 
 int ft_get_token_len(char* input, int i)
 {
-	int len = 0; 
+    int len = 0;
 
+    while (input[i])
+    {
+        // Ignora spazi iniziali
+        while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+            i++;
 
-	while(input[i])
-	{
-		if (input[i] != ' ' && input[i] != '\t' && !ft_is_redir_pipe(input[i]))
-		{
-			if (input[i] == '\'' || input[i] == '"')
-	    		{
-				len += ft_get_quotedtoken_len(input, i, input[i]);
-				i = ft_next_token_index(input, i);
-	    		}
-	    		else
-	    		{
-				len++;
-				i++;     
-	    		}    
-		}
-		else
-			return(len);
-	}
-	return (len);
+        if (input[i] == '|' || input[i] == '>' || input[i] == '<')
+        {
+            // Carattere di redirezione/pipe
+            len = 1;
+            return len;
+        }
+        else if (input[i] == '\'' || input[i] == '"')
+        {
+            // Inizio di una virgoletta
+            len = ft_get_quotedtoken_len(input, i, input[i]);
+            i += len - 1;  // Sottrai 1 perché il loop incrementa di nuovo i
+            return len;
+        }
+        else
+        {
+            // Carattere non speciale
+            len++;
+            i++;
+
+            // Leggi fino alla fine del token
+            while (input[i] && !ft_is_space(input[i]) && !ft_is_redir_pipe(input[i]) && input[i] != '\'' && input[i] != '"')
+            {
+                len++;
+                i++;
+            }
+
+            return len;
+        }
+    }
+
+    return len;
 }
-
-
 
 /*int ft_cmd_in_path(char* cmd)
 {
@@ -184,7 +226,7 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
 		return;
 	}
 	tokens_total = ft_count_tokens(input);
-	//printf("Numero di tokens = %d\n", tokens_total);
+	printf("Numero di tokens = %d\n", tokens_total);
 	cmd_line = malloc(sizeof(t_tokens) * (tokens_total));
 	if (!cmd_line)
 		printf("Malloc error\n");
@@ -201,6 +243,7 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
 			token_len = ft_get_token_len(input, i);
 		cmd_line[token_num].token = ft_substr(input, i, token_len);
 		//printf("stringa prima = %s\n", cmd_line[token_num].token);
+		printf("Token %d: \"%s\" - Lunghezza: %d\n", token_num + 1, cmd_line[token_num].token, token_len);
 		cmd_line[token_num].token = handle_quotes(cmd_line[token_num].token);
 		//printf("stringa dopo = %s\n", cmd_line[token_num].token);
 		i += token_len;
@@ -210,4 +253,3 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
         	ft_parse(cmd_line, tokens_total, env_list, envp);
         free(cmd_line);
 }
-
