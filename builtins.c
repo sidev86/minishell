@@ -5,11 +5,15 @@ int ft_echo(t_command **cmd) //t_command cmd
 	int i = 1;
 	int no_newline = 0;
 
-	if (i < (*cmd)->argc && strcmp((*cmd)->argv[i], "-n") == 0)
+	if ((*cmd)->argv[i])
 	{
-		no_newline = 1;
-		i++; // Se l'opzione -n è presente, passa al prossimo argomento
+		if (i < (*cmd)->argc && strcmp((*cmd)->argv[i], "-n") == 0)
+		{
+			no_newline = 1;
+			i++; // Se l'opzione -n è presente, passa al prossimo argomento
+		}
 	}
+	//printf("argc = %d, num_tokens = %d\n", (*cmd)->argc, (*cmd)->num_tokens);
 	while (i < (*cmd)->argc)
 	{
 		if ((*cmd)->argv[i])

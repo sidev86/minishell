@@ -72,6 +72,7 @@ void ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
     //printf("path = %s\n", path);
     if (!ft_strchr((*cmd)->argv[0], '/'))
     {
+    
 	if (path)
 	{
 		dirs = ft_split(path, ':');
@@ -81,19 +82,23 @@ void ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 			path = ft_strjoin(path, (*cmd)->argv[0]);
 			//printf("path= %s\n", path);
 			//printf("cmd argv = %s\n", (*cmd)->argv);
-			execve(path, (*cmd)->argv, envp);
+			if (execve(path, (*cmd)->argv, envp) == -1)
+				e_code = 1;
 			i++;
 		}
 	}
-	printf("Command not found\n");
+	ft_putstr_fd("command not found\n", STDERR_FILENO);
     }
     else 
     {
     	path = (*cmd)->argv[0];
+    	//printf("cmd name 1 = %s\n", path);
     	(*cmd)->argv[0] = ft_get_cmdname((*cmd)->argv[0]);
+    	//printf("cmd name = %s\n", (*cmd)->argv[0]);
     	//printf("command name = %s\n", (*cmd)->argv[0]);
-    	execve(path, (*cmd)->argv, envp);
-    	printf("Command not found\n");
+    	if (execve(path, (*cmd)->argv, envp) == -1)
+		e_code = 127;
+    	ft_putstr_fd("command not found\n", STDERR_FILENO);
     }
 }
 
@@ -103,7 +108,6 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 	pid_t pid;
 
 
-	//printf("executionn\n");
 	if (!(*cmd)->is_builtin)
 	{
 		pid = fork();
@@ -113,8 +117,11 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 			perror("Fork() error");
 		else if (pid == 0) //Child Process
 		{
+			
+			
 			ft_check_output_redirs(cmd);
 			ft_check_input_redirs(cmd);
+		
 			//printf("argv 0 = %s\n",(*cmd)->argv[0]);
 			//printf("childpid = %d\n", childPid);
 			//printf("parola chiave child= %s\n", (*cmd)->argv[0]);
@@ -122,7 +129,8 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 			if (strcmp((*cmd)->argv[0], ">") && strcmp((*cmd)->argv[0], "<") && strcmp((*cmd)->argv[0], ">>") && strcmp((*cmd)->argv[0], "<<") && strcmp((*cmd)->argv[0], "|"))
 				ft_exec_systemcmd(cmd, envp, env_list);
 			//printf("child process end\n");
-			exit(0);
+			
+			exit(e_code);
 			//return ;
 		}
 		else //Parent Process 
@@ -134,9 +142,10 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 			//}
 			wait(&status); // Attendere il processo figlio
 			if (WIFEXITED(status)) {
-			    WEXITSTATUS(status);
-			    //printf("Codice di uscita del processo figlio: %d\n", exit_code);
+			    e_code = WEXITSTATUS(status);
+			    //printf("Codice di uscita del processo figlio: %d\n", e_code);
 			}
+			//printf("exit code = %d\n", e_code);
 			//}
 			// exit_code contiene il codice di uscita del comando
 
@@ -146,6 +155,7 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 	{
 		ft_check_output_redirs(cmd);
 		ft_check_input_redirs(cmd);
+		//printf("provaprova\n");
 		ft_exec_builtin(cmd, &env_list);
 		if ((*cmd)->fd_terminal != -1)
 		{

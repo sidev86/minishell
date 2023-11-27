@@ -12,6 +12,7 @@ SRCS =	minishell.c \
 	lexer.c \
 	ft_substr.c \
 	ft_strjoin.c \
+	ft_putstr_fd.c \
 	ft_itoa.c \
 	builtins.c \
 	ft_strchr.c \

@@ -110,7 +110,6 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 	t_command *curr_cmd;
 	int arg_index;
 	int total_cmds;
-	int tokens_cmd;
 	int i = 0;
 	
 	total_cmds = ft_get_num_cmds(cmd_line, total_tokens);
@@ -119,32 +118,35 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 	command = (t_command*)malloc(sizeof(t_command));
 	curr_cmd = command;
 	arg_index = 0; 
-	//printf("Number of tokensss = %d\n", num_tokens);
+	//printf("Number of tokensss = %d\n", total_tokens);
 	while (arg_index < total_tokens)
 	{
 		//printf("total tokens = %d\n", total_tokens);
-		tokens_cmd = ft_get_tokens_in_cmd(cmd_line, arg_index, total_tokens);
+		curr_cmd->num_tokens = ft_get_tokens_in_cmd(cmd_line, arg_index, total_tokens);
 		//printf("tokens in the command = %d\n", tokens_cmd);
-		curr_cmd->argv = (char**)malloc(sizeof(char*) * tokens_cmd + 1);
-		curr_cmd->argc = tokens_cmd;
+		curr_cmd->argv = (char**)malloc(sizeof(char*) * curr_cmd->num_tokens + 1);
+		curr_cmd->argc = curr_cmd->num_tokens;
 		if (!curr_cmd->argv)
 			printf("Malloc error");
 		i = 0;
-		while (i < tokens_cmd)
+		while (i < curr_cmd->num_tokens)
 		{
 			curr_cmd->argv[i] = ft_substr(cmd_line[arg_index + i].token, 0, strlen(cmd_line[arg_index + i].token));
 			
-			//printf("token= %s\n", command->argv[arg_index]);
+			//printf("token= %s\n", command->argv[i]);
 			//printf("lunghezza token= %ld\n", strlen(command->argv[arg_index]));
 			i++;
 		}
 		
 		if (ft_cmd_builtin(curr_cmd->argv[0]))
+		{
 			curr_cmd->is_builtin = 1; 
+			//printf("is a builtin!\n");
+		}
 		else
 			curr_cmd->is_builtin = 0;
 		curr_cmd->argv[i] = NULL;
-		arg_index += tokens_cmd + 1;
+		arg_index += curr_cmd->num_tokens + 1;
 		if (arg_index < total_tokens)
 		{
 			curr_cmd->next = (t_command*)malloc(sizeof(t_command));
