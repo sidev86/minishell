@@ -1,6 +1,8 @@
 #include "minishell.h"
 #include <fcntl.h>
 
+extern int e_code;
+
 int ft_redir_output_overwrite(char *filename)
 {
 	int original_fd = dup(STDOUT_FILENO);
@@ -11,7 +13,12 @@ int ft_redir_output_overwrite(char *filename)
 		int file = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		
 		if (file == -1)
-			exit(2);
+		{
+			//printf("erroreeeee\n");
+			close(file);
+			e_code = 1;
+			return (-1);
+		}
 		//printf("file opended?\n");
 		dup2(file, STDOUT_FILENO);
 		close(file);
@@ -72,6 +79,7 @@ int ft_last_out_redir(t_command **cmd)
 
 }
 
+
 void ft_empty_out_other(t_command **cmd)
 {
 	int	i = 0; 
@@ -113,17 +121,14 @@ void ft_check_output_redirs(t_command **cmd)
 	
 	i = 0; 
 	
-	
-	
-	
-		//printf("redir out\n");
-		
-		(*cmd)->num_redirs = ft_get_out_redirections(cmd);
-		if ((*cmd)->num_redirs > 0)
-			i = ft_last_out_redir(cmd);
+	(*cmd)->num_redirs = ft_get_out_redirections(cmd);
+	if ((*cmd)->num_redirs > 0)
+		i = ft_last_out_redir(cmd);
+	if ((*cmd)->argv[i])
+	{
 		if (!strcmp((*cmd)->argv[i], ">") || !strcmp((*cmd)->argv[i], ">>"))
 		{
-			
+			(*cmd)->redir_out = 1;
 			if (!strcmp((*cmd)->argv[i], ">")) 
 				fd_stdout = ft_redir_output_overwrite((*cmd)->argv[i + 1]);
 			else if(!strcmp((*cmd)->argv[i], ">>"))
@@ -138,7 +143,8 @@ void ft_check_output_redirs(t_command **cmd)
 			//printf("here?\n");
 			
 		}
-		i++;
+	}
+	i++;
 		
 	
 	(*cmd)->fd_terminal = fd_stdout;

@@ -64,19 +64,16 @@ int	ft_get_tokens_in_cmd(t_tokens *cmd_line, int index, int total_tokens)
 	int	tokens;
 	
 	tokens = 0;
-	//printf("index = %d\n", index);
 	while (index < total_tokens)
 	{
-		if (strcmp(cmd_line[index].token, "|"))
+		if (!strchr(cmd_line[index].token, '|') || (strchr(cmd_line[index].token, '|') && strlen(cmd_line[index].token) > 1))
 		{
 			tokens++;
 			index++;
 		}
 		else 
-			break;
-		
+			break;	
 	}
-	
 	return (tokens);
 }
 
@@ -96,7 +93,6 @@ void ft_print_all_commands(t_command **command)
 			printf("%s\n",curr->argv[i]);
 			i++;
 		}
-		//printf("\n");
 		num_cmd++;
 		curr = curr->next;
 	}	
@@ -114,35 +110,33 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 	
 	total_cmds = ft_get_num_cmds(cmd_line, total_tokens);
 	total_cmds = total_cmds + 1 - 1;
-	//printf("num of commands = %d\n", total_cmds);
 	command = (t_command*)malloc(sizeof(t_command));
 	curr_cmd = command;
+	curr_cmd->number = 1;
+	curr_cmd->num_cmds = total_cmds;
 	arg_index = 0; 
-	//printf("Number of tokensss = %d\n", total_tokens);
 	while (arg_index < total_tokens)
 	{
-		//printf("total tokens = %d\n", total_tokens);
 		curr_cmd->num_tokens = ft_get_tokens_in_cmd(cmd_line, arg_index, total_tokens);
-		//printf("tokens in the command = %d\n", tokens_cmd);
 		curr_cmd->argv = (char**)malloc(sizeof(char*) * curr_cmd->num_tokens + 1);
 		curr_cmd->argc = curr_cmd->num_tokens;
+		curr_cmd->redir_in = 0; 
+		curr_cmd->redir_out = 0;
 		if (!curr_cmd->argv)
 			printf("Malloc error");
 		i = 0;
 		while (i < curr_cmd->num_tokens)
 		{
 			curr_cmd->argv[i] = ft_substr(cmd_line[arg_index + i].token, 0, strlen(cmd_line[arg_index + i].token));
-			
-			//printf("token= %s\n", command->argv[i]);
-			//printf("lunghezza token= %ld\n", strlen(command->argv[arg_index]));
+			if (curr_cmd->argv[i][0] == '\\' || !strcmp(curr_cmd->argv[i], ";"))
+			{
+				printf("Error: detected '\'' or ';' \n");
+				return ;
+			}
 			i++;
 		}
-		
 		if (ft_cmd_builtin(curr_cmd->argv[0]))
-		{
 			curr_cmd->is_builtin = 1; 
-			//printf("is a builtin!\n");
-		}
 		else
 			curr_cmd->is_builtin = 0;
 		curr_cmd->argv[i] = NULL;
@@ -150,15 +144,20 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 		if (arg_index < total_tokens)
 		{
 			curr_cmd->next = (t_command*)malloc(sizeof(t_command));
-			curr_cmd = curr_cmd->next;	
+			curr_cmd->next->prev = (t_command*)malloc(sizeof(t_command));
+			if (curr_cmd->number == 1)
+				curr_cmd->prev = NULL;
+			curr_cmd->next->prev = curr_cmd;
+			curr_cmd->next->number = curr_cmd->number + 1;
+			curr_cmd = curr_cmd->next;
+				
 		}
 		else
 			curr_cmd->next = NULL;
+		
 	}
 	//ft_print_all_commands(&command);  //funzione per testing
 	ft_execute(&command, env_list, envp);
 	free(command);
 
-	//if (!ft_cmd_builtin(command->argv[0]) && !ft_cmd_in_path(command->argv[0]))
-	//    perror("Command not found");
 }

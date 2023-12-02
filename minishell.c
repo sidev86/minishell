@@ -55,6 +55,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		input = ft_wait_for_input();
+		input[strlen(input)] = '\0';
 		if (input != NULL)
 		{
 			if (ft_command_is_exit(input))
@@ -64,6 +65,7 @@ int	main(int argc, char **argv, char **envp)
 
 			ft_lex(input, &first_env, envp);
 			add_history(input);
+			free(input);
 			//if (cmd_line[0] && (strcmp(cmd_line, "exit") == 0))
 			//    break; 
 		}    

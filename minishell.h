@@ -25,7 +25,12 @@ typedef struct s_command
     int fd_stdinput;
     int num_redirs;
     int num_tokens;
+    int number;
+    int num_cmds;
+    int redir_out;
+    int redir_in;
     struct s_command *next;
+    struct s_command *prev;
 } t_command;
 
 typedef struct s_last_command

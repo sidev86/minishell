@@ -92,9 +92,6 @@ void handle_input(char *output, int *j, char *input, int *i)
 	}
 	else
 	{
-		if (input[*i] == '\\')
-			(*i)++;
-		else
 			output[(*j)++] = input[(*i)++];	
 	}
 }

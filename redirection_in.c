@@ -1,6 +1,8 @@
 #include "minishell.h"
 #include <fcntl.h>
 
+extern int e_code;
+
 int ft_redir_input(char *filename)
 {
 	int original_fd = dup(STDIN_FILENO);
@@ -10,7 +12,11 @@ int ft_redir_input(char *filename)
 		//printf("got filename\n");
 		int file = open(filename, O_RDONLY);
 		if (file == -1)
+		{
+			perror(filename);
+			e_code = 1;
 			exit(2);
+		}
 		dup2(file, STDIN_FILENO);
 		close(file);
 	}
@@ -73,6 +79,7 @@ void ft_empty_in_other(t_command **cmd)
 		{
 			if (!strcmp((*cmd)->argv[i], "<") || !strcmp((*cmd)->argv[i], "<<"))
 			{
+				(*cmd)->redir_in = 1;
 				num_redir++;
 				(*cmd)->argv[i] = NULL;
 				if ((*cmd)->argv[i+1])
@@ -98,17 +105,22 @@ void ft_check_input_redirs(t_command **cmd)
 		//printf("Number of redirections in command = %d\n", (*cmd)->num_redirs);
 		if ((*cmd)->num_redirs > 0)
 			i = ft_last_in_redir(cmd);
-		if (!strcmp((*cmd)->argv[i], "<") || !strcmp((*cmd)->argv[i], "<<"))
+		if ((*cmd)->argv[i])
 		{
-			if (!strcmp((*cmd)->argv[i], "<")) 
-				fd_stdin = ft_redir_input((*cmd)->argv[i + 1]);
-			else if(!strcmp((*cmd)->argv[i], "<<"))
-				printf("heredoc\n");
-			(*cmd)->argv[i] = NULL; 
-			if ((*cmd)->argv[i + 1])
-				(*cmd)->argv[i + 1] = NULL;
-			if ((*cmd)->num_redirs > 1)
-				ft_empty_in_other(cmd);
+			if (!strcmp((*cmd)->argv[i], "<") || !strcmp((*cmd)->argv[i], "<<"))
+			{
+				if (!strcmp((*cmd)->argv[i], "<")) 
+					fd_stdin = ft_redir_input((*cmd)->argv[i + 1]);
+				else if(!strcmp((*cmd)->argv[i], "<<"))
+					printf("heredoc\n");
+				(*cmd)->argv[i] = NULL; 
+				if ((*cmd)->argv[i + 1])
+					(*cmd)->argv[i + 1] = NULL;
+
+				if ((*cmd)->num_redirs  > 1)
+					ft_empty_in_other(cmd);
+				
+			}
 		}
 		i++;	
 	

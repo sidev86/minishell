@@ -38,7 +38,7 @@ clean:
 	rm -rf $(OBJS)
 
 fclean: clean
-	rm -rf $(NAME)
+	rm -rf $(NAME) $(OBJS)
 	
 re: fclean all
 

@@ -47,43 +47,51 @@ int	ft_count_tokens(char* input)
 					i++;
 				i++;
 			}
-			if (ft_is_space(input[i]) || ft_is_redir_pipe(input[i]) || !input[i + 1])
+			if (ft_is_space(input[i]) || ft_is_redir_pipe(input[i]) || !input[i] || !input[i + 1])
 				tokens++;
 		}
 		if (ft_is_redir_pipe(input[i]))
 		{
 			tokens++;
-			if (input[i] == '>' && input[i+1] == '>')
+			if (input[i] == '|')
 				i++;
+			else if (input[i] == '>' || input[i] == '<')
+			{
+				i++;
+				if (input[i+1] == '>' || input[i+1] == '<')
+					i++;
+			}
+			
 		}
-		i++;
+		if (input[i])
+			i++;
 	}
 	return tokens;
 }
 
 int ft_check_missing_quotes(char* input)
 {
-    int i = 0;
-    int j = 0; 
-    char q; 
+	int i = 0;
+	int j = 0; 
+	char q; 
 
-    while (input[i])
-    {
-        if (input[i] == '\'' || input[i] == '"')
-        {
-            q = input[i];
-            j = i + 1;
-            while(input[j] != q && input[j] != '\0')
-                j++;
-            if (input[j] == q)
-                i = j + 1;
-            else if (input[j] == '\0' || input[j] != q)
-                return(1);
-        }
-        else
-            i++;   
-    }
-    return(0);
+	while (input[i])
+	{
+		if (input[i] == '\'' || input[i] == '"')
+	{
+		q = input[i];
+		j = i + 1;
+		while(input[j] != q && input[j] != '\0')
+			j++;
+		if (input[j] == q)
+			i = j + 1;
+		else if (input[j] == '\0' || input[j] != q)
+			return(1);
+	}
+	else
+	    i++;   
+	}
+	return(0);
 }
 
 int ft_get_quotedtoken_len(char* input, int i, char q)
@@ -117,12 +125,12 @@ int ft_next_token_index(char* input, int i)
 
 int ft_get_token_len(char* input, int i)
 {
-	int len = 0; 
-
-
+	int len;
+	
+	len = 0; 
 	while(input[i])
 	{
-		if (input[i] != ' ' && input[i] != '\t' && !ft_is_redir_pipe(input[i]))
+		if (input[i] != ' ' && input[i] != '\t' && input[i] != '\\' && input[i] != ';'&& !ft_is_redir_pipe(input[i]))
 		{
 			if (input[i] == '\'' || input[i] == '"')
 	    		{
@@ -132,7 +140,7 @@ int ft_get_token_len(char* input, int i)
 	    		else
 	    		{
 				len++;
-				i++;     
+				i++;  	
 	    		}    
 		}
 		else
@@ -141,17 +149,6 @@ int ft_get_token_len(char* input, int i)
 	return (len);
 }
 
-
-
-/*int ft_cmd_in_path(char* cmd)
-{
-    char *path;
-
-    path = getenv("PATH");
-
-    printf("path = %s\n", path);
-    return 1;
-}*/
 
 int ft_get_redirpipe_len(char *input, int i)
 {
@@ -184,24 +181,27 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
 		return;
 	}
 	tokens_total = ft_count_tokens(input);
+	if (tokens_total == 0)
+		return;
 	//printf("Numero di tokens = %d\n", tokens_total);
 	cmd_line = malloc(sizeof(t_tokens) * (tokens_total));
 	if (!cmd_line)
 		printf("Malloc error\n");
 	i = 0;
-	//salvo e stampo i token
 	while (token_num < tokens_total && input[i])
 	{
-		//skippo eventuali spazi iniziali
 		while (input[i] && (input[i] == ' ' || input[i] == '\t'))
 		    i++;
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 			token_len = ft_get_redirpipe_len(input, i);
+		else if (input[i] == '\\' || input[i] == ';')
+			token_len = 1;
 		else
 			token_len = ft_get_token_len(input, i);
 		cmd_line[token_num].token = ft_substr(input, i, token_len);
+		//printf("ciao\n");
 		//printf("stringa prima = %s\n", cmd_line[token_num].token);
-		cmd_line[token_num].token = handle_quotes(cmd_line[token_num].token);
+		//cmd_line[token_num].token = handle_quotes(cmd_line[token_num].token);
 		//printf("stringa dopo = %s\n", cmd_line[token_num].token);
 		i += token_len;
 		token_num++;
