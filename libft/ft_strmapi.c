@@ -1,49 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/20 13:17:12 by sibrahim          #+#    #+#             */
-/*   Updated: 2022/10/20 13:18:35 by sibrahim         ###   ########.fr       */
+/*   Created: 2022/10/20 13:10:22 by sibrahim          #+#    #+#             */
+/*   Updated: 2022/10/20 13:10:24 by sibrahim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-
-size_t	ft_strlen(const char *s)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
+	char	*str;
 	size_t	i;
 
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
-}
-
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*sub;
-	size_t	i;
-
-	i = 0;
 	if (!s)
 		return (NULL);
-	if (start > ft_strlen(s))
-		len = 0;
-	if (ft_strlen(s) - start < len)
-		len = ft_strlen(s) - start;
-	sub = malloc(sizeof(char) * (len + 1));
-	if (!sub)
+	str = malloc(sizeof(char) * ft_strlen(s) + 1);
+	if (!str)
 		return (NULL);
-	while (i < len)
-	{		
-		sub[i] = s[start + i];
+	i = 0;
+	while (s[i])
+	{
+		str[i] = (*f)(i, s[i]);
 		i++;
 	}
-	sub[i] = '\0';
-	return (sub);
+	str[i] = 0;
+	return (str);
 }

@@ -1,10 +1,15 @@
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include "libft/libft.h"
 //#include <errno.h>
+
 
 typedef struct s_tokens
 {
@@ -46,16 +51,6 @@ typedef struct s_env_vars
     struct s_env_vars *next;
 } t_env_vars;
 
-
-char	**ft_split(char const *s, char c);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strchr(const char *s, int c);
-size_t	ft_strlen(const char *s);
-void	ft_putstr_fd(char *s, int fd);
-
-
-
 //BUILTINS
 int ft_echo(t_command **cmd);
 int ft_cd(t_command **cmd);
@@ -82,4 +77,6 @@ int	check_var_validity(char *arg);
 void ft_check_output_redirs(t_command **cmd);
 void ft_check_input_redirs(t_command **cmd);
 int ft_is_redir_pipe(char c);
+
+#endif
 
