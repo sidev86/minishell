@@ -18,16 +18,16 @@ void	handle_variable(char *output, int *j, char *variabile)
 	//printf("strlen = %ld\n", strlen(valorevariabile));
 	if (valorevariabile)
 	{
-		strcat(output, valorevariabile);
-		(*j) += strlen(valorevariabile);
+		ft_strcat(output, valorevariabile);
+		(*j) += ft_strlen(valorevariabile);
 	}
 	else 
 	{
 		//printf("valore variabile = %s\n", variabile);
 		if (variabile[i] == '?')
 		{
-			strcat(output, ft_itoa(e_code));
-			(*j) += strlen(ft_itoa(e_code));
+			ft_strcat(output, ft_itoa(e_code));
+			(*j) += ft_strlen(ft_itoa(e_code));
 			if (variabile[i + 1] != ' ' && variabile[i + 1])
 			{
 				while(variabile[i + 1] != ' ' && variabile[i + 1])
@@ -43,7 +43,7 @@ void	extract_and_handle(char *output, int *j, char *input, int *i)
 	int		k;
 	char	*variabile;
 
-	variabile = (char *)malloc(strlen(input) * 100);
+	variabile = (char *)malloc(ft_strlen(input) * 100);
 	if (!variabile)
 	{
 		perror("Memory allocation error");
@@ -108,7 +108,7 @@ char	*handle_quotes(char *input)
     j = 0;
     //ft_doppie = 0;
     //ft_singole = 0;
-    output = (char *)malloc(strlen(input) * 100);
+    output = (char *)malloc(ft_strlen(input) * 100);
     if (!output)
     {
         perror("Memory allocation error");

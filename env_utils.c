@@ -47,7 +47,7 @@ int ft_env_var_exists(t_env_vars ***env_list, char *var)
     //printf("curent var = %s\n", curr->var);
     while (curr)
     {
-        if (!strcmp(curr->var, var))
+        if (!ft_strcmp(curr->var, var))
             return 1;
         curr = curr->next;
     }
@@ -81,7 +81,7 @@ void ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 {
     t_env_vars *curr;
     curr = **env_list;
-    while(strcmp(curr->var, ft_substr(env_str, 0, var_len)))
+    while(ft_strcmp(curr->var, ft_substr(env_str, 0, var_len)))
             curr = curr->next; 
     curr->env_str = env_str;
     //printf("stringa corrente in lista= %s\n", curr->env_str);
@@ -102,7 +102,7 @@ void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len)
     
     num_element = 1;
     //printf("rimuovo env var\n");
-    while(strcmp(curr->var, ft_substr(env_str, 0, var_len)))
+    while(ft_strcmp(curr->var, ft_substr(env_str, 0, var_len)))
     {
         curr = curr->next;
         num_element++;

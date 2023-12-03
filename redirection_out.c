@@ -49,7 +49,7 @@ int ft_get_out_redirections(t_command **cmd)
 	
 	while (i < (*cmd)->num_tokens)
 	{
-		if ((!strcmp((*cmd)->argv[i], ">") || !strcmp((*cmd)->argv[i], ">>")) && (*cmd)->argv[i])
+		if ((!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i], ">>")) && (*cmd)->argv[i])
 		{
 			redirs++;
 		}
@@ -68,7 +68,7 @@ int ft_last_out_redir(t_command **cmd)
 	{
 		if ((*cmd)->argv[i])
 		{
-			if (!strcmp((*cmd)->argv[i], ">") || !strcmp((*cmd)->argv[i], ">>"))
+			if (!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i], ">>"))
 				redir_num++; 
 		}
 		if (redir_num == (*cmd)->num_redirs)
@@ -92,12 +92,12 @@ void ft_empty_out_other(t_command **cmd)
 	{
 		if ((*cmd)->argv[i])
 		{
-			if (!strcmp((*cmd)->argv[i], ">"))
+			if (!ft_strcmp((*cmd)->argv[i], ">"))
 			{
 				file = open((*cmd)->argv[i+1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 				close(file);
 			}
-			if (!strcmp((*cmd)->argv[i], ">") || !strcmp((*cmd)->argv[i], ">>"))
+			if (!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i], ">>"))
 			{
 				num_redir++;
 				(*cmd)->argv[i] = NULL;
@@ -126,12 +126,12 @@ void ft_check_output_redirs(t_command **cmd)
 		i = ft_last_out_redir(cmd);
 	if ((*cmd)->argv[i])
 	{
-		if (!strcmp((*cmd)->argv[i], ">") || !strcmp((*cmd)->argv[i], ">>"))
+		if (!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i], ">>"))
 		{
 			(*cmd)->redir_out = 1;
-			if (!strcmp((*cmd)->argv[i], ">")) 
+			if (!ft_strcmp((*cmd)->argv[i], ">")) 
 				fd_stdout = ft_redir_output_overwrite((*cmd)->argv[i + 1]);
-			else if(!strcmp((*cmd)->argv[i], ">>"))
+			else if(!ft_strcmp((*cmd)->argv[i], ">>"))
 				fd_stdout = ft_redir_output_append((*cmd)->argv[i+1]);
 			//printf("working??\n");
 			(*cmd)->argv[i] = NULL; 

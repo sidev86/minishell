@@ -9,6 +9,8 @@ SRCS =	minishell.c \
 	redirection_out.c \
 	redirection_in.c \
 	env_utils.c \
+	ft_strcmp.c \
+	ft_strcat.c \
 	lexer.c \
 	builtins.c \
 	quotes.c \

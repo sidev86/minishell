@@ -37,17 +37,17 @@ int ft_get_total_cmds(t_command **cmd)
 void ft_exec_builtin(t_command** cmd, t_env_vars ***env_list)
 {
     //printf("variabile env = %s\n", (**env_list)->env_str);
-    if (!strcmp((*cmd)->argv[0], "echo"))
+    if (!ft_strcmp((*cmd)->argv[0], "echo"))
         e_code = ft_echo(cmd);
-    else if (!strcmp((*cmd)->argv[0], "cd"))
+    else if (!ft_strcmp((*cmd)->argv[0], "cd"))
         e_code = ft_cd(cmd);
-    else if (!strcmp((*cmd)->argv[0], "pwd"))
+    else if (!ft_strcmp((*cmd)->argv[0], "pwd"))
         e_code = ft_pwd();
-    else if (!strcmp((*cmd)->argv[0], "export"))
+    else if (!ft_strcmp((*cmd)->argv[0], "export"))
         e_code = ft_export(cmd, env_list);
-    else if (!strcmp((*cmd)->argv[0], "unset"))
+    else if (!ft_strcmp((*cmd)->argv[0], "unset"))
         e_code = ft_unset(cmd, env_list);
-    else if (!strcmp((*cmd)->argv[0], "env"))
+    else if (!ft_strcmp((*cmd)->argv[0], "env"))
         e_code = ft_env(env_list);
     //else if (!strcmp((*cmd)->argv[0], "exit"))
     //    ft_exit(cmd);
@@ -63,7 +63,7 @@ char *ft_get_path(t_env_vars **env_list)
 	
 	while(curr)
 	{
-		if (!strcmp(curr->var, "PATH"))
+		if (!ft_strcmp(curr->var, "PATH"))
 			return (curr->value);
 		if (curr->next)
 			curr = curr->next;

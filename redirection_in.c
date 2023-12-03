@@ -34,7 +34,7 @@ int ft_get_in_redirections(t_command **cmd)
 		//printf("inside\n");
 		if ((*cmd)->argv[i])
 		{
-			if (!strcmp((*cmd)->argv[i], "<") || !strcmp((*cmd)->argv[i], "<<"))
+			if (!ft_strcmp((*cmd)->argv[i], "<") || !ft_strcmp((*cmd)->argv[i], "<<"))
 			{
 				//printf("increment\n");
 				redirs++;
@@ -55,7 +55,7 @@ int ft_last_in_redir(t_command **cmd)
 	{
 		if ((*cmd)->argv[i])
 		{
-			if (!strcmp((*cmd)->argv[i], "<") || !strcmp((*cmd)->argv[i], "<<"))
+			if (!ft_strcmp((*cmd)->argv[i], "<") || !ft_strcmp((*cmd)->argv[i], "<<"))
 				redir_num++; 
 		}
 		if (redir_num == (*cmd)->num_redirs)
@@ -77,7 +77,7 @@ void ft_empty_in_other(t_command **cmd)
 	{
 		if ((*cmd)->argv[i])
 		{
-			if (!strcmp((*cmd)->argv[i], "<") || !strcmp((*cmd)->argv[i], "<<"))
+			if (!ft_strcmp((*cmd)->argv[i], "<") || !ft_strcmp((*cmd)->argv[i], "<<"))
 			{
 				(*cmd)->redir_in = 1;
 				num_redir++;
@@ -107,11 +107,11 @@ void ft_check_input_redirs(t_command **cmd)
 			i = ft_last_in_redir(cmd);
 		if ((*cmd)->argv[i])
 		{
-			if (!strcmp((*cmd)->argv[i], "<") || !strcmp((*cmd)->argv[i], "<<"))
+			if (!ft_strcmp((*cmd)->argv[i], "<") || !ft_strcmp((*cmd)->argv[i], "<<"))
 			{
-				if (!strcmp((*cmd)->argv[i], "<")) 
+				if (!ft_strcmp((*cmd)->argv[i], "<")) 
 					fd_stdin = ft_redir_input((*cmd)->argv[i + 1]);
-				else if(!strcmp((*cmd)->argv[i], "<<"))
+				else if(!ft_strcmp((*cmd)->argv[i], "<<"))
 					printf("heredoc\n");
 				(*cmd)->argv[i] = NULL; 
 				if ((*cmd)->argv[i + 1])

@@ -2,17 +2,17 @@
 
 int ft_cmd_builtin(char* cmd)
 {
-    if (!strcmp(cmd, "echo"))
+    if (!ft_strcmp(cmd, "echo"))
         return 1;
-    else if (!strcmp(cmd, "cd"))
+    else if (!ft_strcmp(cmd, "cd"))
         return 1;
-    else if (!strcmp(cmd, "pwd"))
+    else if (!ft_strcmp(cmd, "pwd"))
         return 1;
-    else if (!strcmp(cmd, "export"))
+    else if (!ft_strcmp(cmd, "export"))
         return 1;
-    else if (!strcmp(cmd, "unset"))
+    else if (!ft_strcmp(cmd, "unset"))
         return 1;
-    else if (!strcmp(cmd, "env"))
+    else if (!ft_strcmp(cmd, "env"))
         return 1;
     //else if (!strcmp(cmd, "exit"))
     //    return 1;
@@ -51,7 +51,7 @@ int ft_get_num_cmds(t_tokens *cmd_line, int num_tokens)
 		num_cmds++;
 	while(i < num_tokens)
 	{
-		if (!strcmp(cmd_line[i].token, "|"))
+		if (!ft_strcmp(cmd_line[i].token, "|"))
 			num_cmds++;
 		i++;
 	}
@@ -66,7 +66,7 @@ int	ft_get_tokens_in_cmd(t_tokens *cmd_line, int index, int total_tokens)
 	tokens = 0;
 	while (index < total_tokens)
 	{
-		if (!strchr(cmd_line[index].token, '|') || (strchr(cmd_line[index].token, '|') && strlen(cmd_line[index].token) > 1))
+		if (!ft_strchr(cmd_line[index].token, '|') || (ft_strchr(cmd_line[index].token, '|') && ft_strlen(cmd_line[index].token) > 1))
 		{
 			tokens++;
 			index++;
@@ -127,8 +127,8 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 		i = 0;
 		while (i < curr_cmd->num_tokens)
 		{
-			curr_cmd->argv[i] = ft_substr(cmd_line[arg_index + i].token, 0, strlen(cmd_line[arg_index + i].token));
-			if (curr_cmd->argv[i][0] == '\\' || !strcmp(curr_cmd->argv[i], ";"))
+			curr_cmd->argv[i] = ft_substr(cmd_line[arg_index + i].token, 0, ft_strlen(cmd_line[arg_index + i].token));
+			if (curr_cmd->argv[i][0] == '\\' || !ft_strcmp(curr_cmd->argv[i], ";"))
 			{
 				printf("Error: detected '\'' or ';' \n");
 				return ;

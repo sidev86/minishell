@@ -7,7 +7,7 @@ int ft_echo(t_command **cmd) //t_command cmd
 
 	if ((*cmd)->argv[i])
 	{
-		if (i < (*cmd)->argc && strcmp((*cmd)->argv[i], "-n") == 0)
+		if (i < (*cmd)->argc && ft_strcmp((*cmd)->argv[i], "-n") == 0)
 		{
 			no_newline = 1;
 			i++; // Se l'opzione -n è presente, passa al prossimo argomento
@@ -31,7 +31,7 @@ int ft_echo(t_command **cmd) //t_command cmd
 
 int ft_cd(t_command **cmd)
 {
-	if ((*cmd)->argc == 1 || (strcmp((*cmd)->argv[1], "~") == 0))
+	if ((*cmd)->argc == 1 || (ft_strcmp((*cmd)->argv[1], "~") == 0))
 	{
 		// Nessun argomento, torna alla home directory
 		char *home_directory = getenv("HOME");
