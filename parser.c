@@ -141,7 +141,7 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 			if (curr_cmd->argv[i][0] == '\\' || !ft_strcmp(curr_cmd->argv[i], ";"))
 			{
 				errors_manager(SET_CODE, 2, NULL, NULL);
-				printf("Error: detected '\'' or ';' \n");
+				printf("Error: detected '\\' or ';' \n");
 				return ;
 			}
 			i++;

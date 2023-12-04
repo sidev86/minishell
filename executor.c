@@ -165,6 +165,7 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 			pid = fork(); 
 			if (pid == 0)
 			{
+				errors_manager(SET_CODE, 0, NULL, NULL);
 				ft_check_output_redirs(&curr_cmd);
 				ft_check_input_redirs(&curr_cmd);
 				if (errors_manager(GET_CODE, 0, NULL, NULL) == 1)
