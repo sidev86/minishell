@@ -122,12 +122,15 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 	while (arg_index < total_tokens)
 	{
 		curr_cmd->num_tokens = ft_get_tokens_in_cmd(cmd_line, arg_index, total_tokens);
+		//printf("numberio of tokenazz = %d\n", curr_cmd->num_tokens);
 		if (curr_cmd->num_tokens == 0)
 			return ;
-		curr_cmd->argv = (char**)malloc(sizeof(char*) * curr_cmd->num_tokens + 1);
+		curr_cmd->argv = (char**)malloc(sizeof(char*) * (curr_cmd->num_tokens + 1));
 		curr_cmd->argc = curr_cmd->num_tokens;
 		curr_cmd->redir_in = 0; 
 		curr_cmd->redir_out = 0;
+		curr_cmd->fd_terminal = STDOUT_FILENO;
+		curr_cmd->fd_stdinput = STDIN_FILENO;
 		
 		if (!curr_cmd->argv)
 			printf("Malloc error");
@@ -166,6 +169,7 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 	}
 	//ft_print_all_commands(&command);  //funzione per testing
 	ft_execute(&command, env_list, envp);
+	free(command->argv);
 	free(command);
 
 }

@@ -15,7 +15,8 @@ SRCS =	minishell.c \
 	builtins.c \
 	quotes.c \
 	var_check.c \
-	errors_manager.c
+	errors_manager.c \
+	signals.c
 
 CC = gcc
 

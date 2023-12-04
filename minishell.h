@@ -12,6 +12,9 @@
 # include <stdio.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/ioctl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include "libft/libft.h"
 //#include <errno.h>
 
@@ -86,6 +89,7 @@ int	check_var_validity(char *arg);
 void ft_check_output_redirs(t_command **cmd);
 void ft_check_input_redirs(t_command **cmd);
 int ft_is_redir_pipe(char c);
+void	signal_handler(int sig);
 
 #endif
 
