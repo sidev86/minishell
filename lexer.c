@@ -177,7 +177,7 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
 
 	if (ft_check_missing_quotes(input))
 	{
-		printf("Error. Missing quotes\n");
+		printf("Error: Missing quotes\n");
 		return;
 	}
 	tokens_total = ft_count_tokens(input);

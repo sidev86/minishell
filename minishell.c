@@ -4,7 +4,6 @@
 #include <string.h>
 #include "minishell.h"
 
-int e_code;
 
 char*	ft_wait_for_input()
 {
@@ -14,7 +13,7 @@ char*	ft_wait_for_input()
 	{
     		if (isatty(STDIN_FILENO))
 			write(2, "exit\n", 6);
-	    	exit (e_code);
+	    	exit (0);
 	}
 	if (input[0] == '\0')
 		return NULL;

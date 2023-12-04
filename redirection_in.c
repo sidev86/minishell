@@ -1,7 +1,6 @@
 #include "minishell.h"
 #include <fcntl.h>
 
-extern int e_code;
 
 int ft_redir_input(char *filename)
 {
@@ -12,10 +11,10 @@ int ft_redir_input(char *filename)
 		//printf("got filename\n");
 		int file = open(filename, O_RDONLY);
 		if (file == -1)
-		{
-			perror(filename);
-			e_code = 1;
-			exit(2);
+		{	
+			errors_manager(SET_CODE, 1, NULL, NULL);
+			errors_manager(PRINT, 1, "Can't open or create file", filename);
+			return (-1);
 		}
 		dup2(file, STDIN_FILENO);
 		close(file);

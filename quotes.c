@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-extern int e_code; 
+
 
 int	is_alphanumeric(char c)
 {
@@ -11,6 +11,7 @@ void	handle_variable(char *output, int *j, char *variabile)
 {
 	char	*valorevariabile;
 	int	i;
+	int e_code;
 	
 	i = 0;
 	valorevariabile = getenv(variabile);
@@ -26,6 +27,7 @@ void	handle_variable(char *output, int *j, char *variabile)
 		//printf("valore variabile = %s\n", variabile);
 		if (variabile[i] == '?')
 		{
+			e_code = errors_manager(GET_CODE, 0, NULL, NULL);
 			ft_strcat(output, ft_itoa(e_code));
 			(*j) += ft_strlen(ft_itoa(e_code));
 			if (variabile[i + 1] != ' ' && variabile[i + 1])

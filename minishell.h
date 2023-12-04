@@ -1,12 +1,18 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include "libft/libft.h"
+
+
+# define GET_CODE 0
+# define SET_CODE 1
+# define PRINT 2
+
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include "libft/libft.h"
 //#include <errno.h>
 
 
@@ -24,7 +30,6 @@ typedef struct s_command
     char **argv;
     char **envp;
     int is_builtin;
-    int exit_code;
     int fd_terminal;
     int fd_stdinput;
     int num_redirs;
@@ -36,11 +41,6 @@ typedef struct s_command
     struct s_command *next;
     struct s_command *prev;
 } t_command;
-
-typedef struct s_last_command
-{
-	int exit_code;
-}	t_last_command;
 
 typedef struct s_env_vars
 {
@@ -55,25 +55,31 @@ int 	ft_strcmp(const char *s1, const char *s2);
 char	*ft_strcat(char *dest, char *src);
 
 //BUILTINS
-int ft_echo(t_command **cmd);
-int ft_cd(t_command **cmd);
-int ft_pwd();
-int ft_export(t_command **cmd, t_env_vars ***env_list);
-int ft_unset(t_command **cmd, t_env_vars ***env_list);
-int ft_env(t_env_vars ***env_list);
-int ft_exit(t_command **cmd);
+void ft_echo(t_command **cmd);
+void ft_cd(t_command **cmd);
+void ft_pwd();
+void ft_export(t_command **cmd, t_env_vars ***env_list);
+void ft_unset(t_command **cmd, t_env_vars ***env_list);
+void ft_env(t_env_vars ***env_list);
+void ft_exit(t_command **cmd);
 
 //SHELL CORE
 void ft_lex(char* input, t_env_vars **env_list, char **envp);
 void ft_parse(t_tokens* cmd_line, int num_tokens, t_env_vars **env_list, char **envp);
 void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp);
 
+
+//ENV LIST
 void ft_create_env_list(t_env_vars **first, char **envp);
 void ft_print_env_list(t_env_vars **first);
 int ft_env_var_exists(t_env_vars ***env_list, char *var);
 void ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len);
 void ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len);
 void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len);
+
+//ERRORS
+int	errors_manager(int action, int code, char *msg, char *arg);
+
 char	*ft_itoa(int n);
 char	*handle_quotes(char *input);
 int	check_var_validity(char *arg);

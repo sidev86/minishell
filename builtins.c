@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-int ft_echo(t_command **cmd) //t_command cmd
+void ft_echo(t_command **cmd) //t_command cmd
 {
 	int i = 1;
 	int no_newline = 0;
-
+	
 	if ((*cmd)->argv[i])
 	{
 		if (i < (*cmd)->argc && ft_strcmp((*cmd)->argv[i], "-n") == 0)
@@ -26,10 +26,10 @@ int ft_echo(t_command **cmd) //t_command cmd
 	}
 	if (i < (*cmd)->argc || no_newline == 0) 
 		printf("\n"); // Aggiungi una nuova linea se l'opzione -n non è presente o se ci sono più argomenti
-	return (0);
+	errors_manager(SET_CODE, 0, NULL, NULL);
 }
 
-int ft_cd(t_command **cmd)
+void ft_cd(t_command **cmd)
 {
 	if ((*cmd)->argc == 1 || (ft_strcmp((*cmd)->argv[1], "~") == 0))
 	{
@@ -38,14 +38,16 @@ int ft_cd(t_command **cmd)
 		
 		if (home_directory == NULL)
 		{
-			printf("La variabile HOME non è impostata.\n");
-			return (130);
+			errors_manager(SET_CODE, 1, NULL, NULL);
+			errors_manager(PRINT, 1, "Variable HOME not set\n", "Error");
+			return ;
 		}
 
 		if (chdir(home_directory) == -1)
 		{
-			perror("chdir");
-			return (1);
+			errors_manager(SET_CODE, 1, NULL, NULL);
+			errors_manager(PRINT, 1, "No such file or directory\n", home_directory);
+			return ;
 		}
 	}
 	else if ((*cmd)->argc == 2)
@@ -54,33 +56,37 @@ int ft_cd(t_command **cmd)
 
 		if (chdir(new_directory) == -1)
 		{
-			perror("chdir");
-			return (1);
+			errors_manager(SET_CODE, 1, NULL, NULL);
+			errors_manager(PRINT, 1, "No such file or directory\n", new_directory);
+			return ;
 		}
 	}
 	else
 	{
-		fprintf(stderr, " too many arguments"); 
-		return (1);
+		errors_manager(SET_CODE, 1, NULL, NULL);
+		errors_manager(PRINT, 1, "Too many arguments", "Error");
+		return ;
 	}
-	return (0);
+	errors_manager(SET_CODE, 0, NULL, NULL);
 }
 
-int ft_pwd()
+void ft_pwd()
 {
 	char *current_dir = getcwd(NULL, 0);
 	if (current_dir == NULL)
 	{
-		perror("getcwd");
-		return (130);
+		errors_manager(SET_CODE, 130, NULL, NULL);
+		return ;
 	}
 
 	printf("%s\n", current_dir);
+	
+	errors_manager(SET_CODE, 0, NULL, NULL);
 	free(current_dir);
-	return (0);
+	return ;
 }
 
-int ft_export(t_command **cmd, t_env_vars ***env_list)
+void ft_export(t_command **cmd, t_env_vars ***env_list)
 {
 	char *env_arg;
 	char *var_name;
@@ -89,7 +95,10 @@ int ft_export(t_command **cmd, t_env_vars ***env_list)
 	env_arg = (*cmd)->argv[1];
 	//printf("env arg= %s\n", env_arg);
 	if (!env_arg)
-		return 1;
+	{
+		errors_manager(SET_CODE, 0, NULL, NULL);
+		return ;
+	}
 	if (!ft_strchr(env_arg, '='))
 		var_len = ft_strlen(env_arg);
 	else
@@ -104,7 +113,11 @@ int ft_export(t_command **cmd, t_env_vars ***env_list)
 	//printf("export env list = %s\n", (**env_list)->env_str);
 	//printf("env arg = %s\n", env_arg);
 	if (check_var_validity(var_name))
-		return (1);	
+	{
+		errors_manager(SET_CODE, 1, NULL, NULL);
+		errors_manager(PRINT, 1, "Not a valid identifier", var_name);
+		return ;
+	}	
 	
 	if(!ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
 	{
@@ -132,27 +145,32 @@ int ft_export(t_command **cmd, t_env_vars ***env_list)
 		printf("curr var = %s\n", curr->var); 
 		curr->next = NULL;
 	}   */
-	return (0);
+	errors_manager(SET_CODE, 0, NULL, NULL);
+	return ;
 }
 
-int ft_unset(t_command **cmd, t_env_vars ***env_list)
+void ft_unset(t_command **cmd, t_env_vars ***env_list)
 {
 	char *env_arg;
 	int var_len;
 	//t_env_vars *curr;
 	env_arg = (*cmd)->argv[1];
 	if (!env_arg)
-		return (0);
+	{
+		errors_manager(SET_CODE, 0, NULL, NULL);
+		return ;
+	}
 	var_len = ft_strlen(env_arg);
 	if (ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len)) && env_arg != NULL)
 	{
 		//printf("variabile trovata\n");
 		ft_remove_env_var(env_list, env_arg, var_len);
 	}
-	return (0);     
+	errors_manager(SET_CODE, 0, NULL, NULL);
+	return ;     
 }
 
-int ft_env(t_env_vars ***env_list)
+void ft_env(t_env_vars ***env_list)
 {
 	t_env_vars *curr; 
 
@@ -162,7 +180,8 @@ int ft_env(t_env_vars ***env_list)
 		printf("%s\n", curr->env_str);
 		curr = curr->next; 
 	}
-	return (0);
+	errors_manager(SET_CODE, 0, NULL, NULL);
+	return ;
 }
 
 /*void ft_exit(t_command **cmd)

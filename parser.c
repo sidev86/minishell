@@ -64,6 +64,12 @@ int	ft_get_tokens_in_cmd(t_tokens *cmd_line, int index, int total_tokens)
 	int	tokens;
 	
 	tokens = 0;
+	if (cmd_line[index].token[0] == '|')
+	{
+		errors_manager(SET_CODE, 2, NULL, NULL);
+		printf("Syntax error near unexpected token '|'\n");
+		return (0);
+	}
 	while (index < total_tokens)
 	{
 		if (!ft_strchr(cmd_line[index].token, '|') || (ft_strchr(cmd_line[index].token, '|') && ft_strlen(cmd_line[index].token) > 1))
@@ -96,8 +102,6 @@ void ft_print_all_commands(t_command **command)
 		num_cmd++;
 		curr = curr->next;
 	}	
-
-
 }
 
 void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char **envp)
@@ -109,19 +113,22 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 	int i = 0;
 	
 	total_cmds = ft_get_num_cmds(cmd_line, total_tokens);
-	total_cmds = total_cmds + 1 - 1;
 	command = (t_command*)malloc(sizeof(t_command));
 	curr_cmd = command;
 	curr_cmd->number = 1;
 	curr_cmd->num_cmds = total_cmds;
+	curr_cmd->prev = NULL;
 	arg_index = 0; 
 	while (arg_index < total_tokens)
 	{
 		curr_cmd->num_tokens = ft_get_tokens_in_cmd(cmd_line, arg_index, total_tokens);
+		if (curr_cmd->num_tokens == 0)
+			return ;
 		curr_cmd->argv = (char**)malloc(sizeof(char*) * curr_cmd->num_tokens + 1);
 		curr_cmd->argc = curr_cmd->num_tokens;
 		curr_cmd->redir_in = 0; 
 		curr_cmd->redir_out = 0;
+		
 		if (!curr_cmd->argv)
 			printf("Malloc error");
 		i = 0;
@@ -130,6 +137,7 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 			curr_cmd->argv[i] = ft_substr(cmd_line[arg_index + i].token, 0, ft_strlen(cmd_line[arg_index + i].token));
 			if (curr_cmd->argv[i][0] == '\\' || !ft_strcmp(curr_cmd->argv[i], ";"))
 			{
+				errors_manager(SET_CODE, 2, NULL, NULL);
 				printf("Error: detected '\'' or ';' \n");
 				return ;
 			}

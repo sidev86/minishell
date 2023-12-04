@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-extern int e_code;
 
 char *ft_get_cmdname(char *str)
 {
@@ -36,24 +35,23 @@ int ft_get_total_cmds(t_command **cmd)
 
 void ft_exec_builtin(t_command** cmd, t_env_vars ***env_list)
 {
-    //printf("variabile env = %s\n", (**env_list)->env_str);
     if (!ft_strcmp((*cmd)->argv[0], "echo"))
-        e_code = ft_echo(cmd);
+        ft_echo(cmd);
     else if (!ft_strcmp((*cmd)->argv[0], "cd"))
-        e_code = ft_cd(cmd);
+        ft_cd(cmd);
     else if (!ft_strcmp((*cmd)->argv[0], "pwd"))
-        e_code = ft_pwd();
+        ft_pwd();
     else if (!ft_strcmp((*cmd)->argv[0], "export"))
-        e_code = ft_export(cmd, env_list);
+    	ft_export(cmd, env_list);
     else if (!ft_strcmp((*cmd)->argv[0], "unset"))
-        e_code = ft_unset(cmd, env_list);
+        ft_unset(cmd, env_list);
     else if (!ft_strcmp((*cmd)->argv[0], "env"))
-        e_code = ft_env(env_list);
-    //else if (!strcmp((*cmd)->argv[0], "exit"))
-    //    ft_exit(cmd);
+        ft_env(env_list);
     else
-        printf("Error. Commando not found\n");
-    //printf("exit code = %d\n", e_code);
+    {
+        errors_manager(SET_CODE, 127, NULL, NULL);
+        errors_manager(PRINT,127,"Command not found", "Error");
+    }
 }
 
 char *ft_get_path(t_env_vars **env_list)
@@ -93,21 +91,42 @@ void ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 			path = ft_strjoin(path, (*cmd)->argv[0]);
 			if (access(path, F_OK | X_OK) == 0)
 			{
+				errors_manager(SET_CODE, 100, NULL, NULL);
 				if (execve(path, (*cmd)->argv, envp) == -1)
-					e_code = 127;
+				{
+        				errors_manager(PRINT,126,"Execution error\n", "Error");
+        				exit (126);
+				}
+				
+					exit(0);
 			}
 			i++;
 		}
 	}
-	ft_putstr_fd("command not found\n", STDERR_FILENO);
+	errors_manager(PRINT,127,"Command not found\n", (*cmd)->argv[0]);
+	exit (127);
     }
     else 
     {
     	path = (*cmd)->argv[0];
-    	(*cmd)->argv[0] = ft_get_cmdname((*cmd)->argv[0]);
-    	if (execve(path, (*cmd)->argv, envp) == -1)
-		e_code = 127;
-    	ft_putstr_fd("command not found\n", STDERR_FILENO);
+    	
+    	if (access(path, F_OK | X_OK) == 0)
+	{
+		(*cmd)->argv[0] = ft_get_cmdname((*cmd)->argv[0]);
+		if (execve(path, (*cmd)->argv, envp) == -1)
+		{
+		 	errors_manager(SET_CODE, 127, NULL, NULL);
+			errors_manager(PRINT,127,"Execution error", "Error");
+		}
+			exit (0);
+	}	
+	if ((*cmd)->argv[0][0] == '.' && (*cmd)->argv[0][1] == '/')
+	{
+		errors_manager(PRINT,126,"Executable not found\n", (*cmd)->argv[0]);
+		exit (126);
+	}
+	errors_manager(PRINT,127,"Commando not found\n", (*cmd)->argv[0]);
+	exit (127);
     }
 }
 
@@ -137,7 +156,7 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 	t_command *curr_cmd; 
 	
 	curr_cmd = *cmd;
-	if (curr_cmd->num_cmds > 1)
+	if (curr_cmd->num_cmds > 1 || (curr_cmd->num_cmds == 1 && !curr_cmd->is_builtin))
 	{
 		while (curr_cmd)
 		{
@@ -148,6 +167,8 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 			{
 				ft_check_output_redirs(&curr_cmd);
 				ft_check_input_redirs(&curr_cmd);
+				if (errors_manager(GET_CODE, 0, NULL, NULL) == 1)
+					exit (1);
 				ft_handle_quotes_alltokens(&curr_cmd);
 				if (curr_cmd->prev && !curr_cmd->redir_in)
 				{
@@ -166,7 +187,7 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 					ft_exec_systemcmd(&curr_cmd, envp, env_list);
 				else if (curr_cmd->argv[0] && curr_cmd->is_builtin)
 					ft_exec_builtin(&curr_cmd, &env_list);
-				exit(1);	
+				exit(0);	
 			}
 			else
 			{
@@ -196,14 +217,13 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 		while (i < (*cmd)->num_cmds)
 		{
 			wait(&status);
-			if (WIFEXITED(status)) {
-			    e_code = WEXITSTATUS(status);
-			}
+			if (WIFEXITED(status)) 
+			{
+			     errors_manager(SET_CODE, WEXITSTATUS(status), NULL, NULL);
+			}	
 			i++;
-		
-		}
+		}	
 	}
-	
 	else
 	{
 		ft_check_output_redirs(&curr_cmd);

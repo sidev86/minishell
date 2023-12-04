@@ -14,7 +14,8 @@ SRCS =	minishell.c \
 	lexer.c \
 	builtins.c \
 	quotes.c \
-	var_check.c 
+	var_check.c \
+	errors_manager.c
 
 CC = gcc
 

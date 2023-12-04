@@ -1,7 +1,6 @@
 #include "minishell.h"
 #include <fcntl.h>
 
-extern int e_code;
 
 int ft_redir_output_overwrite(char *filename)
 {
@@ -15,8 +14,9 @@ int ft_redir_output_overwrite(char *filename)
 		if (file == -1)
 		{
 			//printf("erroreeeee\n");
-			close(file);
-			e_code = 1;
+			//close(file);
+			errors_manager(SET_CODE, 1, NULL, NULL);
+			errors_manager(PRINT, 1, "Can't open or create file", filename);
 			return (-1);
 		}
 		//printf("file opended?\n");
@@ -34,7 +34,11 @@ int ft_redir_output_append(char *filename)
 	{
 		int file = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
 		if (file == -1)
-			exit(2);
+		{
+			errors_manager(SET_CODE, 1, NULL, NULL);
+			errors_manager(PRINT, 1, "Can't open or create file", filename);
+			return (-1);
+		}
 		dup2(file, STDOUT_FILENO);
 		close(file);
 	}
@@ -95,6 +99,12 @@ void ft_empty_out_other(t_command **cmd)
 			if (!ft_strcmp((*cmd)->argv[i], ">"))
 			{
 				file = open((*cmd)->argv[i+1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+				if (file == -1)
+				{
+					errors_manager(SET_CODE, 1, NULL, NULL);
+					errors_manager(PRINT, 1, "Can't open or create file", "Error");
+					return ;
+				}
 				close(file);
 			}
 			if (!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i], ">>"))
