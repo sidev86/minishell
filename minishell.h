@@ -32,6 +32,11 @@ typedef struct s_command
     int argc;
     char **argv;
     char **envp;
+    char **heredoc_text;
+    char **end_tokens;
+    int skip_terminator;
+    int has_heredoc;
+    int heredoc_counter;
     int is_builtin;
     int fd_terminal;
     int fd_stdinput;
@@ -90,6 +95,9 @@ void ft_check_output_redirs(t_command **cmd);
 void ft_check_input_redirs(t_command **cmd);
 int ft_is_redir_pipe(char c);
 void	signal_handler(int sig);
+void	ft_heredoc(t_command **cmd);
+int	is_alphanumeric(char c);
+void	extract_and_handle(char *output, int *j, char *input, int *i);
 
 #endif
 

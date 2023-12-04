@@ -71,6 +71,22 @@ char *ft_get_path(t_env_vars **env_list)
 	return(NULL);
 }
 
+
+void ft_check_if_heredoc(t_command **cmd)
+{
+	int j = 0;
+	if (ft_strcmp((*cmd)->argv[0], "cat") == 0 && (*cmd)->has_heredoc)
+	{
+		
+		while ((*cmd)->heredoc_text[j] != NULL)
+		{
+			printf("%s\n", (*cmd)->heredoc_text[j]);
+			j++;
+		}
+		exit(0);
+	}
+}
+
 void ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 {
     char *path = ft_get_path(env_list);
@@ -89,6 +105,8 @@ void ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 		{
 			path = ft_strjoin(dirs[i], "/");
 			path = ft_strjoin(path, (*cmd)->argv[0]);
+			ft_check_if_heredoc(cmd);
+			
 			if (access(path, F_OK | X_OK) == 0)
 			{
 				errors_manager(SET_CODE, 100, NULL, NULL);
@@ -166,8 +184,10 @@ void ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 			if (pid == 0)
 			{
 				errors_manager(SET_CODE, 0, NULL, NULL);
-				ft_check_output_redirs(&curr_cmd);
+				
 				ft_check_input_redirs(&curr_cmd);
+				ft_check_output_redirs(&curr_cmd);
+				
 				if (errors_manager(GET_CODE, 0, NULL, NULL) == 1)
 					exit (1);
 				ft_handle_quotes_alltokens(&curr_cmd);

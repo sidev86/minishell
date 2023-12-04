@@ -35,8 +35,13 @@ int ft_get_in_redirections(t_command **cmd)
 		{
 			if (!ft_strcmp((*cmd)->argv[i], "<") || !ft_strcmp((*cmd)->argv[i], "<<"))
 			{
-				//printf("increment\n");
 				redirs++;
+				if(!ft_strcmp((*cmd)->argv[i], "<<"))
+				{
+					(*cmd)->heredoc_counter++;
+					(*cmd)->end_tokens = realloc((*cmd)->end_tokens, sizeof(char) * (*cmd)->heredoc_counter);
+					(*cmd)->end_tokens[((*cmd)->heredoc_counter) - 1] = ft_strdup((*cmd)->argv[i + 1]);
+				}
 			}
 		}
 		i++;
@@ -111,7 +116,7 @@ void ft_check_input_redirs(t_command **cmd)
 				if (!ft_strcmp((*cmd)->argv[i], "<")) 
 					fd_stdin = ft_redir_input((*cmd)->argv[i + 1]);
 				else if(!ft_strcmp((*cmd)->argv[i], "<<"))
-					printf("heredoc\n");
+					ft_heredoc(cmd);
 				(*cmd)->argv[i] = NULL; 
 				if ((*cmd)->argv[i + 1])
 					(*cmd)->argv[i + 1] = NULL;

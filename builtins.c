@@ -19,7 +19,7 @@ void ft_echo(t_command **cmd) //t_command cmd
 		if ((*cmd)->argv[i])
 		{
 			printf("%s", (*cmd)->argv[i]);
-			if (i < (*cmd)->argc - 1)
+			if (i < (*cmd)->argc - 1 && (*cmd)->argv[i+1])
 				printf(" ");
 		}
 		i++;

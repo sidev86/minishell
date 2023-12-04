@@ -16,7 +16,7 @@ int ft_redir_output_overwrite(char *filename)
 			//printf("erroreeeee\n");
 			//close(file);
 			errors_manager(SET_CODE, 1, NULL, NULL);
-			errors_manager(PRINT, 1, "Can't open or create file", filename);
+			errors_manager(PRINT, 1, "Can't open or create file\n", filename);
 			return (-1);
 		}
 		//printf("file opended?\n");
@@ -36,7 +36,7 @@ int ft_redir_output_append(char *filename)
 		if (file == -1)
 		{
 			errors_manager(SET_CODE, 1, NULL, NULL);
-			errors_manager(PRINT, 1, "Can't open or create file", filename);
+			errors_manager(PRINT, 1, "Can't open or create file\n", filename);
 			return (-1);
 		}
 		dup2(file, STDOUT_FILENO);
@@ -53,9 +53,10 @@ int ft_get_out_redirections(t_command **cmd)
 	
 	while (i < (*cmd)->num_tokens)
 	{
-		if ((!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i], ">>")) && (*cmd)->argv[i])
+		if ((*cmd)->argv[i])
 		{
-			redirs++;
+			if ((!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i], ">>")) && (*cmd)->argv[i])
+				redirs++;	
 		}
 		i++;
 	}
@@ -102,7 +103,7 @@ void ft_empty_out_other(t_command **cmd)
 				if (file == -1)
 				{
 					errors_manager(SET_CODE, 1, NULL, NULL);
-					errors_manager(PRINT, 1, "Can't open or create file", "Error");
+					errors_manager(PRINT, 1, "Can't open or create file\n", "Error");
 					return ;
 				}
 				close(file);

@@ -131,6 +131,7 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 		curr_cmd->redir_out = 0;
 		curr_cmd->fd_terminal = STDOUT_FILENO;
 		curr_cmd->fd_stdinput = STDIN_FILENO;
+		curr_cmd->has_heredoc = 0;
 		
 		if (!curr_cmd->argv)
 			printf("Malloc error");
@@ -138,6 +139,8 @@ void ft_parse(t_tokens* cmd_line, int total_tokens, t_env_vars **env_list, char 
 		while (i < curr_cmd->num_tokens)
 		{
 			curr_cmd->argv[i] = ft_substr(cmd_line[arg_index + i].token, 0, ft_strlen(cmd_line[arg_index + i].token));
+			if (!ft_strcmp(curr_cmd->argv[i], "<<"))
+				curr_cmd->has_heredoc = 1;
 			if (curr_cmd->argv[i][0] == '\\' || !ft_strcmp(curr_cmd->argv[i], ";"))
 			{
 				errors_manager(SET_CODE, 2, NULL, NULL);
