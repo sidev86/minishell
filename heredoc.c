@@ -78,3 +78,19 @@ void	ft_heredoc(t_command **cmd)
 	}
 }
 
+void	ft_check_if_heredoc(t_command **cmd)
+{
+	int	j;
+
+	j = 0;
+	if (ft_strcmp((*cmd)->argv[0], "cat") == 0 && (*cmd)->has_heredoc)
+	{
+		while ((*cmd)->heredoc_text[j] != NULL)
+		{
+			printf("%s\n", (*cmd)->heredoc_text[j]);
+			j++;
+		}
+		exit(0);
+	}
+}
+

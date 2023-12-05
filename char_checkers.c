@@ -1,5 +1,9 @@
 #include "minishell.h"
 
+int	ft_is_a_valid_character(char c)
+{
+	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||(c >= '0' && c <= '9') || (c == '_'));
+}
 
 int ft_is_quote(char c)
 {

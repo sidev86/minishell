@@ -1,5 +1,29 @@
 #include "minishell.h"
 
+
+int ft_count_environment_vars(char **envp)
+{
+    int i = 0;
+    while (envp[i])
+        i++;
+    return (i);
+}
+
+char **ft_get_environment_vars(char **envp)
+{
+    char **env;
+    int i = 0;
+    env = (char**)malloc(sizeof(char*) * ft_count_environment_vars(envp) + 1);
+    while (envp[i])
+    {
+        env[i] = ft_strjoin(envp[i], "\0");
+        i++;
+    }
+    env[i] = NULL;
+    return (env);
+}
+
+
 void ft_create_env_list(t_env_vars **first, char **envp)
 {
     int i; 
@@ -82,39 +106,3 @@ void ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len)
    
 }
 
-void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len)
-{
-    t_env_vars *curr;
-    int num_element;
-    
-    curr = **env_list;
-    num_element = 1;
-    while(ft_strcmp(curr->var, ft_substr(env_str, 0, var_len)))
-    {
-        curr = curr->next;
-        num_element++;
-    }
-    curr->env_str = NULL;
-    curr->var = NULL;
-    curr->value = NULL;
-    if (curr->next && num_element == 1)
-    {
-    	**env_list = curr->next;
-    	free(curr);
-    }
-    else if (curr->next && num_element > 1)
-    {
-        curr = **env_list;
-        while(curr->next->env_str)
-            curr = curr->next;
-        free(curr->next);
-        curr->next = curr->next->next;
-    }
-    else
-    {
-        curr = **env_list;
-        while (curr->next->env_str)
-            curr = curr->next;
-        curr->next = NULL;   
-    }     
-}

@@ -39,13 +39,11 @@ int	ft_command_is_exit(char *input)
 int	main(int argc, char **argv, char **envp) 
 {
 	char* input;
-	//char* cmd_key;
 	t_env_vars *first_env;
-	//int i = 0;
+	
 	first_env = 0;
 	ft_create_env_list(&first_env, envp);
-	setenv("TERM", "xterm", 1); // Imposta la variabile TERM a un valore valido
-
+	setenv("TERM", "xterm", 1); 
 	if (argc > 1 || argv[1])
 		return 1;
 	while (1)
@@ -63,7 +61,6 @@ int	main(int argc, char **argv, char **envp)
 				free(input);
 				return 1; 
 			}
-
 			ft_lex(input, &first_env, envp);
 			add_history(input);
 			free(input);

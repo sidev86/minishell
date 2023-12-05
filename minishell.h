@@ -85,14 +85,34 @@ void ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len);
 void ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len);
 void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len);
 
+
+//LEXER
+int	ft_count_tokens(char* input); 
+
+//PARSING
+int ft_get_num_cmds(t_tokens *cmd_line, int num_tokens);
+int ft_get_tokens_in_cmd(t_tokens *cmd_line, int index, int total_tokens);
+int ft_put_tokens_in_cmd(t_command **curr_cmd, t_tokens *cmd_line, int arg_index);
+
+//REDIRS
+int ft_get_out_redirections(t_command **cmd);
+int ft_last_out_redir(t_command **cmd);
+int ft_get_in_redirections(t_command **cmd);
+int ft_last_in_redir(t_command **cmd);
+
+//EXECUTOR
+void	ft_exec_builtin(t_command **cmd, t_env_vars ***env_list);
+void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list);
 //ERRORS
 int	errors_manager(int action, int code, char *msg, char *arg);
 
 char	*ft_itoa(int n);
 char	*handle_quotes(char *input);
+void	ft_handle_quotes_alltokens(t_command **cmd);
 int	check_var_validity(char *arg);
 void ft_check_output_redirs(t_command **cmd);
 void ft_check_input_redirs(t_command **cmd);
+void	ft_check_if_heredoc(t_command **cmd);
 int ft_is_redir_pipe(char c);
 void	signal_handler(int sig);
 void	ft_heredoc(t_command **cmd);
@@ -103,7 +123,12 @@ int	is_alphanumeric(char c);
 int ft_is_space(char c);
 int ft_is_redir_pipe(char c);
 int ft_is_quote(char c);
-int	ft_count_tokens(char* input);
+int ft_is_a_valid_character(char c);
+
+int ft_cmd_builtin(char* cmd);
+char	*ft_get_cmdname(char *str);
+int	ft_get_total_cmds(t_command **cmd);
+char	*ft_get_path(t_env_vars **env_list);
 
 #endif
 
