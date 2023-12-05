@@ -1,74 +1,5 @@
 #include "minishell.h"
 
-int ft_is_quote(char c)
-{
-	return (c == '"' || c == '\'');
-}
-
-int ft_is_space(char c)
-{
-	return (c == ' ' || c == '\t');
-}
-
-int ft_is_redir_pipe(char c)
-{
-	return (c == '|' || c == '>' || c == '<');
-}
-
-
-int	ft_count_tokens(char* input)
-{
-	int	i = 0;
-	int	tokens = 0;
-	char	c;
-	
-	while (input[i])
-	{
-		while (ft_is_space(input[i]) && input[i])
-			i++;
-		if (ft_is_quote(input[i]))
-		{
-			c = input[i++];
-			while (input[i] != c && input[i])
-				i++;
-			if (ft_is_space(input[i + 1]) || ft_is_redir_pipe(input[i + 1]) || !input[i + 1])
-				tokens++;
-		}
-		else if (!ft_is_quote(input[i]) && !ft_is_redir_pipe(input[i]) && input[i])
-		{
-			while (ft_is_space(input[i]))
-				i++;	
-			while(!ft_is_quote(input[i]) && !ft_is_space(input[i]) && !ft_is_redir_pipe(input[i]) && input[i])
-				i++;
-			if (ft_is_quote(input[i]))
-			{
-				c = input[i++];
-				while (input[i] != c && input[i])
-					i++;
-				i++;
-			}
-			if (ft_is_space(input[i]) || ft_is_redir_pipe(input[i]) || !input[i] || !input[i + 1])
-				tokens++;
-		}
-		if (ft_is_redir_pipe(input[i]))
-		{
-			tokens++;
-			if (input[i] == '|')
-				i++;
-			else if (input[i] == '>' || input[i] == '<')
-			{
-				i++;
-				if (input[i+1] == '>' || input[i+1] == '<')
-					i++;
-			}
-			
-		}
-		if (input[i])
-			i++;
-	}
-	return tokens;
-}
-
 int ft_check_missing_quotes(char* input)
 {
 	int i = 0;
@@ -162,32 +93,15 @@ int ft_get_redirpipe_len(char *input, int i)
 	return (1);
 }
 
-
-void ft_lex(char* input, t_env_vars **env_list, char **envp)
+void ft_split_into_tokens(char *input, t_tokens **line, int tokens_total)
 {
-	t_tokens	*cmd_line; 
-	int i; 
+	int i;
 	int token_num;
-	int tokens_total;
 	int token_len;
-
-	token_num = 0; 
-	tokens_total = 0; 
-	token_len = 0; 
-
-	if (ft_check_missing_quotes(input))
-	{
-		printf("Error: Missing quotes\n");
-		return;
-	}
-	tokens_total = ft_count_tokens(input);
-	if (tokens_total == 0)
-		return;
-	//printf("Numero di tokens = %d\n", tokens_total);
-	cmd_line = malloc(sizeof(t_tokens) * (tokens_total));
-	if (!cmd_line)
-		printf("Malloc error\n");
+	
 	i = 0;
+	token_num = 0; 
+	token_len = 0;
 	while (token_num < tokens_total && input[i])
 	{
 		while (input[i] && (input[i] == ' ' || input[i] == '\t'))
@@ -198,14 +112,28 @@ void ft_lex(char* input, t_env_vars **env_list, char **envp)
 			token_len = 1;
 		else
 			token_len = ft_get_token_len(input, i);
-		cmd_line[token_num].token = ft_substr(input, i, token_len);
-		//printf("ciao\n");
-		//printf("stringa prima = %s\n", cmd_line[token_num].token);
-		//cmd_line[token_num].token = handle_quotes(cmd_line[token_num].token);
-		//printf("stringa dopo = %s\n", cmd_line[token_num].token);
+		(*line)[token_num].token = ft_substr(input, i, token_len);
 		i += token_len;
 		token_num++;
 	}
+}
+void ft_lex(char* input, t_env_vars **env_list, char **envp)
+{
+	t_tokens	*cmd_line; 
+	int tokens_total;
+
+	if (ft_check_missing_quotes(input))
+	{
+		printf("Error: Missing quotes\n");
+		return;
+	}
+	tokens_total = ft_count_tokens(input);
+	if (tokens_total == 0)
+		return;
+	cmd_line = malloc(sizeof(t_tokens) * (tokens_total));
+	if (!cmd_line)
+		printf("Malloc error\n");
+	ft_split_into_tokens(input, &cmd_line, tokens_total);
 	if (ft_strcmp(cmd_line[0].token, "exit") != 0)
         	ft_parse(cmd_line, tokens_total, env_list, envp);
         free(cmd_line);

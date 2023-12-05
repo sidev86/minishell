@@ -17,7 +17,9 @@ SRCS =	minishell.c \
 	var_check.c \
 	errors_manager.c \
 	signals.c \
-	heredoc.c
+	heredoc.c \
+	char_checkers.c \
+	tokens_counter.c
 
 CC = gcc
 

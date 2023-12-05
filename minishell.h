@@ -96,8 +96,14 @@ void ft_check_input_redirs(t_command **cmd);
 int ft_is_redir_pipe(char c);
 void	signal_handler(int sig);
 void	ft_heredoc(t_command **cmd);
-int	is_alphanumeric(char c);
+
 void	extract_and_handle(char *output, int *j, char *input, int *i);
+
+int	is_alphanumeric(char c);
+int ft_is_space(char c);
+int ft_is_redir_pipe(char c);
+int ft_is_quote(char c);
+int	ft_count_tokens(char* input);
 
 #endif
 

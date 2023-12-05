@@ -13,7 +13,7 @@ int ft_redir_input(char *filename)
 		if (file == -1)
 		{	
 			errors_manager(SET_CODE, 1, NULL, NULL);
-			errors_manager(PRINT, 1, "Can't open or create file", filename);
+			errors_manager(PRINT, 1, "Can't open or create file\n", filename);
 			return (-1);
 		}
 		dup2(file, STDIN_FILENO);

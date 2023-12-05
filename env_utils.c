@@ -3,10 +3,9 @@
 void ft_create_env_list(t_env_vars **first, char **envp)
 {
     int i; 
-    
-    i = 0; 
     t_env_vars *curr;
     
+    i = 0; 
     if (i == 0 && envp[i])
         *first = malloc(sizeof(t_env_vars));
     curr = *first; 
@@ -15,7 +14,6 @@ void ft_create_env_list(t_env_vars **first, char **envp)
         curr->env_str = envp[i];
         curr->var = ft_substr(envp[i], 0, ft_strchr(envp[i], '=') - envp[i]);
         curr->value = ft_substr(envp[i], ft_strlen(envp[i]) - ft_strlen(ft_strchr(envp[i], '=')) + 1, envp[i] - ft_strchr(envp[i], '='));
-        //printf("corrente variabile = %s\n", curr->var);
         if (envp[i + 1])
         {
             curr->next = malloc(sizeof(t_env_vars));
@@ -57,23 +55,17 @@ int ft_env_var_exists(t_env_vars ***env_list, char *var)
 void ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 {
     t_env_vars *curr;
+    
     curr = **env_list;
-    //printf("set env curr str = %s\n", curr->env_str);
     while(curr->next)
             curr = curr->next; 
     curr->next = malloc(sizeof(t_env_vars));
-    //if (curr->next)
-     //   printf("allocation success\n");
     curr = curr->next; 
     curr->env_str = env_str;
     
-    //printf("var len = %d\n", var_len);
     
     curr->var = ft_substr(env_str, 0, var_len);
     curr->value = ft_substr(env_str, var_len + 1, ft_strlen(env_str) - var_len - 1);
-    //curr->var = ft_strjoin(curr->var, "\0");
-    //rintf("curr var = %s\n", curr->var); 
-    //printf("curr value = %s\n", curr->value);
     curr->next = NULL;
 }
 
@@ -84,59 +76,45 @@ void ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len)
     while(ft_strcmp(curr->var, ft_substr(env_str, 0, var_len)))
             curr = curr->next; 
     curr->env_str = env_str;
-    //printf("stringa corrente in lista= %s\n", curr->env_str);
-    //printf("var len = %d\n", var_len);
     
     curr->var = ft_substr(env_str, 0, var_len);
     curr->value = ft_substr(env_str, var_len + 1, ft_strlen(env_str) - var_len - 1);
-    //curr->var = ft_strjoin(curr->var, "\0");
-    //printf("curr var = %s\n", curr->var); 
-    //printf("curr value = %s\n", curr->value);
+   
 }
 
 void ft_remove_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 {
     t_env_vars *curr;
-    curr = **env_list;
     int num_element;
     
+    curr = **env_list;
     num_element = 1;
-    //printf("rimuovo env var\n");
     while(ft_strcmp(curr->var, ft_substr(env_str, 0, var_len)))
     {
         curr = curr->next;
         num_element++;
     }
-
-    //printf("curr var = %s\n", curr->var);
     curr->env_str = NULL;
     curr->var = NULL;
     curr->value = NULL;
     if (curr->next && num_element == 1)
     {
-    	//primo elemento
     	**env_list = curr->next;
     	free(curr);
     }
     else if (curr->next && num_element > 1)
     {
-        //elemento in mezzo a lista 
         curr = **env_list;
-        
         while(curr->next->env_str)
             curr = curr->next;
-        //printf("env corrente = %s\n", curr->env_str);
-        //printf("env next next = %s\n", curr->next->next->env_str);
         free(curr->next);
         curr->next = curr->next->next;
     }
     else
     {
-        //ultimo elemento
         curr = **env_list;
         while (curr->next->env_str)
             curr = curr->next;
-        //printf("env corrente = %s\n", curr->env_str);
         curr->next = NULL;   
     }     
 }

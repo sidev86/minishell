@@ -32,7 +32,7 @@ int	ft_command_is_exit(char *input)
 
 	//printf("cmd len = %d\n", cmd_len);
 	if (cmd_len == 4 && !strcmp(ft_substr(input, 0, cmd_len), "exit"))    
-		return(1);
+		return(10);
 	return(0);        
 }
 
@@ -67,8 +67,6 @@ int	main(int argc, char **argv, char **envp)
 			ft_lex(input, &first_env, envp);
 			add_history(input);
 			free(input);
-			//if (cmd_line[0] && (strcmp(cmd_line, "exit") == 0))
-			//    break; 
 		}    
 	}
 	return 0;
