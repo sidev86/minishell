@@ -50,6 +50,6 @@ char	*ft_itoa(int n)
 		else
 			str_num[--len] = (n % 10 * -1) + '0';
 		n /= 10;
-	}	
+	}
 	return (str_num);
 }

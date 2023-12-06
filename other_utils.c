@@ -1,21 +1,21 @@
 #include "minishell.h"
 
-int ft_cmd_builtin(char* cmd)
+int	ft_cmd_builtin(char *cmd)
 {
-    if (!ft_strcmp(cmd, "echo"))
-        return 1;
-    else if (!ft_strcmp(cmd, "cd"))
-        return 1;
-    else if (!ft_strcmp(cmd, "pwd"))
-        return 1;
-    else if (!ft_strcmp(cmd, "export"))
-        return 1;
-    else if (!ft_strcmp(cmd, "unset"))
-        return 1;
-    else if (!ft_strcmp(cmd, "env"))
-        return 1;
-    else
-        return 0;
+	if (!ft_strcmp(cmd, "echo"))
+		return (1);
+	else if (!ft_strcmp(cmd, "cd"))
+		return (1);
+	else if (!ft_strcmp(cmd, "pwd"))
+		return (1);
+	else if (!ft_strcmp(cmd, "export"))
+		return (1);
+	else if (!ft_strcmp(cmd, "unset"))
+		return (1);
+	else if (!ft_strcmp(cmd, "env"))
+		return (1);
+	else
+		return (0);
 }
 
 char	*ft_get_cmdname(char *str)
@@ -66,7 +66,6 @@ char	*ft_get_path(t_env_vars **env_list)
 	return (NULL);
 }
 
-
 void	ft_handle_quotes_alltokens(t_command **cmd)
 {
 	int	i;
@@ -81,6 +80,3 @@ void	ft_handle_quotes_alltokens(t_command **cmd)
 		i++;
 	}
 }
-
-
-

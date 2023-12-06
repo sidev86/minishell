@@ -18,7 +18,7 @@ static void	handle_variable(char *output, int *j, char *variabile)
 		if (variabile[i] == '?')
 		{
 			e_code = errors_manager(GET_CODE, 0, NULL, NULL);
-			ft_strcat(output, ft_itoa(e_code));
+			strcpy(output, ft_itoa(e_code));
 			(*j) += ft_strlen(ft_itoa(e_code));
 			if (variabile[i + 1] != ' ' && variabile[i + 1])
 			{
@@ -99,6 +99,7 @@ char	*handle_quotes(char *input)
 
 	i = 0;
 	j = 0;
+	output = NULL;
 	output = (char *)malloc(ft_strlen(input) * 100);
 	if (!output)
 	{

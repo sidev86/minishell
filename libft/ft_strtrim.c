@@ -22,7 +22,7 @@ static int	ft_is_in_set(char c, const char *set)
 		if (set[i] == c)
 			return (1);
 		i++;
-	}	
+	}
 	return (0);
 }
 

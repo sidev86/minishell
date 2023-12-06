@@ -48,7 +48,6 @@ static void	exec_command_direct(t_command **cmd, char **envp, char	*path)
 	exit(127);
 }
 
-
 void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 {
 	char	*path;

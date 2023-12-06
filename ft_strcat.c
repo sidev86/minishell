@@ -7,6 +7,8 @@ char	*ft_strcat(char *dest, char *src)
 
 	i = 0;
 	j = 0;
+	if (dest == NULL)
+		return (NULL);
 	while (dest[i] != '\0')
 		i++;
 	while (src[j] != '\0')
