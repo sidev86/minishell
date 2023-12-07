@@ -82,9 +82,4 @@ void	ft_exec_builtin(t_command **cmd, t_env_vars ***env_list)
 		ft_unset(cmd, env_list);
 	else if (!ft_strcmp((*cmd)->argv[0], "env"))
 		ft_env(env_list);
-	else
-	{
-		errors_manager(SET_CODE, 127, NULL, NULL);
-		errors_manager(PRINT, 127, "Command not found", "Error");
-	}
 }

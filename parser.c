@@ -80,6 +80,5 @@ void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 		ft_set_next_prev_nodes(&curr_cmd, arg_index, total_tokens);
 	}
 	ft_execute(&command, env_list, envp);
-	free(command->argv);
-	free(command);
+	ft_free_all_commands(&command);
 }

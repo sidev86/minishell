@@ -25,7 +25,8 @@ SRCS =	minishell.c \
 	char_checkers.c \
 	tokens_counter.c \
 	parse_utils.c \
-	other_utils.c
+	other_utils.c \
+	free_memory.c
 
 CC = gcc
 

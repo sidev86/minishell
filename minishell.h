@@ -135,5 +135,7 @@ int						ft_cmd_builtin(char *cmd);
 char					*ft_get_cmdname(char *str);
 int						ft_get_total_cmds(t_command **cmd);
 char					*ft_get_path(t_env_vars **env_list);
+void 					ft_free_env_list(t_env_vars **env_list);
+void 					ft_free_all_commands(t_command **cmd);
 
 #endif
