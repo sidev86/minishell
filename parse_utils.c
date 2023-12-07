@@ -52,8 +52,7 @@ int	ft_put_tokens_in_cmd(t_command **curr_cmd, t_tokens *cmd_line,
 	i = 0;
 	while (i < (*curr_cmd)->num_tokens)
 	{
-		(*curr_cmd)->argv[i] = ft_substr(cmd_line[arg_index + i].token, 0,
-				ft_strlen(cmd_line[arg_index + i].token));
+		(*curr_cmd)->argv[i] = ft_substr(cmd_line[arg_index + i].token, 0, ft_strlen(cmd_line[arg_index + i].token));
 		if (!ft_strcmp((*curr_cmd)->argv[i], "<<"))
 			(*curr_cmd)->has_heredoc = 1;
 		if ((*curr_cmd)->argv[i][0] == '\\' || !ft_strcmp((*curr_cmd)->argv[i],

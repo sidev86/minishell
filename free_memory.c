@@ -24,19 +24,15 @@ void ft_free_all_commands(t_command **cmd)
 {
 	t_command *curr_cmd;
 	t_command *next_cmd; 
-	int i; 
-	
-	i = 0;
+	int i = 0;
 	curr_cmd = *cmd; 
 	
 	while (curr_cmd)
 	{
+		i = 0;
 		next_cmd = curr_cmd->next;
 		while (i < curr_cmd->num_tokens)
-		{
-			free(curr_cmd->argv[i]);
-			i++;
-		}
+			free((curr_cmd)->argv[i++]);
 		free(curr_cmd->argv);
 		free(curr_cmd);
 		curr_cmd = next_cmd;

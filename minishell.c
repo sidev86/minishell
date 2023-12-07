@@ -18,8 +18,9 @@ char	*ft_wait_for_input(void)
 
 int	ft_command_is_exit(char *input, t_env_vars **env_list)
 {
-	int	cmd_len;
-	int	i;
+	char	*str;
+	int		cmd_len;
+	int		i;
 
 	cmd_len = 0;
 	i = 0;
@@ -28,11 +29,14 @@ int	ft_command_is_exit(char *input, t_env_vars **env_list)
 		cmd_len++;
 		i++;
 	}
-	if (cmd_len == 4 && !strcmp(ft_substr(input, 0, cmd_len), "exit"))
+	str = ft_substr(input, 0, cmd_len);
+	if (cmd_len == 4 && !ft_strcmp(str, "exit"))
 	{
 		ft_free_env_list(env_list);
+		free(str);
 		return (10);
 	}
+	free(str);
 	return (0);
 }
 
@@ -59,7 +63,7 @@ int	main(int argc, char **argv, char **envp)
 			if (ft_command_is_exit(input, &first_env))
 			{
 				free(input);
-				return (1);
+				exit(44);
 			}
 			ft_lex(input, &first_env, envp);
 			add_history(input);

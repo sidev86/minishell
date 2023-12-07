@@ -34,7 +34,7 @@ void	ft_set_next_prev_nodes(t_command **curr_cmd, int arg_index,
 	if (arg_index < total_tokens)
 	{
 		(*curr_cmd)->next = (t_command *)malloc(sizeof(t_command));
-		(*curr_cmd)->next->prev = (t_command *)malloc(sizeof(t_command));
+		(*curr_cmd)->next->prev = NULL;
 		if ((*curr_cmd)->number == 1)
 			(*curr_cmd)->prev = NULL;
 		(*curr_cmd)->next->prev = (*curr_cmd);

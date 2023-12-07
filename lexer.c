@@ -125,7 +125,7 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 {
 	t_tokens	*cmd_line;
 	int			tokens_total;
-
+	int	i = 0;
 	if (ft_check_missing_quotes(input))
 	{
 		printf("Error: Missing quotes\n");
@@ -140,5 +140,10 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 	ft_split_into_tokens(input, &cmd_line, tokens_total);
 	if (ft_strcmp(cmd_line[0].token, "exit") != 0)
 		ft_parse(cmd_line, tokens_total, env_list, envp);
+	while (i < tokens_total)
+	{
+		free(cmd_line[i].token);
+		i++;
+	}
 	free(cmd_line);
 }
