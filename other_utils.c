@@ -69,13 +69,17 @@ char	*ft_get_path(t_env_vars **env_list)
 void	ft_handle_quotes_alltokens(t_command **cmd)
 {
 	int	i;
-
+	char *str;
 	i = 0;
-	while (i < (*cmd)->argc)
+	
+	while (i < (*cmd)->num_tokens)
 	{
 		if ((*cmd)->argv[i])
 		{
-			(*cmd)->argv[i] = handle_quotes((*cmd)->argv[i]);
+			str = handle_quotes((*cmd)->argv[i]);
+			(*cmd)->argv[i] = realloc((*cmd)->argv[i], ft_strlen(str)+1);
+			strcpy((*cmd)->argv[i], str);
+			free(str);
 		}
 		i++;
 	}

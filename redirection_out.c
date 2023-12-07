@@ -61,9 +61,13 @@ void	ft_empty_out_redir(t_command **cmd, int i, int *num_redir)
 	if (!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i], ">>"))
 	{
 		(*num_redir)++;
+		free((*cmd)->argv[i]);
 		(*cmd)->argv[i] = NULL;
 		if ((*cmd)->argv[i + 1])
+		{
+			free((*cmd)->argv[i+1]);
 			(*cmd)->argv[i + 1] = NULL;
+		}
 		i++;
 	}
 }
@@ -109,9 +113,13 @@ void	ft_check_output_redirs(t_command **cmd)
 				fd_stdout = ft_redir_output_overwrite((*cmd)->argv[i + 1]);
 			else if (!ft_strcmp((*cmd)->argv[i], ">>"))
 				fd_stdout = ft_redir_output_append((*cmd)->argv[i + 1]);
+			free((*cmd)->argv[i]);
 			(*cmd)->argv[i] = NULL;
 			if ((*cmd)->argv[i + 1])
+			{
+				free((*cmd)->argv[i+1]);
 				(*cmd)->argv[i + 1] = NULL;
+			}
 			if ((*cmd)->num_redirs > 1)
 				ft_empty_out_other(cmd);
 		}

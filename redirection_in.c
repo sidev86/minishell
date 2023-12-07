@@ -40,9 +40,13 @@ void	ft_empty_in_other(t_command **cmd)
 			{
 				(*cmd)->redir_in = 1;
 				num_redir++;
+				free((*cmd)->argv[i]);
 				(*cmd)->argv[i] = NULL;
 				if ((*cmd)->argv[i + 1])
+				{
+					free((*cmd)->argv[i+1]);
 					(*cmd)->argv[i + 1] = NULL;
+				}
 				i++;
 			}
 			if (num_redir == last_redir)
@@ -71,9 +75,13 @@ void	ft_check_input_redirs(t_command **cmd)
 				fd_stdin = ft_redir_input((*cmd)->argv[i + 1]);
 			else if (!ft_strcmp((*cmd)->argv[i], "<<"))
 				ft_heredoc(cmd);
+			free((*cmd)->argv[i]);
 			(*cmd)->argv[i] = NULL;
 			if ((*cmd)->argv[i + 1])
+			{
+				free((*cmd)->argv[i+1]);
 				(*cmd)->argv[i + 1] = NULL;
+			}
 			if ((*cmd)->num_redirs > 1)
 				ft_empty_in_other(cmd);
 		}
