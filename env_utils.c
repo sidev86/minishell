@@ -1,31 +1,5 @@
 #include "minishell.h"
 
-int	ft_count_environment_vars(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	return (i);
-}
-
-char	**ft_get_environment_vars(char **envp)
-{
-	char	**env;
-	int		i;
-
-	i = 0;
-	env = (char **)malloc(sizeof(char *) * ft_count_environment_vars(envp) + 1);
-	while (envp[i])
-	{
-		env[i] = ft_strjoin(envp[i], "\0");
-		i++;
-	}
-	env[i] = NULL;
-	return (env);
-}
-
 void	ft_create_env_list(t_env_vars **first, char **envp)
 {
 	int			i;
@@ -50,18 +24,6 @@ void	ft_create_env_list(t_env_vars **first, char **envp)
 		else
 			curr->next = NULL;
 		i++;
-	}
-}
-
-void	ft_print_env_list(t_env_vars **first)
-{
-	t_env_vars	*curr;
-
-	curr = *first;
-	while (curr != NULL)
-	{
-		printf("%s\n", curr->env_str);
-		curr = curr->next;
 	}
 }
 

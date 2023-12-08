@@ -36,19 +36,6 @@ char	*ft_get_cmdname(char *str)
 	return (cmd);
 }
 
-int	ft_get_total_cmds(t_command **cmd)
-{
-	int	total;
-
-	total = 0;
-	while (*cmd)
-	{
-		total++;
-		(*cmd) = (*cmd)->next;
-	}
-	return (total);
-}
-
 char	*ft_get_path(t_env_vars **env_list)
 {
 	t_env_vars	*curr;
@@ -68,10 +55,10 @@ char	*ft_get_path(t_env_vars **env_list)
 
 void	ft_handle_quotes_alltokens(t_command **cmd)
 {
-	int	i;
-	char *str;
+	int		i;
+	char	*str;
+
 	i = 0;
-	
 	while (i < (*cmd)->num_tokens)
 	{
 		if ((*cmd)->argv[i])

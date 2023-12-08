@@ -1,7 +1,6 @@
 #include "minishell.h"
-#include <fcntl.h>
 
-int	ft_redir_input(char *filename)
+static int	ft_redir_input(char *filename)
 {
 	int	original_fd;
 	int	file;
@@ -22,7 +21,21 @@ int	ft_redir_input(char *filename)
 	return (original_fd);
 }
 
-void	ft_empty_in_other(t_command **cmd)
+static void	handle_redirection(t_command **cmd, int *i, int *num_redir)
+{
+	(*cmd)->redir_in = 1;
+	(*num_redir)++;
+	free((*cmd)->argv[*i]);
+	(*cmd)->argv[*i] = NULL;
+	if ((*cmd)->argv[*i + 1])
+	{
+		free((*cmd)->argv[*i + 1]);
+		(*cmd)->argv[*i + 1] = NULL;
+	}
+	(*i)++;
+}
+
+static void	ft_empty_in_other(t_command **cmd)
 {
 	int	i;
 	int	last_redir;
@@ -38,21 +51,35 @@ void	ft_empty_in_other(t_command **cmd)
 			if (!ft_strcmp((*cmd)->argv[i], "<") || !ft_strcmp((*cmd)->argv[i],
 					"<<"))
 			{
-				(*cmd)->redir_in = 1;
-				num_redir++;
-				free((*cmd)->argv[i]);
-				(*cmd)->argv[i] = NULL;
-				if ((*cmd)->argv[i + 1])
-				{
-					free((*cmd)->argv[i+1]);
-					(*cmd)->argv[i + 1] = NULL;
-				}
-				i++;
+				handle_redirection(cmd, &i, &num_redir);
+				if (num_redir == last_redir)
+					break ;
 			}
-			if (num_redir == last_redir)
-				break ;
 		}
 		i++;
+	}
+}
+
+static void	handle_input_redirection(t_command **cmd, int *fd_stdin, int i)
+{
+	if (!ft_strcmp((*cmd)->argv[i], "<"))
+	{
+		*fd_stdin = ft_redir_input((*cmd)->argv[i + 1]);
+	}
+	else if (!ft_strcmp((*cmd)->argv[i], "<<"))
+	{
+		ft_heredoc(cmd);
+	}
+	free((*cmd)->argv[i]);
+	(*cmd)->argv[i] = NULL;
+	if ((*cmd)->argv[i + 1])
+	{
+		free((*cmd)->argv[i + 1]);
+		(*cmd)->argv[i + 1] = NULL;
+	}
+	if ((*cmd)->num_redirs > 1)
+	{
+		ft_empty_in_other(cmd);
 	}
 }
 
@@ -71,19 +98,7 @@ void	ft_check_input_redirs(t_command **cmd)
 		if (!ft_strcmp((*cmd)->argv[i], "<") || !ft_strcmp((*cmd)->argv[i],
 				"<<"))
 		{
-			if (!ft_strcmp((*cmd)->argv[i], "<"))
-				fd_stdin = ft_redir_input((*cmd)->argv[i + 1]);
-			else if (!ft_strcmp((*cmd)->argv[i], "<<"))
-				ft_heredoc(cmd);
-			free((*cmd)->argv[i]);
-			(*cmd)->argv[i] = NULL;
-			if ((*cmd)->argv[i + 1])
-			{
-				free((*cmd)->argv[i+1]);
-				(*cmd)->argv[i + 1] = NULL;
-			}
-			if ((*cmd)->num_redirs > 1)
-				ft_empty_in_other(cmd);
+			handle_input_redirection(cmd, &fd_stdin, i);
 		}
 	}
 	i++;

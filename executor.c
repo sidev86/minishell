@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe, \
+static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 		t_env_vars **env_list, char **envp)
-{	//printf("exit_code in child = %d\n", (*curr_cmd)->last_exit_code);
+{
 	errors_manager(SET_CODE, (*curr_cmd)->last_exit_code, NULL, NULL);
 	ft_check_input_redirs(curr_cmd);
 	ft_check_output_redirs(curr_cmd);
@@ -21,7 +21,6 @@ void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe, \
 		dup2(fd_pipe[3], STDOUT_FILENO);
 		close(fd_pipe[3]);
 	}
-	//printf("%s + %s\n", (*curr_cmd)->argv[1],(*curr_cmd)->argv[3]);
 	if ((*curr_cmd)->argv[0] && !(*curr_cmd)->is_builtin)
 		ft_exec_systemcmd(curr_cmd, envp, env_list);
 	else if ((*curr_cmd)->argv[0] && (*curr_cmd)->is_builtin)
@@ -29,7 +28,8 @@ void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe, \
 	exit(0);
 }
 
-void	ft_after_child_exec(t_command **curr_cmd, t_command **cmd, int *fd_pipe)
+static void	ft_after_child_exec(t_command **curr_cmd, t_command **cmd,
+		int *fd_pipe)
 {
 	if ((*curr_cmd)->prev)
 	{
@@ -47,7 +47,7 @@ void	ft_after_child_exec(t_command **curr_cmd, t_command **cmd, int *fd_pipe)
 		dup2((*cmd)->fd_stdinput, STDIN_FILENO);
 }
 
-void	ft_wait_child_termination(t_command **cmd, int status, int *fd_pipe)
+static void	ft_wait_child_termination(t_command **cmd, int status, int *fd_pipe)
 {
 	int	i;
 
@@ -68,7 +68,7 @@ void	ft_wait_child_termination(t_command **cmd, int status, int *fd_pipe)
 	}
 }
 
-void	ft_exec_single_builtin(t_command **curr_cmd, t_command **cmd,
+static void	ft_exec_single_builtin(t_command **curr_cmd, t_command **cmd,
 		t_env_vars **env_list)
 {
 	ft_check_output_redirs(curr_cmd);

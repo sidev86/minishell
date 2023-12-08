@@ -29,19 +29,20 @@ void	ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 			- 1);
 }
 
-t_env_vars	*find_env_var_node(t_env_vars ***env_list, char *env_str,
+static t_env_vars	*find_env_var_node(t_env_vars ***env_list, char *env_str,
 		int var_len)
 {
 	t_env_vars	*curr;
 
 	curr = **env_list;
-	while (curr != NULL && ft_strcmp(curr->var, \
-	ft_substr(env_str, 0, var_len)) != 0)
+	while (curr != NULL && ft_strcmp(curr->var, ft_substr(env_str, 0,
+				var_len)) != 0)
 		curr = curr->next;
 	return (curr);
 }
 
-void	remove_env_var_node(t_env_vars ***env_list, t_env_vars *node_to_remove)
+static void	remove_env_var_node(t_env_vars ***env_list,
+		t_env_vars *node_to_remove)
 {
 	t_env_vars	*curr;
 

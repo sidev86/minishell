@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_check_missing_quotes(char *input)
+static int	ft_check_missing_quotes(char *input)
 {
 	int		i;
 	int		j;
@@ -27,64 +27,7 @@ int	ft_check_missing_quotes(char *input)
 	return (0);
 }
 
-int	ft_get_quotedtoken_len(char *input, int i, char q)
-{
-	int	len;
-
-	len = 0;
-	i++;
-	len++;
-	while (input[i] && input[i] != q)
-	{
-		i++;
-		len++;
-	}
-	if (input[i] == q)
-		len++;
-	return (len);
-}
-
-int	ft_next_token_index(char *input, int i)
-{
-	char	q;
-
-	q = input[i];
-	i++;
-	while (input[i] && input[i] != q)
-		i++;
-	if (input[i] == q)
-		i++;
-	return (i);
-}
-
-int	ft_get_token_len(char *input, int i)
-{
-	int	len;
-
-	len = 0;
-	while (input[i])
-	{
-		if (input[i] != ' ' && input[i] != '\t' && input[i] != '\\'
-			&& input[i] != ';' && !ft_is_redir_pipe(input[i]))
-		{
-			if (input[i] == '\'' || input[i] == '"')
-			{
-				len += ft_get_quotedtoken_len(input, i, input[i]);
-				i = ft_next_token_index(input, i);
-			}
-			else
-			{
-				len++;
-				i++;
-			}
-		}
-		else
-			return (len);
-	}
-	return (len);
-}
-
-int	ft_get_redirpipe_len(char *input, int i)
+static int	ft_get_redirpipe_len(char *input, int i)
 {
 	if (input[i])
 	{
@@ -96,7 +39,7 @@ int	ft_get_redirpipe_len(char *input, int i)
 	return (1);
 }
 
-void	ft_split_into_tokens(char *input, t_tokens **line, int tokens_total)
+static void	ft_split_into_tokens(char *input, t_tokens **line, int tokens_total)
 {
 	int	i;
 	int	token_num;
@@ -125,7 +68,9 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 {
 	t_tokens	*cmd_line;
 	int			tokens_total;
-	int	i = 0;
+	int			i;
+
+	i = 0;
 	if (ft_check_missing_quotes(input))
 	{
 		printf("Error: Missing quotes\n");

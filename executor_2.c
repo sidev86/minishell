@@ -1,33 +1,36 @@
 #include "minishell.h"
 
 static void	exec_command_in_path(char *cmd_name, char **dirs, char **envp,
-	t_command **cmd)
+		t_command **cmd)
 {
 	int		i;
 	char	*path;
+	char	*full_path;
 
 	i = 0;
 	while (dirs[i])
 	{
 		path = ft_strjoin(dirs[i], "/");
-		path = ft_strjoin(path, cmd_name);
+		full_path = ft_strjoin(path, cmd_name);
 		ft_check_if_heredoc(cmd);
-		if (access(path, F_OK | X_OK) == 0)
+		if (access(full_path, F_OK | X_OK) == 0)
 		{
 			errors_manager(SET_CODE, 100, NULL, NULL);
-			if (execve(path, (*cmd)->argv, envp) == -1)
+			if (execve(full_path, (*cmd)->argv, envp) == -1)
 			{
 				errors_manager(PRINT, 126, "Execution error\n", "Error");
 				exit(126);
 			}
-			
 			exit(0);
 		}
+		free(path);
+		free(full_path);
 		i++;
 	}
+	
 }
 
-static void	exec_command_direct(t_command **cmd, char **envp, char	*path)
+static void	exec_command_direct(t_command **cmd, char **envp, char *path)
 {
 	path = (*cmd)->argv[0];
 	if (access(path, F_OK | X_OK) == 0)

@@ -1,11 +1,12 @@
 #include "minishell.h"
 
-int	handle_end_token(char *input_line, t_command **cmd, int *end_token_index)
+static int	handle_end_token(char *input_line, t_command **cmd,
+		int *end_token_index)
 {
 	int	last_end_token_index;
 
 	last_end_token_index = (*cmd)->heredoc_counter - 1;
-	if (strcmp(input_line, (*cmd)->end_tokens[*end_token_index]) == 0)
+	if (ft_strcmp(input_line, (*cmd)->end_tokens[*end_token_index]) == 0)
 	{
 		if (*end_token_index == last_end_token_index)
 		{
@@ -18,13 +19,14 @@ int	handle_end_token(char *input_line, t_command **cmd, int *end_token_index)
 	return (0);
 }
 
-void	process_heredoc_line(t_command **cmd, char *input_line, int *line_count)
+static void	process_heredoc_line(t_command **cmd, char *input_line,
+		int *line_count)
 {
 	int		i;
 	int		j;
 	char	*output;
 
-	output = (char *)malloc(strlen(input_line) * 100);
+	output = (char *)malloc(ft_strlen(input_line) * 100);
 	i = 0;
 	j = 0;
 	while (input_line[i])
@@ -39,13 +41,13 @@ void	process_heredoc_line(t_command **cmd, char *input_line, int *line_count)
 	}
 	output[j] = '\0';
 	(*line_count)++;
-	(*cmd)->heredoc_text = (char **)realloc((*cmd)->heredoc_text, (*line_count)
-			* sizeof(char *));
-	(*cmd)->heredoc_text[(*line_count) - 1] = strdup(output);
+	(*cmd)->heredoc_text = (char **)realloc((*cmd)->heredoc_text,
+			(*line_count) * sizeof(char *));
+	(*cmd)->heredoc_text[(*line_count) - 1] = ft_strdup(output);
 	free(output);
 }
 
-void	handle_input_condition(t_command **cmd, char *input_line,
+static void	handle_input_condition(t_command **cmd, char *input_line,
 		int *end_token_index, int *line_count)
 {
 	int	last_end_token_index;
@@ -76,7 +78,10 @@ void	ft_heredoc(t_command **cmd)
 	{
 		input_line = readline("> ");
 		if (handle_end_token(input_line, cmd, &end_token_index))
+		{
+			(*cmd)->lines_heredoc = line_count;
 			break ;
+		}
 		handle_input_condition(cmd, input_line, &end_token_index, &line_count);
 		free(input_line);
 	}
@@ -89,7 +94,7 @@ void	ft_check_if_heredoc(t_command **cmd)
 	j = 0;
 	if (ft_strcmp((*cmd)->argv[0], "cat") == 0 && (*cmd)->has_heredoc)
 	{
-		while ((*cmd)->heredoc_text[j] != NULL)
+		while (j < (*cmd)->lines_heredoc)
 		{
 			printf("%s\n", (*cmd)->heredoc_text[j]);
 			j++;

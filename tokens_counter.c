@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_token_in_quotes(char *input, int i, int *tokens)
+static int	ft_token_in_quotes(char *input, int i, int *tokens)
 {
 	char	c;
 
@@ -13,7 +13,7 @@ int	ft_token_in_quotes(char *input, int i, int *tokens)
 	return (i);
 }
 
-int	ft_token_no_quotes(char *input, int i, int *tokens)
+static int	ft_token_no_quotes(char *input, int i, int *tokens)
 {
 	char	c;
 
@@ -35,7 +35,7 @@ int	ft_token_no_quotes(char *input, int i, int *tokens)
 	return (i);
 }
 
-int	ft_redir_pipe_token(char *input, int i, int *tokens)
+static int	ft_redir_pipe_token(char *input, int i, int *tokens)
 {
 	(*tokens)++;
 	if (input[i] == '|')

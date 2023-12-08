@@ -19,7 +19,7 @@ int	errors_manager(int action, int code, char *msg, char *arg)
 		msg_full = malloc(msg_len);
 		if (!msg_full)
 			return (-1);
-		strcpy(msg_full, arg);
+		ft_strcpy(msg_full, arg);
 		ft_strcat(msg_full, ": ");
 		ft_strcat(msg_full, msg);
 		ft_putstr_fd(msg_full, STDERR_FILENO);

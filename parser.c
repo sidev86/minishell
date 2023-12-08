@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	ft_init_first_cmd_node(t_command **command, t_tokens *cmd_line,
+static void	ft_init_first_cmd_node(t_command **command, t_tokens *cmd_line,
 		int total_tokens)
 {
 	(*command) = (t_command *)malloc(sizeof(t_command));
@@ -8,10 +8,9 @@ void	ft_init_first_cmd_node(t_command **command, t_tokens *cmd_line,
 	(*command)->num_cmds = ft_get_num_cmds(cmd_line, total_tokens);
 	(*command)->prev = NULL;
 	(*command)->last_exit_code = errors_manager(GET_CODE, 0, NULL, NULL);
-	//printf("last exit code = %d\n", (*command)->last_exit_code);
 }
 
-void	ft_set_cmd_parameters(t_command **curr_cmd)
+static void	ft_set_cmd_parameters(t_command **curr_cmd)
 {
 	(*curr_cmd)->argv = (char **)malloc(sizeof(char *)
 			* ((*curr_cmd)->num_tokens + 1));
@@ -20,6 +19,10 @@ void	ft_set_cmd_parameters(t_command **curr_cmd)
 		printf("Malloc error\n");
 		exit(1);
 	}
+	(*curr_cmd)->end_tokens = NULL;
+	(*curr_cmd)->heredoc_text = NULL;
+	(*curr_cmd)->lines_heredoc = 0;
+	(*curr_cmd)->heredoc_counter = 0;
 	(*curr_cmd)->argc = (*curr_cmd)->num_tokens;
 	(*curr_cmd)->redir_in = 0;
 	(*curr_cmd)->redir_out = 0;
@@ -28,7 +31,7 @@ void	ft_set_cmd_parameters(t_command **curr_cmd)
 	(*curr_cmd)->fd_stdinput = STDIN_FILENO;
 }
 
-void	ft_set_next_prev_nodes(t_command **curr_cmd, int arg_index,
+static void	ft_set_next_prev_nodes(t_command **curr_cmd, int arg_index,
 		int total_tokens)
 {
 	if (arg_index < total_tokens)
@@ -45,7 +48,7 @@ void	ft_set_next_prev_nodes(t_command **curr_cmd, int arg_index,
 		(*curr_cmd)->next = NULL;
 }
 
-void	ft_set_cmd_type(t_command **curr_cmd)
+static void	ft_set_cmd_type(t_command **curr_cmd)
 {
 	if (ft_cmd_builtin((*curr_cmd)->argv[0]))
 		(*curr_cmd)->is_builtin = 1;

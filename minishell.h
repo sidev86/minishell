@@ -6,6 +6,7 @@
 # define PRINT 2
 
 # include "libft/libft.h"
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>
@@ -14,7 +15,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-//#include <errno.h>
 
 typedef struct s_tokens
 {
@@ -31,6 +31,7 @@ typedef struct s_command
 	char				**heredoc_text;
 	char				**end_tokens;
 	int					skip_terminator;
+	int					lines_heredoc;
 	int					has_heredoc;
 	int					heredoc_counter;
 	int					is_builtin;
@@ -42,7 +43,7 @@ typedef struct s_command
 	int					num_cmds;
 	int					redir_out;
 	int					redir_in;
-	int 					last_exit_code;
+	int					last_exit_code;
 	struct s_command	*next;
 	struct s_command	*prev;
 }						t_command;
@@ -58,6 +59,8 @@ typedef struct s_env_vars
 // STRING FUNCTIONS
 int						ft_strcmp(const char *s1, const char *s2);
 char					*ft_strcat(char *dest, char *src);
+char					*ft_strcpy(char *s1, const char *s2);
+void *ft_realloc(void *ptr, int old_size, int new_size);
 
 // BUILTINS
 void					ft_echo(t_command **cmd);
@@ -77,7 +80,6 @@ void					ft_execute(t_command **cmd, t_env_vars **env_list,
 
 // ENV LIST
 void					ft_create_env_list(t_env_vars **first, char **envp);
-void					ft_print_env_list(t_env_vars **first);
 int						ft_env_var_exists(t_env_vars ***env_list, char *var);
 void					ft_set_env_var(t_env_vars ***env_list, char *env_str,
 							int var_len);
@@ -88,6 +90,7 @@ void					ft_remove_env_var(t_env_vars ***env_list, char *env_str,
 
 // LEXER
 int						ft_count_tokens(char *input);
+int						ft_get_token_len(char *input, int i);
 
 // PARSING
 int						ft_get_num_cmds(t_tokens *cmd_line, int num_tokens);
@@ -97,10 +100,12 @@ int						ft_put_tokens_in_cmd(t_command **curr_cmd,
 							t_tokens *cmd_line, int arg_index);
 
 // REDIRS
-int						ft_get_out_redirections(t_command **cmd);
 int						ft_last_out_redir(t_command **cmd);
 int						ft_get_in_redirections(t_command **cmd);
 int						ft_last_in_redir(t_command **cmd);
+int						ft_redir_output_append(char *filename);
+int						ft_redir_output_overwrite(char *filename);
+void					ft_empty_out_other(t_command **cmd);
 
 // EXECUTOR
 void					ft_exec_builtin(t_command **cmd,
@@ -133,9 +138,8 @@ int						ft_is_a_valid_character(char c);
 
 int						ft_cmd_builtin(char *cmd);
 char					*ft_get_cmdname(char *str);
-int						ft_get_total_cmds(t_command **cmd);
 char					*ft_get_path(t_env_vars **env_list);
-void 					ft_free_env_list(t_env_vars **env_list);
-void 					ft_free_all_commands(t_command **cmd);
+void					ft_free_env_list(t_env_vars **env_list);
+void					ft_free_all_commands(t_command **cmd);
 
 #endif

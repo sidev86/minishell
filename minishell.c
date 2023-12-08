@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*ft_wait_for_input(void)
+static char	*ft_wait_for_input(void)
 {
 	char	*input;
 
@@ -16,7 +16,7 @@ char	*ft_wait_for_input(void)
 	return (input);
 }
 
-int	ft_command_is_exit(char *input, t_env_vars **env_list)
+static int	ft_command_is_exit(char *input, t_env_vars **env_list)
 {
 	char	*str;
 	int		cmd_len;
@@ -40,6 +40,15 @@ int	ft_command_is_exit(char *input, t_env_vars **env_list)
 	return (0);
 }
 
+static void	handle_exit_command(char *input, t_env_vars **env_list)
+{
+	if (ft_command_is_exit(input, env_list))
+	{
+		free(input);
+		exit(44);
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
@@ -47,7 +56,6 @@ int	main(int argc, char **argv, char **envp)
 
 	first_env = 0;
 	ft_create_env_list(&first_env, envp);
-	setenv("TERM", "xterm", 1);
 	if (argc > 1 || argv[1])
 		return (1);
 	while (1)
@@ -60,11 +68,7 @@ int	main(int argc, char **argv, char **envp)
 			input[ft_strlen(input)] = '\0';
 		if (input != NULL)
 		{
-			if (ft_command_is_exit(input, &first_env))
-			{
-				free(input);
-				exit(44);
-			}
+			handle_exit_command(input, &first_env);
 			ft_lex(input, &first_env, envp);
 			add_history(input);
 			free(input);

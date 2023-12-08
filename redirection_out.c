@@ -1,5 +1,26 @@
 #include "minishell.h"
-#include <fcntl.h>
+
+int	ft_last_out_redir(t_command **cmd)
+{
+	int	i;
+	int	redir_num;
+
+	i = 0;
+	redir_num = 0;
+	while (i < (*cmd)->num_tokens)
+	{
+		if ((*cmd)->argv[i])
+		{
+			if (!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i],
+					">>"))
+				redir_num++;
+		}
+		if (redir_num == (*cmd)->num_redirs)
+			break ;
+		i++;
+	}
+	return (i);
+}
 
 int	ft_redir_output_overwrite(char *filename)
 {
@@ -43,7 +64,7 @@ int	ft_redir_output_append(char *filename)
 	return (original_fd);
 }
 
-void	ft_empty_out_redir(t_command **cmd, int i, int *num_redir)
+static void	ft_empty_out_redir(t_command **cmd, int i, int *num_redir)
 {
 	int	file;
 
@@ -65,7 +86,7 @@ void	ft_empty_out_redir(t_command **cmd, int i, int *num_redir)
 		(*cmd)->argv[i] = NULL;
 		if ((*cmd)->argv[i + 1])
 		{
-			free((*cmd)->argv[i+1]);
+			free((*cmd)->argv[i + 1]);
 			(*cmd)->argv[i + 1] = NULL;
 		}
 		i++;
@@ -91,39 +112,4 @@ void	ft_empty_out_other(t_command **cmd)
 			break ;
 		i++;
 	}
-}
-
-void	ft_check_output_redirs(t_command **cmd)
-{
-	int	i;
-	int	fd_stdout;
-
-	fd_stdout = 1;
-	i = 0;
-	(*cmd)->num_redirs = ft_get_out_redirections(cmd);
-	if ((*cmd)->num_redirs > 0)
-		i = ft_last_out_redir(cmd);
-	if ((*cmd)->argv[i])
-	{
-		if (!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i],
-				">>"))
-		{
-			(*cmd)->redir_out = 1;
-			if (!ft_strcmp((*cmd)->argv[i], ">"))
-				fd_stdout = ft_redir_output_overwrite((*cmd)->argv[i + 1]);
-			else if (!ft_strcmp((*cmd)->argv[i], ">>"))
-				fd_stdout = ft_redir_output_append((*cmd)->argv[i + 1]);
-			free((*cmd)->argv[i]);
-			(*cmd)->argv[i] = NULL;
-			if ((*cmd)->argv[i + 1])
-			{
-				free((*cmd)->argv[i+1]);
-				(*cmd)->argv[i + 1] = NULL;
-			}
-			if ((*cmd)->num_redirs > 1)
-				ft_empty_out_other(cmd);
-		}
-	}
-	i++;
-	(*cmd)->fd_terminal = fd_stdout;
 }

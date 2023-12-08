@@ -18,7 +18,7 @@ static void	handle_variable(char *output, int *j, char *variabile)
 		if (variabile[i] == '?')
 		{
 			e_code = errors_manager(GET_CODE, 0, NULL, NULL);
-			strcpy(output, ft_itoa(e_code));
+			ft_strcpy(output, ft_itoa(e_code));
 			(*j) += ft_strlen(ft_itoa(e_code));
 			if (variabile[i + 1] != ' ' && variabile[i + 1])
 			{
@@ -47,6 +47,7 @@ void	extract_and_handle(char *output, int *j, char *input, int *i)
 	}
 	variabile[k] = '\0';
 	handle_variable(output, j, variabile);
+	free(variabile);
 }
 
 static void	handle_quoted_input(char *output, int *j, char *input, int *i)
@@ -99,13 +100,13 @@ char	*handle_quotes(char *input)
 
 	i = 0;
 	j = 0;
-	output = NULL;
 	output = (char *)malloc(ft_strlen(input) * 100);
 	if (!output)
 	{
 		perror("Memory allocation error");
 		exit(1);
 	}
+	output[0] = '\0';
 	while (input[i])
 	{
 		handle_input(output, &j, input, &i);

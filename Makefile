@@ -8,15 +8,20 @@ SRCS =	minishell.c \
 	executor.c \
 	executor_2.c \
 	redirection_out.c \
+	redirection_out_extra.c \
 	redirection_in.c \
-	redirection_more.c \
+	redirection_in_extra.c \
 	env_utils.c \
 	env_utils_2.c \
 	ft_strcmp.c \
+	ft_strcpy.c \
+	ft_realloc.c \
 	ft_strcat.c \
 	lexer.c \
+	lexer_extra.c \
 	builtins.c \
 	builtins_2.c \
+	builtins_3.c \
 	quotes.c \
 	var_check.c \
 	errors_manager.c \
