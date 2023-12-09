@@ -65,7 +65,7 @@ void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 			dirs = ft_split(path, ':');
 			exec_command_in_path((*cmd)->argv[0], dirs, envp, cmd);
 		}
-		errors_manager(PRINT, 127, "Command not found\n", path);
+		errors_manager(PRINT, 127, "Command not found\n", (*cmd)->argv[0]);
 		exit(127);
 	}
 	else

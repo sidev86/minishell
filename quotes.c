@@ -7,6 +7,7 @@ static void	handle_variable(char *output, int *j, char *variabile)
 	int		e_code;
 
 	i = 0;
+	output[(*j)] = '\0';
 	valorevariabile = getenv(variabile);
 	if (valorevariabile)
 	{
@@ -84,6 +85,7 @@ static void	handle_input(char *output, int *j, char *input, int *i)
 	else if (input[*i] == '$' && is_alphanumeric(input[*i + 1]))
 	{
 		(*i)++;
+		output[(*j)] = '\0';
 		extract_and_handle(output, j, input, i);
 	}
 	else

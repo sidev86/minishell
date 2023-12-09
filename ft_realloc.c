@@ -1,29 +1,22 @@
 #include "minishell.h"
+#include <stdlib.h>
+#include <malloc.h>
 
-void *ft_realloc(void *ptr, int old_size, int new_size)
-{
-	char *s;
+void *ft_realloc(void *ptr, size_t newSize) {
+    if (newSize == 0) {
+        free(ptr);
+        return NULL;
+    }
 
-	if (new_size > old_size)
-	{
-		s = malloc(new_size);
-		free(ptr);
-		return (s);
-	}
-	if (new_size == old_size)
-	{
-		return (ptr);
-	}
-	if (ptr == NULL)
-	{
-		s = malloc(new_size);
-		free(ptr);
-		return (s);
-	}
-	if (new_size == 0 && ptr != NULL)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	return (ptr);
+    void *newPtr = malloc(newSize);
+
+    if (newPtr) {
+        size_t oldSize = malloc_usable_size(ptr);
+        size_t copySize = oldSize < newSize ? oldSize : newSize;
+        ft_memcpy(newPtr, ptr, copySize);
+        free(ptr);
+    }
+
+    return newPtr;
 }
+

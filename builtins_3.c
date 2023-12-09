@@ -6,10 +6,9 @@ static int	check_and_handle_var_validity(char *var_name)
 	{
 		errors_manager(SET_CODE, 1, NULL, NULL);
 		errors_manager(PRINT, 1, "Not a valid identifier\n", var_name);
-		free(var_name);
+		//free(var_name);
 		return (1);
 	}
-	free(var_name);
 	return (0);
 }
 
@@ -17,11 +16,13 @@ static int	handle_export_errors(char *env_arg, int *var_len)
 {
 	char	*var_name;
 
+	
 	if (!env_arg)
 	{
 		errors_manager(SET_CODE, 1, NULL, NULL);
 		return (1);
 	}
+	
 	if (!ft_strchr(env_arg, '='))
 	{
 		*var_len = ft_strlen(env_arg);
@@ -49,7 +50,6 @@ static void	ft_handle_env_var(t_env_vars ***env_list, char *env_arg,
 	{
 		ft_update_env_var(env_list, env_arg, var_len);
 	}
-	free(var);
 }
 
 void	ft_export(t_command **cmd, t_env_vars ***env_list)
