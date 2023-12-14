@@ -63,6 +63,7 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGTSTP, SIG_IGN);
 		signal(SIGINT, signal_handler);
+		
 		input = ft_wait_for_input();
 		if (input)
 			input[ft_strlen(input)] = '\0';
