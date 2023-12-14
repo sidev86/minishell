@@ -1,13 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quotes.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:29:43 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:29:44 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	handle_variable(char *output, int *j, char *variabile)
 {
 	char	*valorevariabile;
-	int		i;
-	int		e_code;
-
-	i = 0;
-	output[(*j)] = '\0';
+	
+	output[*j] = '\0';
 	valorevariabile = getenv(variabile);
 	if (valorevariabile)
 	{
@@ -15,19 +24,7 @@ static void	handle_variable(char *output, int *j, char *variabile)
 		(*j) += ft_strlen(valorevariabile);
 	}
 	else
-	{
-		if (variabile[i] == '?')
-		{
-			e_code = errors_manager(GET_CODE, 0, NULL, NULL);
-			ft_strcpy(output, ft_itoa(e_code));
-			(*j) += ft_strlen(ft_itoa(e_code));
-			if (variabile[i + 1] != ' ' && variabile[i + 1])
-			{
-				while (variabile[i + 1] != ' ' && variabile[i + 1])
-					output[(*j)++] = variabile[++i];
-			}
-		}
-	}
+		handle_exit_code(output, j, variabile);
 }
 
 void	extract_and_handle(char *output, int *j, char *input, int *i)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_memory.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:27:29 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:27:31 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_free_env_list(t_env_vars **env_list)
@@ -9,8 +21,12 @@ void	ft_free_env_list(t_env_vars **env_list)
 	while (curr_env)
 	{
 		next_env = curr_env->next;
-		free(curr_env->var);
-		free(curr_env->value);
+		if (curr_env->var)
+			free(curr_env->var);
+		if (curr_env->value)
+			free(curr_env->value);
+		if (curr_env->env_str)
+			free(curr_env->env_str);
 		free(curr_env);
 		curr_env = next_env;
 	}

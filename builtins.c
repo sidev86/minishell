@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:25:58 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:26:00 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	print_echo_arguments(t_command *cmd, int *i)
@@ -56,19 +68,22 @@ void	ft_unset(t_command **cmd, t_env_vars ***env_list)
 	char	*env_arg;
 	int		var_len;
 
-	env_arg = (*cmd)->argv[1];
+	env_arg = NULL;
+	if ((*cmd)->argv[1])
+		env_arg = ft_substr((*cmd)->argv[1], 0, ft_strlen((*cmd)->argv[1]));
 	if (!env_arg)
 	{
 		errors_manager(SET_CODE, 0, NULL, NULL);
 		return ;
 	}
 	var_len = ft_strlen(env_arg);
-	if (ft_env_var_exists(env_list, ft_substr(env_arg, 0, var_len))
+	if (ft_env_var_exists(env_list, env_arg)
 		&& env_arg != NULL)
 	{
 		ft_remove_env_var(env_list, env_arg, var_len);
 	}
 	errors_manager(SET_CODE, 0, NULL, NULL);
+	free(env_arg);
 	return ;
 }
 
@@ -77,7 +92,7 @@ void	ft_env(t_env_vars ***env_list)
 	t_env_vars	*curr;
 
 	curr = **env_list;
-	while (curr != NULL)
+	while (curr)
 	{
 		printf("%s\n", curr->env_str);
 		curr = curr->next;

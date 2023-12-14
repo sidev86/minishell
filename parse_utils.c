@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:29:36 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:29:37 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_get_num_cmds(t_tokens *cmd_line, int num_tokens)
@@ -25,7 +37,7 @@ int	ft_get_tokens_in_cmd(t_tokens *cmd_line, int index, int total_tokens)
 	tokens = 0;
 	if (cmd_line[index].token[0] == '|')
 	{
-		errors_manager(SET_CODE, 2, NULL, NULL);
+		errors_manager(SET_CODE, 1, NULL, NULL);
 		printf("Syntax error near unexpected token '|'\n");
 		return (0);
 	}

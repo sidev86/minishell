@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:28:29 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:28:31 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	handle_end_token(char *input_line, t_command **cmd,
@@ -41,7 +53,7 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 	}
 	output[j] = '\0';
 	(*line_count)++;
-	(*cmd)->heredoc_text = (char **)realloc((*cmd)->heredoc_text,
+	(*cmd)->heredoc_text = (char **)ft_realloc((*cmd)->heredoc_text,
 			(*line_count) * sizeof(char *));
 	(*cmd)->heredoc_text[(*line_count) - 1] = ft_strdup(output);
 	free(output);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:26:36 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:26:38 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_create_env_list(t_env_vars **first, char **envp)
@@ -11,7 +23,7 @@ void	ft_create_env_list(t_env_vars **first, char **envp)
 	curr = *first;
 	while (envp[i])
 	{
-		curr->env_str = envp[i];
+		curr->env_str = ft_substr(envp[i], 0, ft_strlen(envp[i]));
 		curr->var = ft_substr(envp[i], 0, ft_strchr(envp[i], '=') - envp[i]);
 		curr->value = ft_substr(envp[i], ft_strlen(envp[i])
 				- ft_strlen(ft_strchr(envp[i], '=')) + 1, envp[i]

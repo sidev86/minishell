@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:29:10 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:29:12 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -15,6 +27,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <malloc.h>
 
 typedef struct s_tokens
 {
@@ -126,6 +139,7 @@ void					ft_check_if_heredoc(t_command **cmd);
 int						ft_is_redir_pipe(char c);
 void					signal_handler(int sig);
 void					ft_heredoc(t_command **cmd);
+void					handle_exit_code(char *output, int *j, char *variabile);
 
 void					extract_and_handle(char *output, int *j, char *input,
 							int *i);

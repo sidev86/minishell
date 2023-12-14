@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:27:24 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:27:25 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	exec_command_in_path(char *cmd_name, char **dirs, char **envp,
@@ -27,7 +39,6 @@ static void	exec_command_in_path(char *cmd_name, char **dirs, char **envp,
 		free(full_path);
 		i++;
 	}
-	
 }
 
 static void	exec_command_direct(t_command **cmd, char **envp, char *path)

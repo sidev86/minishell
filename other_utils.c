@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   other_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:29:18 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:29:19 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_cmd_builtin(char *cmd)
@@ -64,10 +76,33 @@ void	ft_handle_quotes_alltokens(t_command **cmd)
 		if ((*cmd)->argv[i])
 		{
 			str = handle_quotes((*cmd)->argv[i]);
-			(*cmd)->argv[i] = realloc((*cmd)->argv[i], ft_strlen(str)+1);
-			strcpy((*cmd)->argv[i], str);
+			(*cmd)->argv[i] = ft_realloc((*cmd)->argv[i], ft_strlen(str) + 1);
+			ft_strcpy((*cmd)->argv[i], str);
 			free(str);
 		}
 		i++;
+	}
+}
+
+void	handle_exit_code(char *output, int *j, char *variabile)
+{
+	int		i;
+	int		e_code;
+	char	*code_str;
+
+	i = 0;
+	e_code = 0;
+	if (variabile[i] == '?')
+	{
+		e_code = errors_manager(GET_CODE, 0, NULL, NULL);
+		code_str = ft_itoa(e_code);
+		ft_strcpy(output, code_str);
+		(*j) += ft_strlen(code_str);
+		if (variabile[i + 1] != ' ' && variabile[i + 1])
+		{
+			while (variabile[i + 1] != ' ' && variabile[i + 1])
+				output[(*j)++] = variabile[++i];
+		}
+		free(code_str);
 	}
 }

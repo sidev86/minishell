@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils_2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/09 14:26:46 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/12/09 14:26:48 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len)
@@ -9,7 +21,7 @@ void	ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 		curr = curr->next;
 	curr->next = malloc(sizeof(t_env_vars));
 	curr = curr->next;
-	curr->env_str = env_str;
+	curr->env_str = ft_substr(env_str, 0, ft_strlen(env_str));
 	curr->var = ft_substr(env_str, 0, var_len);
 	curr->value = ft_substr(env_str, var_len + 1, ft_strlen(env_str) - var_len
 			- 1);
@@ -23,7 +35,7 @@ void	ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 	curr = **env_list;
 	while (ft_strcmp(curr->var, ft_substr(env_str, 0, var_len)))
 		curr = curr->next;
-	curr->env_str = env_str;
+	curr->env_str = ft_substr(env_str, 0, ft_strlen(env_str));
 	curr->var = ft_substr(env_str, 0, var_len);
 	curr->value = ft_substr(env_str, var_len + 1, ft_strlen(env_str) - var_len
 			- 1);
@@ -33,11 +45,13 @@ static t_env_vars	*find_env_var_node(t_env_vars ***env_list, char *env_str,
 		int var_len)
 {
 	t_env_vars	*curr;
+	char		*var;
 
 	curr = **env_list;
-	while (curr != NULL && ft_strcmp(curr->var, ft_substr(env_str, 0,
-				var_len)) != 0)
+	var = ft_substr(env_str, 0, var_len);
+	while (curr != NULL && (ft_strcmp(curr->var, var) != 0))
 		curr = curr->next;
+	free(var);
 	return (curr);
 }
 
@@ -58,6 +72,9 @@ static void	remove_env_var_node(t_env_vars ***env_list,
 		if (curr != NULL)
 			curr->next = node_to_remove->next;
 	}
+	free(node_to_remove->env_str);
+	free(node_to_remove->var);
+	free(node_to_remove->value);
 	free(node_to_remove);
 }
 
