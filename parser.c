@@ -94,6 +94,13 @@ void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 		arg_index += curr_cmd->num_tokens + 1;
 		ft_set_next_prev_nodes(&curr_cmd, arg_index, total_tokens);
 	}
+	i = 0;
+	while (i < command->num_tokens)
+	{
+		free(cmd_line[i].token);
+		i++;
+	}
+	free(cmd_line);
 	ft_execute(&command, env_list, envp);
 	ft_free_all_commands(&command);
 }

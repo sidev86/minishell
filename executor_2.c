@@ -67,7 +67,8 @@ void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 {
 	char	*path;
 	char	**dirs;
-
+	int	i;
+	
 	path = ft_get_path(env_list);
 	if (!ft_strchr((*cmd)->argv[0], '/'))
 	{
@@ -77,6 +78,12 @@ void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 			exec_command_in_path((*cmd)->argv[0], dirs, envp, cmd);
 		}
 		errors_manager(PRINT, 127, "Command not found\n", (*cmd)->argv[0]);
+		ft_free_all_commands(cmd);
+		ft_free_env_list(env_list);
+		i = 0;
+		while (dirs[i])
+			free(dirs[i++]);
+		free(dirs);
 		exit(127);
 	}
 	else
