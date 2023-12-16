@@ -41,16 +41,15 @@ OBJS = $(SRCS:.c=.o)
 
 LIBFT = libft/libft.a
 
-$(NAME): $(OBJS) libft
+$(NAME): $(OBJS)
+	make -C libft 
 	$(CC) $(FLAGS) $(SRCS) -o $(NAME) -lreadline $(LIBFT)
 
 
-all: $(NAME) $(OBJS) $(INC)
+all: $(NAME) $(OBJS) 
 
-libft:
-	make -C libft
 
-%.o: %.c $(INC)
+%.o: %.c 
 		$(CC) $(FLAGS) -c $< -o $@
 		
 clean:
