@@ -33,10 +33,8 @@ static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 		dup2(fd_pipe[3], STDOUT_FILENO);
 		close(fd_pipe[3]);
 	}
-	if ((*curr_cmd)->argv[0] && !(*curr_cmd)->is_builtin)
-		ft_exec_systemcmd(curr_cmd, envp, env_list);
-	else if ((*curr_cmd)->argv[0] && (*curr_cmd)->is_builtin)
-		ft_exec_builtin(curr_cmd, &env_list);
+	ft_exec_systemcmd(curr_cmd, envp, env_list);
+	
 	exit(0);
 }
 
@@ -53,10 +51,11 @@ static void	ft_after_child_exec(t_command **curr_cmd, t_command **cmd,
 		fd_pipe[0] = fd_pipe[2];
 		fd_pipe[1] = fd_pipe[3];
 	}
-	if ((*cmd)->fd_terminal != -1 && (*cmd)->redir_out)
-		dup2((*cmd)->fd_terminal, STDOUT_FILENO);
-	if ((*cmd)->fd_stdinput != -1 && (*cmd)->redir_in)
-		dup2((*cmd)->fd_stdinput, STDIN_FILENO);
+	cmd = cmd;
+	//if ((*curr_cmd)->fd_terminal != -1 && (*curr_cmd)->redir_out)
+		dup2((*curr_cmd)->fd_terminal, STDOUT_FILENO);
+	//if ((*curr_cmd)->fd_stdinput != -1 && (*curr_cmd)->redir_in)
+		dup2((*curr_cmd)->fd_stdinput, STDIN_FILENO);
 }
 
 static void	ft_wait_child_termination(t_command **cmd, int status, int *fd_pipe)
@@ -64,20 +63,22 @@ static void	ft_wait_child_termination(t_command **cmd, int status, int *fd_pipe)
 	int	i;
 
 	i = 0;
-	if ((*cmd)->num_cmds > 1)
+	/*if ((*cmd)->num_cmds > 1)
 	{
 		close(fd_pipe[0]);
 		close(fd_pipe[1]);
-	}
-	while (i < (*cmd)->num_cmds)
-	{
+	}*/
+	cmd = cmd;
+	fd_pipe = fd_pipe;
+	//while (i < (*cmd)->num_cmds)
+	//{
 		wait(&status);
 		if (WIFEXITED(status))
 		{
 			errors_manager(SET_CODE, WEXITSTATUS(status), NULL, NULL);
 		}
 		i++;
-	}
+	//}
 }
 
 static void	ft_exec_single_builtin(t_command **curr_cmd, t_command **cmd,
@@ -88,14 +89,15 @@ static void	ft_exec_single_builtin(t_command **curr_cmd, t_command **cmd,
 	ft_handle_quotes_alltokens(curr_cmd);
 	if ((*curr_cmd)->argv[0] && (*curr_cmd)->is_builtin)
 		ft_exec_builtin(curr_cmd, &env_list);
-	if ((*cmd)->fd_terminal != -1)
+	if ((*curr_cmd)->fd_terminal != -1)
 	{
-		dup2((*cmd)->fd_terminal, STDOUT_FILENO);
+		dup2((*curr_cmd)->fd_terminal, STDOUT_FILENO);
 	}
-	if ((*cmd)->fd_stdinput != -1)
+	if ((*curr_cmd)->fd_stdinput != -1)
 	{
-		dup2((*cmd)->fd_stdinput, STDIN_FILENO);
+		dup2((*curr_cmd)->fd_stdinput, STDIN_FILENO);
 	}
+	cmd = cmd;
 }
 
 void	ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
@@ -119,9 +121,10 @@ void	ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 				ft_execute_in_child(&curr_cmd, fd_pipe, env_list, envp);
 			else
 				ft_after_child_exec(&curr_cmd, cmd, fd_pipe);
+			ft_wait_child_termination(cmd, status, fd_pipe);
 			curr_cmd = curr_cmd->next;
 		}
-		ft_wait_child_termination(cmd, status, fd_pipe);
+		//ft_wait_child_termination(cmd, status, fd_pipe);
 	}
 	else
 		ft_exec_single_builtin(&curr_cmd, cmd, env_list);

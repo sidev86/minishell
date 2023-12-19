@@ -155,5 +155,6 @@ char					*ft_get_cmdname(char *str);
 char					*ft_get_path(t_env_vars **env_list);
 void					ft_free_env_list(t_env_vars **env_list);
 void					ft_free_all_commands(t_command **cmd);
+void					ft_free_cmd(t_command **cmd);
 
 #endif

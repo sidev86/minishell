@@ -31,14 +31,23 @@ void	ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 void	ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 {
 	t_env_vars	*curr;
-
+	char		*var_str;
+	
 	curr = **env_list;
-	while (ft_strcmp(curr->var, ft_substr(env_str, 0, var_len)))
+	var_str = ft_substr(env_str, 0, var_len);
+	while (ft_strcmp(curr->var, var_str))
 		curr = curr->next;
+	if (curr->var)
+		free(curr->var);
+	if (curr->value)
+		free(curr->value);
+	if (curr->env_str)
+		free(curr->env_str);
 	curr->env_str = ft_substr(env_str, 0, ft_strlen(env_str));
 	curr->var = ft_substr(env_str, 0, var_len);
 	curr->value = ft_substr(env_str, var_len + 1, ft_strlen(env_str) - var_len
 			- 1);
+	free(var_str);
 }
 
 static t_env_vars	*find_env_var_node(t_env_vars ***env_list, char *env_str,

@@ -65,7 +65,10 @@ void	ft_check_output_redirs(t_command **cmd)
 	i = 0;
 	(*cmd)->num_redirs = ft_get_out_redirections(cmd);
 	if ((*cmd)->num_redirs > 0)
+	{
+		(*cmd)->redir_out = 1;
 		i = ft_last_out_redir(cmd);
+	}
 	if ((*cmd)->argv[i])
 	{
 		if (!ft_strcmp((*cmd)->argv[i], ">") || !ft_strcmp((*cmd)->argv[i],

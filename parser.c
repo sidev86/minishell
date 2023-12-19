@@ -22,7 +22,7 @@ static void	ft_init_first_cmd_node(t_command **command, t_tokens *cmd_line,
 	(*command)->last_exit_code = errors_manager(GET_CODE, 0, NULL, NULL);
 }
 
-static void	ft_set_cmd_parameters(t_command **curr_cmd)
+static void	ft_set_cmd_parameters(t_command **curr_cmd, t_command **cmd)
 {
 	(*curr_cmd)->argv = (char **)malloc(sizeof(char *)
 			* ((*curr_cmd)->num_tokens + 1));
@@ -41,6 +41,7 @@ static void	ft_set_cmd_parameters(t_command **curr_cmd)
 	(*curr_cmd)->has_heredoc = 0;
 	(*curr_cmd)->fd_terminal = STDOUT_FILENO;
 	(*curr_cmd)->fd_stdinput = STDIN_FILENO;
+	(*curr_cmd)->num_cmds = (*cmd)->num_cmds;
 }
 
 static void	ft_set_next_prev_nodes(t_command **curr_cmd, int arg_index,
@@ -85,7 +86,7 @@ void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 				total_tokens);
 		if (curr_cmd->num_tokens == 0)
 			return ;
-		ft_set_cmd_parameters(&curr_cmd);
+		ft_set_cmd_parameters(&curr_cmd, &command);
 		i = ft_put_tokens_in_cmd(&curr_cmd, cmd_line, arg_index);
 		if (i == -1)
 			return ;
@@ -95,7 +96,7 @@ void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 		ft_set_next_prev_nodes(&curr_cmd, arg_index, total_tokens);
 	}
 	i = 0;
-	while (i < command->num_tokens)
+	while (i < total_tokens)
 	{
 		free(cmd_line[i].token);
 		i++;

@@ -53,3 +53,17 @@ void	ft_free_all_commands(t_command **cmd)
 	}
 	*cmd = NULL;
 }
+
+
+void ft_free_cmd(t_command **cmd)
+{
+	int i; 
+	
+	i = 0;
+	while (i < (*cmd)->num_tokens)
+		free((*cmd)->argv[i++]);
+	free((*cmd)->argv); 
+	free(*cmd);
+}
+
+
