@@ -12,12 +12,15 @@
 
 #include "minishell.h"
 
-static void	handle_variable(char *output, int *j, char *variabile)
+static void	handle_variable(char *output, int *j, char *variabile, t_env_vars **env_list)
 {
 	char	*valorevariabile;
 	
 	output[*j] = '\0';
-	valorevariabile = getenv(variabile);
+	//printf("variabile = %s\n", variabile);
+	valorevariabile = ft_get_env_var_value(env_list, variabile);
+	//printf("valore variabile = %s\n", valorevariabile);
+	//printf("len val variabile = %ld\n", ft_strlen(valorevariabile));
 	if (valorevariabile)
 	{
 		ft_strcat(output, valorevariabile);
@@ -27,7 +30,7 @@ static void	handle_variable(char *output, int *j, char *variabile)
 		handle_exit_code(output, j, variabile);
 }
 
-void	extract_and_handle(char *output, int *j, char *input, int *i)
+void	extract_and_handle(char *output, int *j, char *input, int *i, t_env_vars **env_list)
 {
 	int		k;
 	char	*variabile;
@@ -44,11 +47,11 @@ void	extract_and_handle(char *output, int *j, char *input, int *i)
 		variabile[k++] = input[(*i)++];
 	}
 	variabile[k] = '\0';
-	handle_variable(output, j, variabile);
+	handle_variable(output, j, variabile, env_list);
 	free(variabile);
 }
 
-static void	handle_quoted_input(char *output, int *j, char *input, int *i)
+static void	handle_quoted_input(char *output, int *j, char *input, int *i, t_env_vars **env_list)
 {
 	(*i)++;
 	while (input[*i] != '"')
@@ -56,7 +59,7 @@ static void	handle_quoted_input(char *output, int *j, char *input, int *i)
 		if (input[*i] == '$' && is_alphanumeric(input[*i + 1]))
 		{
 			(*i)++;
-			extract_and_handle(output, j, input, i);
+			extract_and_handle(output, j, input, i, env_list);
 		}
 		else
 		{
@@ -66,10 +69,10 @@ static void	handle_quoted_input(char *output, int *j, char *input, int *i)
 	(*i)++;
 }
 
-static void	handle_input(char *output, int *j, char *input, int *i)
+static void	handle_input(char *output, int *j, char *input, int *i, t_env_vars **env_list)
 {
 	if (input[*i] == '"')
-		handle_quoted_input(output, j, input, i);
+		handle_quoted_input(output, j, input, i, env_list);
 	else if (input[*i] == '\'')
 	{
 		(*i)++;
@@ -83,7 +86,7 @@ static void	handle_input(char *output, int *j, char *input, int *i)
 	{
 		(*i)++;
 		output[(*j)] = '\0';
-		extract_and_handle(output, j, input, i);
+		extract_and_handle(output, j, input, i, env_list);
 	}
 	else
 	{
@@ -91,7 +94,7 @@ static void	handle_input(char *output, int *j, char *input, int *i)
 	}
 }
 
-char	*handle_quotes(char *input)
+char	*handle_quotes(char *input, t_env_vars **env_list)
 {
 	int		i;
 	int		j;
@@ -108,7 +111,7 @@ char	*handle_quotes(char *input)
 	output[0] = '\0';
 	while (input[i])
 	{
-		handle_input(output, &j, input, &i);
+		handle_input(output, &j, input, &i, env_list);
 	}
 	output[j] = '\0';
 	return (output);

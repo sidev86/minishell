@@ -41,6 +41,8 @@ void	ft_free_all_commands(t_command **cmd)
 
 	i = 0;
 	curr_cmd = *cmd;
+	while(curr_cmd->prev)
+		curr_cmd = curr_cmd->prev;
 	while (curr_cmd)
 	{
 		i = 0;

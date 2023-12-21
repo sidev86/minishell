@@ -106,6 +106,7 @@ void	ft_exec_builtin(t_command **cmd, t_env_vars ***env_list)
 		ft_env(env_list);
 	if ((*cmd)->num_cmds > 1)
 	{
-		ft_free_cmd(cmd);
+		ft_free_all_commands(cmd);
 	}
+	ft_free_env_list(*env_list);
 }

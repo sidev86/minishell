@@ -20,7 +20,7 @@ static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 	ft_check_output_redirs(curr_cmd);
 	if ((*curr_cmd)->fd_stdinput == -1 || (*curr_cmd)->fd_terminal == -1)
 		exit(1);
-	ft_handle_quotes_alltokens(curr_cmd);
+	ft_handle_quotes_alltokens(curr_cmd, env_list);
 	if ((*curr_cmd)->prev && !(*curr_cmd)->redir_in)
 	{
 		dup2(fd_pipe[0], STDIN_FILENO);
@@ -33,8 +33,10 @@ static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 		dup2(fd_pipe[3], STDOUT_FILENO);
 		close(fd_pipe[3]);
 	}
-	ft_exec_systemcmd(curr_cmd, envp, env_list);
-	
+	if ((*curr_cmd)->argv[0] && !(*curr_cmd)->is_builtin) 
+		ft_exec_systemcmd(curr_cmd, envp, env_list);
+	else if ((*curr_cmd)->argv[0] && (*curr_cmd)->is_builtin) 
+		ft_exec_builtin(curr_cmd, &env_list);
 	exit(0);
 }
 
@@ -86,7 +88,7 @@ static void	ft_exec_single_builtin(t_command **curr_cmd, t_command **cmd,
 {
 	ft_check_output_redirs(curr_cmd);
 	ft_check_input_redirs(curr_cmd);
-	ft_handle_quotes_alltokens(curr_cmd);
+	ft_handle_quotes_alltokens(curr_cmd, env_list);
 	if ((*curr_cmd)->argv[0] && (*curr_cmd)->is_builtin)
 		ft_exec_builtin(curr_cmd, &env_list);
 	if ((*curr_cmd)->fd_terminal != -1)

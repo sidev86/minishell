@@ -37,7 +37,9 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 	int		i;
 	int		j;
 	char	*output;
-
+	t_env_vars **env_list;
+	
+	env_list = 0;
 	output = (char *)malloc(ft_strlen(input_line) * 100);
 	i = 0;
 	j = 0;
@@ -46,7 +48,7 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 		if (input_line[i] == '$' && is_alphanumeric(input_line[i + 1]))
 		{
 			i++;
-			extract_and_handle(output, &j, input_line, &i);
+			extract_and_handle(output, &j, input_line, &i, env_list);
 		}
 		else
 			output[j++] = input_line[i++];

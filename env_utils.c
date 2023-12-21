@@ -52,3 +52,23 @@ int	ft_env_var_exists(t_env_vars ***env_list, char *var)
 	}
 	return (0);
 }
+
+
+char	*ft_get_env_var_value(t_env_vars **env_list, char *var)
+{
+	t_env_vars *curr;
+	
+	curr = *env_list;
+	while (curr)
+	{
+		if (ft_strcmp(curr->var, var))
+			curr = curr->next;
+		else
+			return(curr->value);
+	}
+	return (NULL);
+}
+
+
+
+

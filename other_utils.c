@@ -65,7 +65,7 @@ char	*ft_get_path(t_env_vars **env_list)
 	return (NULL);
 }
 
-void	ft_handle_quotes_alltokens(t_command **cmd)
+void	ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list)
 {
 	int		i;
 	char	*str;
@@ -75,7 +75,7 @@ void	ft_handle_quotes_alltokens(t_command **cmd)
 	{
 		if ((*cmd)->argv[i])
 		{
-			str = handle_quotes((*cmd)->argv[i]);
+			str = handle_quotes((*cmd)->argv[i], env_list);
 			(*cmd)->argv[i] = ft_realloc((*cmd)->argv[i], ft_strlen(str) + 1);
 			ft_strcpy((*cmd)->argv[i], str);
 			free(str);

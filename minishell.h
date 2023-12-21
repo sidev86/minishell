@@ -100,6 +100,7 @@ void					ft_update_env_var(t_env_vars ***env_list, char *env_str,
 							int var_len);
 void					ft_remove_env_var(t_env_vars ***env_list, char *env_str,
 							int var_len);
+char					*ft_get_env_var_value(t_env_vars **env_list, char *var);
 
 // LEXER
 int						ft_count_tokens(char *input);
@@ -130,8 +131,8 @@ int						errors_manager(int action, int code, char *msg,
 							char *arg);
 
 char					*ft_itoa(int n);
-char					*handle_quotes(char *input);
-void					ft_handle_quotes_alltokens(t_command **cmd);
+char					*handle_quotes(char *input, t_env_vars **env_list);
+void					ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list);
 int						check_var_validity(char *arg);
 void					ft_check_output_redirs(t_command **cmd);
 void					ft_check_input_redirs(t_command **cmd);
@@ -142,7 +143,7 @@ void					ft_heredoc(t_command **cmd);
 void					handle_exit_code(char *output, int *j, char *variabile);
 
 void					extract_and_handle(char *output, int *j, char *input,
-							int *i);
+							int *i, t_env_vars **env_list);
 
 int						is_alphanumeric(char c);
 int						ft_is_space(char c);
