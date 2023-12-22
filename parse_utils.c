@@ -37,7 +37,7 @@ int	ft_get_tokens_in_cmd(t_tokens *cmd_line, int index, int total_tokens)
 	tokens = 0;
 	if (cmd_line[index].token[0] == '|')
 	{
-		errors_manager(SET_CODE, 1, NULL, NULL);
+		errors_manager(SET_CODE, 2, NULL, NULL);
 		printf("Syntax error near unexpected token '|'\n");
 		return (0);
 	}

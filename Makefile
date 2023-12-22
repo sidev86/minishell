@@ -13,10 +13,6 @@ SRCS =	minishell.c \
 	redirection_in_extra.c \
 	env_utils.c \
 	env_utils_2.c \
-	ft_strcmp.c \
-	ft_strcpy.c \
-	ft_realloc.c \
-	ft_strcat.c \
 	lexer.c \
 	lexer_extra.c \
 	builtins.c \

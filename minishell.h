@@ -73,7 +73,7 @@ typedef struct s_env_vars
 int						ft_strcmp(const char *s1, const char *s2);
 char					*ft_strcat(char *dest, char *src);
 char					*ft_strcpy(char *s1, const char *s2);
-void					*ft_realloc(void *ptr, size_t newSize);
+void					*ft_realloc(void *ptr, size_t prev_size, size_t new_size);
 
 // BUILTINS
 void					ft_echo(t_command **cmd);
