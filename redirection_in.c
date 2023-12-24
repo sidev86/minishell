@@ -80,8 +80,8 @@ static void	handle_input_redirection(t_command **cmd, int *fd_stdin, int i)
 	}
 	else if (!ft_strcmp((*cmd)->argv[i], "<<"))
 	{
-		printf("heredoc\n");
-		//ft_heredoc(cmd);
+		//printf("heredoc\n");
+		ft_heredoc(cmd);
 	}
 	free((*cmd)->argv[i]);
 	(*cmd)->argv[i] = NULL;

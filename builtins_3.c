@@ -78,7 +78,10 @@ void	ft_export(t_command **cmd, t_env_vars ***env_list)
 		{
 			env_arg = ft_substr((*cmd)->argv[i], 0, ft_strlen((*cmd)->argv[i]));
 			if (handle_export_errors(env_arg, &var_len))
+			{
+				free(env_arg);
 				return ;
+			}
 			ft_handle_env_var(env_list, env_arg, var_len);
 			i++;
 			free(env_arg);

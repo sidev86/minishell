@@ -55,8 +55,10 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 	}
 	output[j] = '\0';
 	(*line_count)++;
-	(*cmd)->heredoc_text = (char **)ft_realloc((*cmd)->heredoc_text,(*line_count - 1) * sizeof(char *),
-			(*line_count) * sizeof(char *));
+	if (!(*cmd)->heredoc_text)
+		(*cmd)->heredoc_text = (char **)malloc((*line_count) * sizeof(char *));
+	else
+		(*cmd)->heredoc_text = (char **)ft_realloc((*cmd)->heredoc_text,((*line_count)- 1) * sizeof(char *), (*line_count) * sizeof(char *));
 	(*cmd)->heredoc_text[(*line_count) - 1] = ft_strdup(output);
 	free(output);
 }
