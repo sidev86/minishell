@@ -12,8 +12,7 @@
 
 #include "minishell.h"
 
-static void	exec_command_in_path(char *cmd_name, char **dirs, char **envp,
-		t_command **cmd)
+static void	exec_command_in_path(t_command **cmd, char **envp, t_env_vars **env_list, char **dirs)
 {
 	int		i;
 	char	*path;
@@ -23,8 +22,9 @@ static void	exec_command_in_path(char *cmd_name, char **dirs, char **envp,
 	while (dirs[i])
 	{
 		path = ft_strjoin(dirs[i], "/");
-		full_path = ft_strjoin(path, cmd_name);
-		ft_check_if_heredoc(cmd);
+		full_path = ft_strjoin(path, (*cmd)->argv[0]);
+		if (ft_check_if_heredoc(cmd, path, full_path))
+			ft_free_heredoc(cmd, dirs, env_list);
 		if (access(full_path, F_OK | X_OK) == 0)
 		{
 			errors_manager(SET_CODE, 100, NULL, NULL);
@@ -75,7 +75,7 @@ void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 		if (path)
 		{
 			dirs = ft_split(path, ':');
-			exec_command_in_path((*cmd)->argv[0], dirs, envp, cmd);
+			exec_command_in_path(cmd, envp, env_list, dirs);
 		}
 		errors_manager(PRINT, 127, "Command not found\n", (*cmd)->argv[0]);
 		ft_free_all_commands(cmd);

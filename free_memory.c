@@ -57,6 +57,27 @@ void	ft_free_all_commands(t_command **cmd)
 }
 
 
+void ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list)
+{
+	int	i; 
+	
+	i = 0;
+	while (i < (*cmd)->heredoc_counter)
+		free((*cmd)->end_tokens[i++]);
+	i = 0;
+	while (i < (*cmd)->lines_heredoc)
+		free((*cmd)->heredoc_text[i++]);
+	i = 0;
+	while (dirs[i])
+		free(dirs[i++]);
+	free(dirs);
+	free((*cmd)->heredoc_text);
+	free((*cmd)->end_tokens);
+	ft_free_all_commands(cmd);
+	ft_free_env_list(env_list);
+	exit(0);
+}
+
 void ft_free_cmd(t_command **cmd)
 {
 	int i; 

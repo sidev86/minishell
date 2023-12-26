@@ -136,7 +136,7 @@ void					ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list);
 int						check_var_validity(char *arg);
 void					ft_check_output_redirs(t_command **cmd);
 void					ft_check_input_redirs(t_command **cmd);
-void					ft_check_if_heredoc(t_command **cmd);
+int					ft_check_if_heredoc(t_command **cmd, char *path, char *full_path);
 int						ft_is_redir_pipe(char c);
 void					signal_handler(int sig);
 void					ft_heredoc(t_command **cmd);
@@ -157,5 +157,6 @@ char					*ft_get_path(t_env_vars **env_list);
 void					ft_free_env_list(t_env_vars **env_list);
 void					ft_free_all_commands(t_command **cmd);
 void					ft_free_cmd(t_command **cmd);
+void					ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list);
 
 #endif
