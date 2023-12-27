@@ -78,6 +78,20 @@ void ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list)
 	exit(0);
 }
 
+
+void ft_free_tokens(t_tokens *cmd_line, int total_tokens)
+{
+	int	i; 
+	
+	i = 0;
+	while (i < total_tokens)
+	{
+		free(cmd_line[i].token);
+		i++;
+	}
+	free(cmd_line);
+}
+
 void ft_free_cmd(t_command **cmd)
 {
 	int i; 

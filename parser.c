@@ -89,7 +89,11 @@ void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 		ft_set_cmd_parameters(&curr_cmd, &command);
 		i = ft_put_tokens_in_cmd(&curr_cmd, cmd_line, arg_index);
 		if (i == -1)
+		{
+			//ft_free_tokens(cmd_line, total_tokens);
+			//ft_free_cmd(&curr_cmd);
 			return ;
+		}
 		ft_set_cmd_type(&curr_cmd);
 		curr_cmd->argv[i] = NULL;
 		arg_index += curr_cmd->num_tokens + 1;

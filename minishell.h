@@ -155,6 +155,7 @@ int						ft_cmd_builtin(char *cmd);
 char					*ft_get_cmdname(char *str);
 char					*ft_get_path(t_env_vars **env_list);
 void					ft_free_env_list(t_env_vars **env_list);
+void					ft_free_tokens(t_tokens *cmd_line, int total_tokens);
 void					ft_free_all_commands(t_command **cmd);
 void					ft_free_cmd(t_command **cmd);
 void					ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list);

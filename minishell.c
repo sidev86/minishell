@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static char	*ft_wait_for_input(void)
+static char	*ft_wait_for_input(t_env_vars **env_list)
 {
 	char	*input;
 
@@ -21,6 +21,7 @@ static char	*ft_wait_for_input(void)
 	{
 		if (isatty(STDIN_FILENO))
 			write(2, "exit\n", 6);
+		ft_free_env_list(env_list);
 		exit(0);
 	}
 	if (input[0] == '\0')
@@ -76,7 +77,7 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGTSTP, SIG_IGN);
 		signal(SIGINT, signal_handler);
 		
-		input = ft_wait_for_input();
+		input = ft_wait_for_input(&first_env);
 		if (input)
 			input[ft_strlen(input)] = '\0';
 		if (input != NULL)
