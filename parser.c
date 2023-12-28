@@ -69,6 +69,29 @@ static void	ft_set_cmd_type(t_command **curr_cmd)
 		(*curr_cmd)->is_builtin = 0;
 }
 
+int	ft_check_tokens_validity(t_command **cmd, t_tokens *cmd_line, int total_tokens)
+{
+	int	i; 
+	t_command *curr_cmd;
+	
+	i = 0; 
+	curr_cmd = *cmd;
+	while (i < curr_cmd->num_tokens)
+	{
+		
+		if (curr_cmd->argv[i][0] == '\\' || !ft_strcmp(curr_cmd->argv[i], ";"))
+		{
+			ft_free_tokens(cmd_line, total_tokens);
+			ft_free_all_commands(cmd);
+			errors_manager(SET_CODE, 2, NULL, NULL);
+			printf("Error: detected '\\' or ';' \n");
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 		char **envp)
 {
@@ -86,19 +109,21 @@ void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 				total_tokens);
 		if (curr_cmd->num_tokens == 0)
 			return ;
-		ft_set_cmd_parameters(&curr_cmd, &command);
-		i = ft_put_tokens_in_cmd(&curr_cmd, cmd_line, arg_index);
-		if (i == -1)
+		else if (curr_cmd->num_tokens == -1)
 		{
-			//ft_free_tokens(cmd_line, total_tokens);
-			//ft_free_cmd(&curr_cmd);
+			ft_free_tokens(cmd_line, total_tokens);
+			free(command);
 			return ;
 		}
+		ft_set_cmd_parameters(&curr_cmd, &command);
+		i = ft_put_tokens_in_cmd(&curr_cmd, cmd_line, arg_index);
 		ft_set_cmd_type(&curr_cmd);
 		curr_cmd->argv[i] = NULL;
 		arg_index += curr_cmd->num_tokens + 1;
 		ft_set_next_prev_nodes(&curr_cmd, arg_index, total_tokens);
 	}
+	if (ft_check_tokens_validity(&command, cmd_line, total_tokens))
+		return ;
 	i = 0;
 	while (i < total_tokens)
 	{

@@ -39,7 +39,7 @@ int	ft_get_tokens_in_cmd(t_tokens *cmd_line, int index, int total_tokens)
 	{
 		errors_manager(SET_CODE, 2, NULL, NULL);
 		printf("Syntax error near unexpected token '|'\n");
-		return (0);
+		return (-1);
 	}
 	while (index < total_tokens)
 	{
@@ -68,13 +68,7 @@ int	ft_put_tokens_in_cmd(t_command **curr_cmd, t_tokens *cmd_line,
 				ft_strlen(cmd_line[arg_index + i].token));
 		if (!ft_strcmp((*curr_cmd)->argv[i], "<<"))
 			(*curr_cmd)->has_heredoc = 1;
-		if ((*curr_cmd)->argv[i][0] == '\\' || !ft_strcmp((*curr_cmd)->argv[i],
-				";"))
-		{
-			errors_manager(SET_CODE, 2, NULL, NULL);
-			printf("Error: detected '\\' or ';' \n");
-			return (-1);
-		}
+		
 		i++;
 	}
 	return (i);
