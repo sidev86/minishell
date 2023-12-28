@@ -72,7 +72,7 @@ static void	ft_empty_in_other(t_command **cmd)
 	}
 }
 
-static void	handle_input_redirection(t_command **cmd, int *fd_stdin, int i)
+static void	handle_input_redirection(t_command **cmd, t_env_vars **env_list, int *fd_stdin, int i)
 {
 	if (!ft_strcmp((*cmd)->argv[i], "<"))
 	{
@@ -81,7 +81,7 @@ static void	handle_input_redirection(t_command **cmd, int *fd_stdin, int i)
 	else if (!ft_strcmp((*cmd)->argv[i], "<<"))
 	{
 		//printf("heredoc\n");
-		ft_heredoc(cmd);
+		ft_heredoc(cmd, env_list);
 	}
 	free((*cmd)->argv[i]);
 	(*cmd)->argv[i] = NULL;
@@ -96,7 +96,7 @@ static void	handle_input_redirection(t_command **cmd, int *fd_stdin, int i)
 	}
 }
 
-void	ft_check_input_redirs(t_command **cmd)
+void	ft_check_input_redirs(t_command **cmd, t_env_vars **env_list)
 {
 	int	i;
 	int	fd_stdin;
@@ -114,7 +114,7 @@ void	ft_check_input_redirs(t_command **cmd)
 		if (!ft_strcmp((*cmd)->argv[i], "<") || !ft_strcmp((*cmd)->argv[i],
 				"<<"))
 		{
-			handle_input_redirection(cmd, &fd_stdin, i);
+			handle_input_redirection(cmd, env_list, &fd_stdin, i);
 		}
 	}
 	i++;

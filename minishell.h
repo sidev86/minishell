@@ -135,11 +135,11 @@ char					*handle_quotes(char *input, t_env_vars **env_list);
 void					ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list);
 int						check_var_validity(char *arg);
 void					ft_check_output_redirs(t_command **cmd);
-void					ft_check_input_redirs(t_command **cmd);
+void					ft_check_input_redirs(t_command **cmd, t_env_vars **env_list);
 int					ft_check_if_heredoc(t_command **cmd, char *path, char *full_path);
 int						ft_is_redir_pipe(char c);
 void					signal_handler(int sig);
-void					ft_heredoc(t_command **cmd);
+void					ft_heredoc(t_command **cmd, t_env_vars **env_list);
 void					handle_exit_code(char *output, int *j, char *variabile);
 
 void					extract_and_handle(char *output, int *j, char *input,

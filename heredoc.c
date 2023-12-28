@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: extrimer <extrimer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 14:28:29 by sibrahim          #+#    #+#             */
-/*   Updated: 2023/12/09 14:28:31 by sibrahim         ###   ########.fr       */
+/*   Updated: 2023/12/28 14:25:01 by extrimer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,12 @@ static int	handle_end_token(char *input_line, t_command **cmd,
 }
 
 static void	process_heredoc_line(t_command **cmd, char *input_line,
-		int *line_count)
+		int *line_count, t_env_vars **env_list)
 {
 	int		i;
 	int		j;
 	char	*output;
-	t_env_vars **env_list;
-	
-	env_list = 0;
+
 	output = (char *)malloc(ft_strlen(input_line) * 100);
 	i = 0;
 	j = 0;
@@ -58,31 +56,31 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 	if (!(*cmd)->heredoc_text)
 		(*cmd)->heredoc_text = (char **)malloc((*line_count) * sizeof(char *));
 	else
-		(*cmd)->heredoc_text = (char **)ft_realloc((*cmd)->heredoc_text,((*line_count)- 1) * sizeof(char *), (*line_count) * sizeof(char *));
+		(*cmd)->heredoc_text = (char **)ft_realloc((*cmd)->heredoc_text,((*line_count) - 1) * sizeof(char *), (*line_count) * sizeof(char *));
 	(*cmd)->heredoc_text[(*line_count) - 1] = ft_strdup(output);
 	(*cmd)->lines_heredoc = (*line_count);
 	free(output);
 }
 
 static void	handle_input_condition(t_command **cmd, char *input_line,
-		int *end_token_index, int *line_count)
+		int *end_token_index, int *line_count, t_env_vars **env_list)
 {
 	int	last_end_token_index;
 
 	last_end_token_index = (*cmd)->heredoc_counter - 1;
 	if (last_end_token_index == 0)
-		process_heredoc_line(cmd, input_line, line_count);
+		process_heredoc_line(cmd, input_line, line_count, env_list);
 	else if (last_end_token_index > 0
 		&& *end_token_index == last_end_token_index)
 	{
 		if (!(*cmd)->skip_terminator)
 			(*cmd)->skip_terminator = 1;
 		else
-			process_heredoc_line(cmd, input_line, line_count);
+			process_heredoc_line(cmd, input_line, line_count, env_list);
 	}
 }
 
-void	ft_heredoc(t_command **cmd)
+void	ft_heredoc(t_command **cmd, t_env_vars **env_list)
 {
 	char	*input_line;
 	int		end_token_index;
@@ -99,10 +97,9 @@ void	ft_heredoc(t_command **cmd)
 			(*cmd)->lines_heredoc = line_count;
 			break ;
 		}
-		handle_input_condition(cmd, input_line, &end_token_index, &line_count);
+		handle_input_condition(cmd, input_line, &end_token_index, &line_count, env_list);
 		free(input_line);
 	}
-	
 }
 
 int	ft_check_if_heredoc(t_command **cmd, char *path, char *full_path)
@@ -117,10 +114,8 @@ int	ft_check_if_heredoc(t_command **cmd, char *path, char *full_path)
 			printf("%s\n", (*cmd)->heredoc_text[j]);
 			j++;
 		}
-		
 		free(path);
 		free(full_path);
-		
 		return(1);
 	}
 	return (0);

@@ -16,7 +16,7 @@ static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 		t_env_vars **env_list, char **envp)
 {
 	errors_manager(SET_CODE, (*curr_cmd)->last_exit_code, NULL, NULL);
-	ft_check_input_redirs(curr_cmd);
+	ft_check_input_redirs(curr_cmd, env_list);
 	ft_check_output_redirs(curr_cmd);
 	if ((*curr_cmd)->fd_stdinput == -1 || (*curr_cmd)->fd_terminal == -1)
 		exit(1);
@@ -87,7 +87,7 @@ static void	ft_exec_single_builtin(t_command **curr_cmd, t_command **cmd,
 		t_env_vars **env_list)
 {
 	ft_check_output_redirs(curr_cmd);
-	ft_check_input_redirs(curr_cmd);
+	ft_check_input_redirs(curr_cmd, env_list);
 	ft_handle_quotes_alltokens(curr_cmd, env_list);
 	if ((*curr_cmd)->argv[0] && (*curr_cmd)->is_builtin)
 		ft_exec_builtin(curr_cmd, &env_list);
