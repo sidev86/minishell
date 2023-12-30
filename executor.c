@@ -37,6 +37,11 @@ static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 		ft_exec_systemcmd(curr_cmd, envp, env_list);
 	else if ((*curr_cmd)->argv[0] && (*curr_cmd)->is_builtin) 
 		ft_exec_builtin(curr_cmd, &env_list);
+	else
+	{
+		ft_free_all_commands(curr_cmd);
+		ft_free_env_list(env_list);
+	}
 	exit(0);
 }
 
