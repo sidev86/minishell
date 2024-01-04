@@ -87,6 +87,7 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 		return ;
 	}
 	tokens_total = ft_count_tokens(input);
+	//printf("numero tokens = %d\n", tokens_total);
 	if (tokens_total == 0)
 		return ;
 	cmd_line = malloc(sizeof(t_tokens) * (tokens_total));
