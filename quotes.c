@@ -38,7 +38,7 @@ void	extract_and_handle(char *output, int *j, char *input, int *i, t_env_vars **
 	variabile = (char *)malloc(ft_strlen(input) * 100);
 	if (!variabile)
 	{
-		perror("Memory allocation error");
+		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 		exit(1);
 	}
 	k = 0;
@@ -105,7 +105,7 @@ char	*handle_quotes(char *input, t_env_vars **env_list)
 	output = (char *)malloc(ft_strlen(input) * 100);
 	if (!output)
 	{
-		perror("Memory allocation error");
+		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 		exit(1);
 	}
 	output[0] = '\0';

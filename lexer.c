@@ -83,7 +83,8 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 
 	if (ft_check_missing_quotes(input))
 	{
-		printf("Error: Missing quotes\n");
+		errors_manager(SET_CODE, 1, NULL, NULL);
+		errors_manager(PRINT, 1, "Missing quotes\n", "Error");
 		return ;
 	}
 	tokens_total = ft_count_tokens(input);
@@ -92,9 +93,8 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 		return ;
 	cmd_line = malloc(sizeof(t_tokens) * (tokens_total));
 	if (!cmd_line)
-		printf("Malloc error\n");
+		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 	ft_split_into_tokens(input, &cmd_line, tokens_total);
 	if (ft_strcmp(cmd_line[0].token, "exit") != 0)
 		ft_parse(cmd_line, tokens_total, env_list, envp);
-	
 }

@@ -16,6 +16,8 @@ static void	ft_init_first_cmd_node(t_command **command, t_tokens *cmd_line,
 		int total_tokens)
 {
 	(*command) = (t_command *)malloc(sizeof(t_command));
+	if (!(*command))
+		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 	(*command)->number = 1;
 	(*command)->num_cmds = ft_get_num_cmds(cmd_line, total_tokens);
 	(*command)->prev = NULL;
@@ -27,10 +29,7 @@ static void	ft_set_cmd_parameters(t_command **curr_cmd, t_command **cmd)
 	(*curr_cmd)->argv = (char **)malloc(sizeof(char *)
 			* ((*curr_cmd)->num_tokens + 1));
 	if (!(*curr_cmd)->argv)
-	{
-		printf("Malloc error\n");
-		exit(1);
-	}
+		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 	(*curr_cmd)->end_tokens = NULL;
 	(*curr_cmd)->heredoc_text = NULL;
 	(*curr_cmd)->lines_heredoc = 0;
@@ -50,6 +49,8 @@ static void	ft_set_next_prev_nodes(t_command **curr_cmd, int arg_index,
 	if (arg_index < total_tokens)
 	{
 		(*curr_cmd)->next = (t_command *)malloc(sizeof(t_command));
+		if (!(*curr_cmd)->next)
+			ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 		(*curr_cmd)->next->prev = NULL;
 		if ((*curr_cmd)->number == 1)
 			(*curr_cmd)->prev = NULL;
@@ -84,7 +85,7 @@ int	ft_check_tokens_validity(t_command **cmd, t_tokens *cmd_line, int total_toke
 			ft_free_tokens(cmd_line, total_tokens);
 			ft_free_all_commands(cmd);
 			errors_manager(SET_CODE, 2, NULL, NULL);
-			printf("Error: detected '\\' or ';' \n");
+			errors_manager(PRINT, 1, "Detected '\\' or ';' \n", "Error");
 			return (1);
 		}
 		i++;

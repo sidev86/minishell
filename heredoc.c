@@ -39,6 +39,8 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 	char	*output;
 
 	output = (char *)malloc(ft_strlen(input_line) * 100);
+	if (!output)
+		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 	i = 0;
 	j = 0;
 	while (input_line[i])
@@ -57,6 +59,8 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 		(*cmd)->heredoc_text = (char **)malloc((*line_count) * sizeof(char *));
 	else
 		(*cmd)->heredoc_text = (char **)ft_realloc((*cmd)->heredoc_text,((*line_count) - 1) * sizeof(char *), (*line_count) * sizeof(char *));
+	if (!(*cmd)->heredoc_text)
+		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 	(*cmd)->heredoc_text[(*line_count) - 1] = ft_strdup(output);
 	(*cmd)->lines_heredoc = (*line_count);
 	free(output);

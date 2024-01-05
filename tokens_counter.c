@@ -44,22 +44,18 @@ static int	ft_redir_pipe_token(char *input, int i, int *tokens)
 	(*tokens)++;
 	if (input[i] == '|')
 		i++;
-	else if (input[i] == '>')
+	else if (input[i] == '>' || input[i] == '<')
 	{
 		i++;
-		if (input[i] == '>')
+		if (input[i - 1] == '>' && input[i] == '>')
 			i++;
-		else if (input[i] == '<')
-			printf("syntax error near unexpected token\n");
-			
-	}
-	else if (input[i] == '<')
-	{
-		i++;
-		if (input[i] == '<')
+		else if (input[i - 1] == '<' && input[i] == '<')
 			i++;
-		else if (input[i] == '>')
-			printf("syntax error near unexpected token\n");
+		else if ((input[i - 1] == '>' && input[i] == '<') || (input[i - 1] == '<' && input[i] == '>'))
+		{
+			errors_manager(SET_CODE, 2, NULL, NULL);
+			errors_manager(PRINT, 1, "syntax error near unexpected token (>,<)\n", "Error");
+		}			
 	}
 	return (i);
 }
@@ -82,6 +78,8 @@ int	ft_count_tokens(char *input)
 			i = ft_token_no_quotes(input, i, &tokens);
 		if (ft_is_redir_pipe(input[i]))
 			i = ft_redir_pipe_token(input, i, &tokens);
+		if (i == 0)
+			return (0);
 	}
 	return (tokens);
 }

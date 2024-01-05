@@ -20,6 +20,8 @@ void	ft_create_env_list(t_env_vars **first, char **envp)
 	i = 0;
 	if (i == 0 && envp[i])
 		*first = malloc(sizeof(t_env_vars));
+	if (!(*first))
+		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 	curr = *first;
 	while (envp[i])
 	{

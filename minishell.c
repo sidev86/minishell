@@ -20,7 +20,7 @@ static char	*ft_wait_for_input(t_env_vars **env_list)
 	if (!input)
 	{
 		if (isatty(STDIN_FILENO))
-			write(2, "exit\n", 6);
+			write(1, "exit\n", 6);
 		ft_free_env_list(env_list);
 		exit(0);
 	}
@@ -47,7 +47,7 @@ static int	ft_command_is_exit(char *input, t_env_vars **env_list)
 	{
 		ft_free_env_list(env_list);
 		free(str);
-		return (10);
+		return (1);
 	}
 	free(str);
 	return (0);

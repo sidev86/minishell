@@ -19,6 +19,11 @@ static void	ft_ifheredoc(t_command **cmd, int *i)
 		(*cmd)->heredoc_counter++;
 		(*cmd)->end_tokens = realloc((*cmd)->end_tokens, sizeof(char *)
 				* (*cmd)->heredoc_counter);
+		if (!(*cmd)->end_tokens)
+		{
+			ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
+			exit (1);
+		}
 		(*cmd)->end_tokens[((*cmd)->heredoc_counter)
 			- 1] = ft_strdup((*cmd)->argv[*i + 1]);
 	}
