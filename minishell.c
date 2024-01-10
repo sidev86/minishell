@@ -15,7 +15,7 @@
 static char	*ft_wait_for_input(t_env_vars **env_list)
 {
 	char	*input;
-
+	rl_redisplay();
 	input = readline("minishell$ ");
 	if (!input)
 	{
@@ -76,7 +76,6 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGTSTP, SIG_IGN);
 		signal(SIGINT, signal_handler);
-		
 		input = ft_wait_for_input(&first_env);
 		if (input)
 			input[ft_strlen(input)] = '\0';

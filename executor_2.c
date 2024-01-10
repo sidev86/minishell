@@ -41,7 +41,7 @@ static void	exec_command_in_path(t_command **cmd, char **envp, t_env_vars **env_
 	}
 }
 
-static void	exec_command_direct(t_command **cmd, char **envp, char *path)
+static void	exec_command_direct(t_command **cmd, char **envp, t_env_vars **env_list, char *path)
 {
 	path = (*cmd)->argv[0];
 	if (access(path, F_OK | X_OK) == 0)
@@ -60,6 +60,8 @@ static void	exec_command_direct(t_command **cmd, char **envp, char *path)
 		exit(126);
 	}
 	errors_manager(PRINT, 127, "Command not found\n", (*cmd)->argv[0]);
+	ft_free_all_commands(cmd);
+	ft_free_env_list(env_list);
 	exit(127);
 }
 
@@ -70,6 +72,7 @@ void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 	int	i;
 	
 	path = ft_get_path(env_list);
+	dirs = 0;
 	if (!ft_strchr((*cmd)->argv[0], '/'))
 	{
 		if (path)
@@ -81,13 +84,16 @@ void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 		ft_free_all_commands(cmd);
 		ft_free_env_list(env_list);
 		i = 0;
-		while (dirs[i])
-			free(dirs[i++]);
-		free(dirs);
+		if (dirs)
+		{
+			while (dirs[i])
+				free(dirs[i++]);
+			free(dirs);
+		}
 		exit(127);
 	}
 	else
-		exec_command_direct(cmd, envp, (*cmd)->argv[0]);
+		exec_command_direct(cmd, envp, env_list, (*cmd)->argv[0]);
 }
 
 void	ft_exec_builtin(t_command **cmd, t_env_vars ***env_list)
