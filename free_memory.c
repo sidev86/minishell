@@ -68,9 +68,12 @@ void ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list)
 	while (i < (*cmd)->lines_heredoc)
 		free((*cmd)->heredoc_text[i++]);
 	i = 0;
-	while (dirs[i])
-		free(dirs[i++]);
-	free(dirs);
+	if (dirs)
+	{
+		while (dirs[i])
+			free(dirs[i++]);
+		free(dirs);
+	}
 	free((*cmd)->heredoc_text);
 	free((*cmd)->end_tokens);
 	ft_free_all_commands(cmd);

@@ -21,6 +21,7 @@ void	signal_handler(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+		
 		errors_manager(SET_CODE, 130, NULL, NULL);
 	}
 }

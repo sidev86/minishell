@@ -75,7 +75,7 @@ static void	handle_input_condition(t_command **cmd, char *input_line,
 	if (last_end_token_index == 0)
 		process_heredoc_line(cmd, input_line, line_count, env_list);
 	else if (last_end_token_index > 0
-		&& *end_token_index == last_end_token_index)
+		&& *end_token_index == last_end_token_index) 
 	{
 		if (!(*cmd)->skip_terminator)
 			(*cmd)->skip_terminator = 1;
@@ -111,12 +111,15 @@ int	ft_check_if_heredoc(t_command **cmd, char *path, char *full_path)
 	int	j;
 
 	j = 0;
-	if (ft_strcmp((*cmd)->argv[0], "cat") == 0 && (*cmd)->has_heredoc)
+	if ((*cmd)->has_heredoc)
 	{
-		while (j < (*cmd)->lines_heredoc)
+		if (ft_strcmp((*cmd)->argv[0], "cat") == 0)
 		{
-			printf("%s\n", (*cmd)->heredoc_text[j]);
-			j++;
+			while (j < (*cmd)->lines_heredoc)
+			{
+				printf("%s\n", (*cmd)->heredoc_text[j]);
+				j++;
+			}
 		}
 		free(path);
 		free(full_path);

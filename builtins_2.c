@@ -12,6 +12,24 @@
 
 #include "minishell.h"
 
+int	ft_cmd_builtin(char *cmd)
+{
+	if (!ft_strcmp(cmd, "echo"))
+		return (1);
+	else if (!ft_strcmp(cmd, "cd"))
+		return (1);
+	else if (!ft_strcmp(cmd, "pwd"))
+		return (1);
+	else if (!ft_strcmp(cmd, "export"))
+		return (1);
+	else if (!ft_strcmp(cmd, "unset"))
+		return (1);
+	else if (!ft_strcmp(cmd, "env"))
+		return (1);
+	else
+		return (0);
+}
+
 static void	cd_to_home_directory(void)
 {
 	char	*home_directory;

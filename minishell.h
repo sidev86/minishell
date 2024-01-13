@@ -117,8 +117,6 @@ int						ft_put_tokens_in_cmd(t_command **curr_cmd,
 int						ft_last_out_redir(t_command **cmd);
 int						ft_get_in_redirections(t_command **cmd);
 int						ft_last_in_redir(t_command **cmd);
-int						ft_redir_output_append(char *filename);
-int						ft_redir_output_overwrite(char *filename);
 void					ft_empty_out_other(t_command **cmd);
 
 // EXECUTOR
@@ -133,8 +131,9 @@ int						errors_manager(int action, int code, char *msg,
 char					*ft_itoa(int n);
 char					*handle_quotes(char *input, t_env_vars **env_list);
 void					ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list);
+void					ft_handle_quotes_single_token(t_command **cmd, t_env_vars **env_list, int i);
 int						check_var_validity(char *arg);
-void					ft_check_output_redirs(t_command **cmd);
+void					ft_check_output_redirs(t_command **cmd, t_env_vars **env_list);
 void					ft_check_input_redirs(t_command **cmd, t_env_vars **env_list);
 int					ft_check_if_heredoc(t_command **cmd, char *path, char *full_path);
 int						ft_is_redir_pipe(char c);

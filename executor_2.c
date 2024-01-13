@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	exec_command_in_path(t_command **cmd, char **envp, t_env_vars **env_list, char **dirs)
+static void	exec_command_search_path(t_command **cmd, char **envp, t_env_vars **env_list, char **dirs)
 {
 	int		i;
 	char	*path;
@@ -41,7 +41,7 @@ static void	exec_command_in_path(t_command **cmd, char **envp, t_env_vars **env_
 	}
 }
 
-static void	exec_command_direct(t_command **cmd, char **envp, t_env_vars **env_list, char *path)
+static void	exec_command_direct_path(t_command **cmd, char **envp, t_env_vars **env_list, char *path)
 {
 	path = (*cmd)->argv[0];
 	if (access(path, F_OK | X_OK) == 0)
@@ -78,7 +78,7 @@ void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 		if (path)
 		{
 			dirs = ft_split(path, ':');
-			exec_command_in_path(cmd, envp, env_list, dirs);
+			exec_command_search_path(cmd, envp, env_list, dirs);
 		}
 		errors_manager(PRINT, 127, "Command not found\n", (*cmd)->argv[0]);
 		ft_free_all_commands(cmd);
@@ -93,7 +93,7 @@ void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 		exit(127);
 	}
 	else
-		exec_command_direct(cmd, envp, env_list, (*cmd)->argv[0]);
+		exec_command_direct_path(cmd, envp, env_list, (*cmd)->argv[0]);
 }
 
 void	ft_exec_builtin(t_command **cmd, t_env_vars ***env_list)
