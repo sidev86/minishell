@@ -45,6 +45,8 @@ void	ft_echo(t_command **cmd)
 	if (i < (*cmd)->argc || no_newline == 0)
 		printf("\n");
 	errors_manager(SET_CODE, 0, NULL, NULL);
+	//if ((*cmd)->num_cmds > 1)
+	//	exit(0);
 }
 
 void	ft_pwd(void)

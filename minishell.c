@@ -15,12 +15,13 @@
 static char	*ft_wait_for_input(t_env_vars **env_list)
 {
 	char	*input;
-	rl_redisplay();
+	//rl_redisplay();
+	
 	input = readline("minishell$ ");
 	if (!input)
 	{
 		if (isatty(STDIN_FILENO))
-			write(1, "exit\n", 6);
+			printf("exit\n");
 		ft_free_env_list(env_list);
 		exit(0);
 	}
@@ -86,6 +87,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			free(input);
 		}
+		
 	}
 	return (0);
 }

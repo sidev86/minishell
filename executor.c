@@ -19,7 +19,11 @@ static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 	ft_check_input_redirs(curr_cmd, env_list);
 	ft_check_output_redirs(curr_cmd, env_list);
 	if ((*curr_cmd)->fd_stdinput == -1 || (*curr_cmd)->fd_terminal == -1)
+	{
+		ft_free_all_commands(curr_cmd);
+		ft_free_env_list(env_list);
 		exit(1);
+	}
 	ft_handle_quotes_alltokens(curr_cmd, env_list);
 	if ((*curr_cmd)->prev && !(*curr_cmd)->redir_in)
 	{
