@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/09 14:29:02 by sibrahim          #+#    #+#             */
-/*   Updated: 2023/12/09 14:29:04 by sibrahim         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 static char	*ft_wait_for_input(t_env_vars **env_list)
@@ -87,6 +75,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			free(input);
 		}
+		
 		
 	}
 	return (0);

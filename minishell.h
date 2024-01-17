@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/09 14:29:10 by sibrahim          #+#    #+#             */
-/*   Updated: 2023/12/09 14:29:12 by sibrahim         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -127,7 +115,6 @@ void					ft_exec_systemcmd(t_command **cmd, char **envp,
 // ERRORS
 int						errors_manager(int action, int code, char *msg,
 							char *arg);
-
 char					*ft_itoa(int n);
 char					*handle_quotes(char *input, t_env_vars **env_list);
 void					ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list);
@@ -137,13 +124,13 @@ void					ft_check_output_redirs(t_command **cmd, t_env_vars **env_list);
 void					ft_check_input_redirs(t_command **cmd, t_env_vars **env_list);
 int					ft_check_if_heredoc(t_command **cmd, char *path, char *full_path);
 int						ft_is_redir_pipe(char c);
-void					signal_handler(int sig);
 void					ft_heredoc(t_command **cmd, t_env_vars **env_list);
 void					handle_exit_code(char *output, int *j, char *variabile);
 
 void					extract_and_handle(char *output, int *j, char *input,
 							int *i, t_env_vars **env_list);
-
+void					sigint_handler();
+void					signal_handler(int sig);
 int						is_alphanumeric(char c);
 int						ft_is_space(char c);
 int						ft_is_redir_pipe(char c);

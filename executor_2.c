@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor_2.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/09 14:27:24 by sibrahim          #+#    #+#             */
-/*   Updated: 2023/12/09 14:27:25 by sibrahim         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 static void	exec_command_search_path(t_command **cmd, char **envp, t_env_vars **env_list, char **dirs)
@@ -33,6 +21,7 @@ static void	exec_command_search_path(t_command **cmd, char **envp, t_env_vars **
 				errors_manager(PRINT, 126, "Execution error\n", "Error");
 				exit(126);
 			}
+			signal(SIGINT, sigint_handler);
 			exit(0);
 		}
 		free(path);

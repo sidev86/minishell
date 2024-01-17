@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: extrimer <extrimer@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/09 14:28:29 by sibrahim          #+#    #+#             */
-/*   Updated: 2023/12/28 14:25:01 by extrimer         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 static int	handle_end_token(char *input_line, t_command **cmd,
@@ -84,6 +72,12 @@ static void	handle_input_condition(t_command **cmd, char *input_line,
 	}
 }
 
+void sigint_handler()
+{
+	write(1, "\n", 1);
+	exit(EXIT_FAILURE);
+}
+
 void	ft_heredoc(t_command **cmd, t_env_vars **env_list)
 {
 	char	*input_line;
@@ -95,7 +89,13 @@ void	ft_heredoc(t_command **cmd, t_env_vars **env_list)
 	line_count = 0;
 	while (1)
 	{
+		signal(SIGINT, sigint_handler);
 		input_line = readline("> ");
+		if (!input_line)
+		{
+			ft_putstr_fd("Heredoc interrotto.\n", STDERR_FILENO);
+			break ;
+		}
 		if (handle_end_token(input_line, cmd, &end_token_index))
 		{
 			(*cmd)->lines_heredoc = line_count;
@@ -103,6 +103,7 @@ void	ft_heredoc(t_command **cmd, t_env_vars **env_list)
 		}
 		handle_input_condition(cmd, input_line, &end_token_index, &line_count, env_list);
 		free(input_line);
+		
 	}
 }
 
