@@ -21,7 +21,6 @@ static void	exec_command_search_path(t_command **cmd, char **envp, t_env_vars **
 				errors_manager(PRINT, 126, "Execution error\n", "Error");
 				exit(126);
 			}
-			//signal(SIGINT, sigint_handler);
 			exit(0);
 		}
 		free(path);

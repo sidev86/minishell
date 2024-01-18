@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 static int	handle_end_token(char *input_line, t_command **cmd,
 		int *end_token_index)
 {
@@ -27,11 +26,13 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 	int		j;
 	char	*output;
 
-	output = (char *)malloc(ft_strlen(input_line) * 100);
-	if (!output)
-		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
+
 	i = 0;
 	j = 0;
+	if (input_line[i] == '$' && is_alphanumeric(input_line[i + 1]))
+		output = (char *)malloc(ft_strlen(input_line) * 100);
+	else
+		output = (char *)malloc(ft_strlen(input_line) + 1);
 	while (input_line[i])
 	{
 		if (input_line[i] == '$' && is_alphanumeric(input_line[i + 1]))
@@ -88,9 +89,9 @@ void	ft_heredoc(t_command **cmd, t_env_vars **env_list)
 	end_token_index = 0;
 	(*cmd)->skip_terminator = 0;
 	line_count = 0;
+	signal(SIGINT, sigint_handler);
 	while (1)
 	{
-		signal(SIGINT, sigint_handler);
 		input_line = readline("> ");
 		if (!input_line)
 		{
@@ -104,7 +105,6 @@ void	ft_heredoc(t_command **cmd, t_env_vars **env_list)
 		}
 		handle_input_condition(cmd, input_line, &end_token_index, &line_count, env_list);
 		free(input_line);
-		
 	}
 }
 

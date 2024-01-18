@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 static void	ft_init_first_cmd_node(t_command **command, t_tokens *cmd_line,
 		int total_tokens)
 {

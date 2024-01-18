@@ -16,7 +16,7 @@ void	signal_handler(int sig)
 }
 
 
-int signal_no_input(int action, int code)
+int	signal_no_input(int action, int code)
 {
 	static int no_input;
 	if (action == SET_CODE)
@@ -25,3 +25,5 @@ int signal_no_input(int action, int code)
 		return(no_input);
 	return(0);
 }
+
+

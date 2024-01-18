@@ -66,7 +66,7 @@ void ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list)
 	free((*cmd)->end_tokens);
 	ft_free_all_commands(cmd);
 	ft_free_env_list(env_list);
-	//exit(0);
+	exit(0);
 }
 
 

@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-
-
 char	*ft_get_cmdname(char *str)
 {
 	int		i;
