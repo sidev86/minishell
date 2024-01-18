@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <malloc.h>
 
+
 typedef struct s_tokens
 {
 	char				*token;
@@ -131,6 +132,7 @@ void					extract_and_handle(char *output, int *j, char *input,
 							int *i, t_env_vars **env_list);
 void					sigint_handler();
 void					signal_handler(int sig);
+int					signal_no_input(int action, int code);
 int						is_alphanumeric(char c);
 int						ft_is_space(char c);
 int						ft_is_redir_pipe(char c);

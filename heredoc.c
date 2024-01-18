@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+
 static int	handle_end_token(char *input_line, t_command **cmd,
 		int *end_token_index)
 {
@@ -75,7 +76,7 @@ static void	handle_input_condition(t_command **cmd, char *input_line,
 void sigint_handler()
 {
 	write(1, "\n", 1);
-	exit(EXIT_FAILURE);
+	exit(130);
 }
 
 void	ft_heredoc(t_command **cmd, t_env_vars **env_list)
