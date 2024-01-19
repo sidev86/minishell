@@ -14,6 +14,8 @@ int	ft_cmd_builtin(char *cmd)
 		return (1);
 	else if (!ft_strcmp(cmd, "env"))
 		return (1);
+	else if (!ft_strcmp(cmd, "exit"))
+		return (1); 
 	else
 		return (0);
 }
@@ -67,3 +69,26 @@ void	ft_cd(t_command **cmd)
 	}
 	errors_manager(SET_CODE, 0, NULL, NULL);
 }
+
+
+void ft_exit(t_command **cmd)
+{
+	int e_code;
+	if ((*cmd)->num_tokens > 2)
+	{
+		errors_manager(SET_CODE, 1, NULL, NULL);
+		errors_manager(PRINT, 1, "Too many arguments\n", "exit");
+		if ((*cmd)->num_cmds > 1)
+			exit(1);
+	}
+	else if ((*cmd)->num_tokens > 1)
+	{
+		e_code = ft_atoi((*cmd)->argv[1]);
+		errors_manager(SET_CODE, e_code, NULL, NULL);
+		exit(e_code);
+		
+	}
+	else
+		exit(0);
+}
+

@@ -64,6 +64,7 @@ static void	handle_input_redirection(t_command **cmd, t_env_vars **env_list, int
 {
 	if (!ft_strcmp((*cmd)->argv[i], "<"))
 	{
+		ft_handle_quotes_single_token(cmd, env_list, i + 1);
 		*fd_stdin = ft_redir_input((*cmd)->argv[i + 1]);
 	}
 	else if (!ft_strcmp((*cmd)->argv[i], "<<"))

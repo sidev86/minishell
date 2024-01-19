@@ -18,20 +18,21 @@ static char	*ft_wait_for_input(t_env_vars **env_list)
 	return (input);
 }
 
-static int	ft_command_is_exit(char *input, t_env_vars **env_list)
+/*static int	ft_command_is_exit(char *input, t_env_vars **env_list)
 {
 	char	*str;
 	int		cmd_len;
 	int		i;
-
+	int		j;
+	
 	cmd_len = 0;
 	i = 0;
-	while (input[i] != ' ' && input[i] != '\t' && input[i])
-	{
-		cmd_len++;
+	while ((input[i] == ' ' || input[i] == '\t') && input[i])	
 		i++;
-	}
-	str = ft_substr(input, 0, cmd_len);
+	j = i;
+	while (input[j++])
+		cmd_len++;
+	str = ft_substr(input, i, cmd_len);
 	if (cmd_len == 4 && !ft_strcmp(str, "exit"))
 	{
 		ft_free_env_list(env_list);
@@ -40,16 +41,16 @@ static int	ft_command_is_exit(char *input, t_env_vars **env_list)
 	}
 	free(str);
 	return (0);
-}
+}*/
 
-static void	handle_exit_command(char *input, t_env_vars **env_list)
+/*static void	handle_exit_command(char *input, t_env_vars **env_list)
 {
 	if (ft_command_is_exit(input, env_list))
 	{
 		free(input);
 		exit(44);
 	}
-}
+}*/
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -72,7 +73,7 @@ int	main(int argc, char **argv, char **envp)
 		if (input != NULL)
 		{
 			signal_no_input(SET_CODE, 0);
-			handle_exit_command(input, &first_env);
+			//handle_exit_command(input, &first_env);
 			ft_lex(input, &first_env, envp);
 			add_history(input);
 			free(input);

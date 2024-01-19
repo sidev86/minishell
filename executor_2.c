@@ -98,6 +98,8 @@ void	ft_exec_builtin(t_command **cmd, t_env_vars ***env_list)
 		ft_unset(cmd, env_list);
 	else if (!ft_strcmp((*cmd)->argv[0], "env"))
 		ft_env(env_list);
+	else if (!ft_strcmp((*cmd)->argv[0], "exit"))
+		ft_exit(cmd);
 	if ((*cmd)->num_cmds > 1)
 	{
 		ft_free_all_commands(cmd);

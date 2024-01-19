@@ -83,6 +83,5 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 	if (!cmd_line)
 		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
 	ft_split_into_tokens(input, &cmd_line, tokens_total);
-	if (ft_strcmp(cmd_line[0].token, "exit") != 0)
-		ft_parse(cmd_line, tokens_total, env_list, envp);
+	ft_parse(cmd_line, tokens_total, env_list, envp);
 }
