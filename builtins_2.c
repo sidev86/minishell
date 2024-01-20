@@ -71,9 +71,11 @@ void	ft_cd(t_command **cmd)
 }
 
 
-void ft_exit(t_command **cmd)
+void ft_exit(t_command **cmd, t_env_vars ***env_list)
 {
 	int e_code;
+	
+	e_code = 0;
 	if ((*cmd)->num_tokens > 2)
 	{
 		errors_manager(SET_CODE, 1, NULL, NULL);
@@ -82,13 +84,10 @@ void ft_exit(t_command **cmd)
 			exit(1);
 	}
 	else if ((*cmd)->num_tokens > 1)
-	{
 		e_code = ft_atoi((*cmd)->argv[1]);
-		errors_manager(SET_CODE, e_code, NULL, NULL);
-		exit(e_code);
-		
-	}
-	else
-		exit(0);
+	errors_manager(SET_CODE, e_code, NULL, NULL);
+	ft_free_all_commands(cmd);
+	ft_free_env_list(*env_list);
+	exit(e_code);		
 }
 

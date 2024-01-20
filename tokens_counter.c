@@ -43,6 +43,7 @@ static int	ft_redir_pipe_token(char *input, int i, int *tokens)
 		{
 			errors_manager(SET_CODE, 2, NULL, NULL);
 			errors_manager(PRINT, 1, "syntax error near unexpected token (>,<)\n", "Error");
+			return (0);
 		}			
 	}
 	return (i);

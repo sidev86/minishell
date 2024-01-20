@@ -70,7 +70,7 @@ void					ft_pwd(void);
 void					ft_export(t_command **cmd, t_env_vars ***env_list);
 void					ft_unset(t_command **cmd, t_env_vars ***env_list);
 void					ft_env(t_env_vars ***env_list);
-void					ft_exit(t_command **cmd);
+void					ft_exit(t_command **cmd, t_env_vars ***env_list);
 
 // SHELL CORE
 void					ft_lex(char *input, t_env_vars **env_list, char **envp);
