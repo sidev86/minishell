@@ -115,6 +115,7 @@ void					ft_exec_systemcmd(t_command **cmd, char **envp,
 // ERRORS
 int						errors_manager(int action, int code, char *msg,
 							char *arg);
+int					ft_wrong_pipe_token(char *input);
 
 char					*ft_itoa(int n);
 char					*handle_quotes(char *input, t_env_vars **env_list);

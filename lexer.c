@@ -75,6 +75,12 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 		errors_manager(PRINT, 1, "Missing quotes\n", "Error");
 		return ;
 	}
+	if (ft_wrong_pipe_token(input))
+	{
+		errors_manager(SET_CODE, 2, NULL, NULL);
+	    	errors_manager(PRINT, 1, "Syntax error near unexpectedde token '|'\n", "Error");
+	    	return ;
+	}
 	tokens_total = ft_count_tokens(input);
 	//printf("numero tokens = %d\n", tokens_total);
 	if (tokens_total == 0)

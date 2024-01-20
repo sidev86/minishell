@@ -27,3 +27,25 @@ int	errors_manager(int action, int code, char *msg, char *arg)
 	free(msg_full);
 	return (0);
 }
+
+
+
+int	ft_wrong_pipe_token(char *input)
+{
+	int	i; 
+	
+	i = 0;
+	if (input[0] == '|')
+		return (1);
+	else
+	{
+		while(input[i])
+			i++;
+		i--;
+		while(input[i] == ' ' || input[i] == '\t')
+			i--;
+		if (input[i] == '|')
+			return (1);
+	}
+	return (0);
+}

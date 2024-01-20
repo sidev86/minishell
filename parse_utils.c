@@ -23,12 +23,7 @@ int	ft_get_tokens_in_cmd(t_tokens *cmd_line, int index, int total_tokens)
 	int	tokens;
 
 	tokens = 0;
-	if (cmd_line[index].token[0] == '|')
-	{
-		errors_manager(SET_CODE, 2, NULL, NULL);
-		errors_manager(PRINT, 1, "Syntax error near unexpected token '|'\n", "Error");
-		return (-1);
-	}
+	
 	while (index < total_tokens)
 	{
 		if (!ft_strchr(cmd_line[index].token, '|')
