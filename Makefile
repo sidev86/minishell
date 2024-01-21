@@ -19,7 +19,6 @@ SRCS =	minishell.c \
 	builtins_2.c \
 	builtins_3.c \
 	quotes.c \
-	var_check.c \
 	errors_manager.c \
 	signals.c \
 	heredoc.c \
@@ -27,6 +26,7 @@ SRCS =	minishell.c \
 	tokens_counter.c \
 	parse_utils.c \
 	other_utils.c \
+	other_utils_2.c \
 	free_memory.c
 
 CC = gcc

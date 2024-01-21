@@ -78,7 +78,7 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 	if (ft_wrong_pipe_token(input))
 	{
 		errors_manager(SET_CODE, 2, NULL, NULL);
-	    	errors_manager(PRINT, 1, "Syntax error near unexpectedde token '|'\n", "Error");
+	    	errors_manager(PRINT, 1, "Syntax error near unexpected token '|'\n", "Error");
 	    	return ;
 	}
 	tokens_total = ft_count_tokens(input);

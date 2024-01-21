@@ -13,18 +13,7 @@ static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 		exit(1);
 	}
 	ft_handle_quotes_alltokens(curr_cmd, env_list);
-	if ((*curr_cmd)->prev && !(*curr_cmd)->redir_in)
-	{
-		dup2(fd_pipe[0], STDIN_FILENO);
-		close(fd_pipe[0]);
-		close(fd_pipe[1]);
-	}
-	if ((*curr_cmd)->next && !(*curr_cmd)->redir_out)
-	{
-		close(fd_pipe[2]);
-		dup2(fd_pipe[3], STDOUT_FILENO);
-		close(fd_pipe[3]);
-	}
+	ft_check_redir_to_pipe(curr_cmd, fd_pipe);
 	if ((*curr_cmd)->argv[0] && (*curr_cmd)->argv[0][0])
 	{
 		if ((*curr_cmd)->argv[0][0] && (*curr_cmd)->argv[0] && !(*curr_cmd)->is_builtin) 
@@ -33,15 +22,7 @@ static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 			ft_exec_builtin(curr_cmd, &env_list);	
 	}
 	else
-	{
-		if ((*curr_cmd)->has_heredoc)
-			ft_free_heredoc(curr_cmd, 0, env_list);
-		else
-		{
-			ft_free_all_commands(curr_cmd);
-			ft_free_env_list(env_list);
-		}
-	}
+		ft_free_in_child_exec(curr_cmd, env_list);		
 	exit(0);
 }
 

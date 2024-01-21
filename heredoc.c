@@ -26,13 +26,10 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 	int		j;
 	char	*output;
 
-
 	i = 0;
 	j = 0;
-	if (input_line[i] == '$' && is_alphanumeric(input_line[i + 1]))
-		output = (char *)malloc(ft_strlen(input_line) * 100);
-	else
-		output = (char *)malloc(ft_strlen(input_line) + 1);
+	output = 0;
+	allocate_heredoc_output(input_line, &output);
 	while (input_line[i])
 	{
 		if (input_line[i] == '$' && is_alphanumeric(input_line[i + 1]))
@@ -45,12 +42,7 @@ static void	process_heredoc_line(t_command **cmd, char *input_line,
 	}
 	output[j] = '\0';
 	(*line_count)++;
-	if (!(*cmd)->heredoc_text)
-		(*cmd)->heredoc_text = (char **)malloc((*line_count) * sizeof(char *));
-	else
-		(*cmd)->heredoc_text = (char **)ft_realloc((*cmd)->heredoc_text,((*line_count) - 1) * sizeof(char *), (*line_count) * sizeof(char *));
-	if (!(*cmd)->heredoc_text)
-		ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
+	allocate_heredoc_text(cmd, *line_count); 
 	(*cmd)->heredoc_text[(*line_count) - 1] = ft_strdup(output);
 	(*cmd)->lines_heredoc = (*line_count);
 	free(output);

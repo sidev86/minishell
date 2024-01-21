@@ -61,7 +61,7 @@ typedef struct s_env_vars
 int						ft_strcmp(const char *s1, const char *s2);
 char					*ft_strcat(char *dest, char *src);
 char					*ft_strcpy(char *s1, const char *s2);
-void					*ft_realloc(void *ptr, size_t prev_size, size_t new_size);
+char					*ft_itoa(int n);
 
 // BUILTINS
 void					ft_echo(t_command **cmd);
@@ -71,6 +71,7 @@ void					ft_export(t_command **cmd, t_env_vars ***env_list);
 void					ft_unset(t_command **cmd, t_env_vars ***env_list);
 void					ft_env(t_env_vars ***env_list);
 void					ft_exit(t_command **cmd, t_env_vars ***env_list);
+int						ft_cmd_builtin(char *cmd);
 
 // SHELL CORE
 void					ft_lex(char *input, t_env_vars **env_list, char **envp);
@@ -117,36 +118,48 @@ int						errors_manager(int action, int code, char *msg,
 							char *arg);
 int					ft_wrong_pipe_token(char *input);
 
-char					*ft_itoa(int n);
-char					*handle_quotes(char *input, t_env_vars **env_list);
-void					ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list);
-void					ft_handle_quotes_single_token(t_command **cmd, t_env_vars **env_list, int i);
-int						check_var_validity(char *arg);
+// CHECKERS
+int					check_var_validity(char *arg);
 void					ft_check_output_redirs(t_command **cmd, t_env_vars **env_list);
 void					ft_check_input_redirs(t_command **cmd, t_env_vars **env_list);
+void					ft_check_redir_to_pipe(t_command **curr_cmd, int *fd_pipe);
 int					ft_check_if_heredoc(t_command **cmd, char *path, char *full_path);
-int						ft_is_redir_pipe(char c);
-void					signal_handler(int sig);
-int					signal_no_input(int action, int code);
-void					ft_heredoc(t_command **cmd, t_env_vars **env_list);
-void					handle_exit_code(char *output, int *j, char *variabile);
 
-void					extract_and_handle(char *output, int *j, char *input,
-							int *i, t_env_vars **env_list);
-
+// CHARACTER CHECK
 int						is_alphanumeric(char c);
 int						ft_is_space(char c);
 int						ft_is_redir_pipe(char c);
 int						ft_is_quote(char c);
 int						ft_is_a_valid_character(char c);
+int						ft_is_redir_pipe(char c);
 
-int						ft_cmd_builtin(char *cmd);
-char					*ft_get_cmdname(char *str);
-char					*ft_get_path(t_env_vars **env_list);
+// QUOTES
+char					*handle_quotes(char *input, t_env_vars **env_list);
+void					ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list);
+void					ft_handle_quotes_single_token(t_command **cmd, t_env_vars **env_list, int i);
+void					extract_and_handle(char *output, int *j, char *input,
+							int *i, t_env_vars **env_list);
+// SIGNALS
+void					signal_handler(int sig);
+int					signal_no_input(int action, int code);
+
+// FREE MEMORY
 void					ft_free_env_list(t_env_vars **env_list);
 void					ft_free_tokens(t_tokens *cmd_line, int total_tokens);
 void					ft_free_all_commands(t_command **cmd);
 void					ft_free_cmd(t_command **cmd);
 void					ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list);
+void					ft_free_in_child_exec(t_command **curr_cmd, t_env_vars **env_list);
+
+// HEREDOC
+void					ft_heredoc(t_command **cmd, t_env_vars **env_list);
+void					allocate_heredoc_output(char *input_line, char **output);
+void					allocate_heredoc_text(t_command **cmd, int line_count);
+
+// OTHER
+void					handle_exit_code(char *output, int *j, char *variabile);
+char					*ft_get_cmdname(char *str);
+char					*ft_get_path(t_env_vars **env_list);
+void					*ft_realloc(void *ptr, size_t prev_size, size_t new_size);
 
 #endif

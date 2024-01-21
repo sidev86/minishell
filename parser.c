@@ -86,6 +86,19 @@ int	ft_check_tokens_validity(t_command **cmd, t_tokens *cmd_line, int total_toke
 	return (0);
 }
 
+void ft_free_all_tokens(t_tokens *cmd_line, int total_tokens)
+{
+	int	i; 
+	
+	i = 0;
+	while (i < total_tokens)
+	{
+		free(cmd_line[i].token);
+		i++;
+	}
+	free(cmd_line);
+}
+
 void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 		char **envp)
 {
@@ -112,13 +125,7 @@ void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 	}
 	if (ft_check_tokens_validity(&command, cmd_line, total_tokens))
 		return ;
-	i = 0;
-	while (i < total_tokens)
-	{
-		free(cmd_line[i].token);
-		i++;
-	}
-	free(cmd_line);
+	ft_free_all_tokens(cmd_line, total_tokens);
 	ft_execute(&command, env_list, envp);
 	ft_free_all_commands(&command);
 }
