@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <sibrahim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:40:26 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/26 15:02:36 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
+void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 		t_env_vars **env_list, char **envp)
 {
 	errors_manager(SET_CODE, (*curr_cmd)->last_exit_code, NULL, NULL);
@@ -16,14 +28,15 @@ static void	ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
 	ft_check_redir_to_pipe(curr_cmd, fd_pipe);
 	if ((*curr_cmd)->argv[0] && (*curr_cmd)->argv[0][0])
 	{
-		if ((*curr_cmd)->argv[0][0] && (*curr_cmd)->argv[0] && !(*curr_cmd)->is_builtin) 
+		if ((*curr_cmd)->argv[0][0] && (*curr_cmd)->argv[0]
+			&& !(*curr_cmd)->is_builtin)
 			ft_exec_systemcmd(curr_cmd, envp, env_list);
-		else if ((*curr_cmd)->argv[0] && (*curr_cmd)->is_builtin) 
-			ft_exec_builtin(curr_cmd, &env_list);	
+		else if ((*curr_cmd)->argv[0] && (*curr_cmd)->is_builtin)
+			ft_exec_builtin(curr_cmd, &env_list);
 	}
 	else
-		ft_free_in_child_exec(curr_cmd, env_list);		
-	exit(0);
+		ft_free_in_child_exec(curr_cmd, env_list);
+	exit(errors_manager(GET_CODE, 0, NULL, NULL));
 }
 
 static void	ft_after_child_exec(t_command **curr_cmd, t_command **cmd,
@@ -40,10 +53,8 @@ static void	ft_after_child_exec(t_command **curr_cmd, t_command **cmd,
 		fd_pipe[1] = fd_pipe[3];
 	}
 	cmd = cmd;
-	//if ((*curr_cmd)->fd_terminal != -1 && (*curr_cmd)->redir_out)
-		dup2((*curr_cmd)->fd_terminal, STDOUT_FILENO);
-	//if ((*curr_cmd)->fd_stdinput != -1 && (*curr_cmd)->redir_in)
-		dup2((*curr_cmd)->fd_stdinput, STDIN_FILENO);
+	dup2((*curr_cmd)->fd_terminal, STDOUT_FILENO);
+	dup2((*curr_cmd)->fd_stdinput, STDIN_FILENO);
 }
 
 static void	ft_wait_child_termination(t_command **cmd, int status, int *fd_pipe)
@@ -106,10 +117,9 @@ void	ft_execute(t_command **cmd, t_env_vars **env_list, char **envp)
 				pipe(&fd_pipe[2]);
 			pid = fork();
 			if (pid == 0)
-				ft_execute_in_child(&curr_cmd, fd_pipe, env_list, envp);
+				ft_in_child(&curr_cmd, fd_pipe, env_list, envp);
 			else
 				ft_after_child_exec(&curr_cmd, cmd, fd_pipe);
-			//ft_wait_child_termination(cmd, status, fd_pipe);
 			curr_cmd = curr_cmd->next;
 		}
 		ft_wait_child_termination(cmd, status, fd_pipe);

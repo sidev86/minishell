@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection_in_extra.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:43:19 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:43:20 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	ft_ifheredoc(t_command **cmd, int *i)
@@ -10,7 +22,7 @@ static void	ft_ifheredoc(t_command **cmd, int *i)
 		if (!(*cmd)->end_tokens)
 		{
 			ft_putstr_fd("Error: memory allocation error!", STDERR_FILENO);
-			exit (1);
+			exit(1);
 		}
 		(*cmd)->end_tokens[((*cmd)->heredoc_counter)
 			- 1] = ft_strdup((*cmd)->argv[*i + 1]);

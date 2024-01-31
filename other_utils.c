@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   other_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <sibrahim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:41:37 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/26 13:02:43 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*ft_get_cmdname(char *str)
@@ -35,12 +47,14 @@ char	*ft_get_path(t_env_vars **env_list)
 	return (NULL);
 }
 
-void ft_handle_quotes_single_token(t_command **cmd, t_env_vars **env_list, int i)
+void	ft_handle_quotes_single_token(t_command **cmd, t_env_vars **env_list,
+		int i)
 {
 	char	*str;
-	
+
 	str = handle_quotes((*cmd)->argv[i], env_list);
-	(*cmd)->argv[i] = ft_realloc((*cmd)->argv[i], ft_strlen((*cmd)->argv[i]) + 1, ft_strlen(str) + 1);
+	(*cmd)->argv[i] = ft_realloc((*cmd)->argv[i], ft_strlen((*cmd)->argv[i])
+			+ 1, ft_strlen(str) + 1);
 	ft_strcpy((*cmd)->argv[i], str);
 	free(str);
 }
@@ -56,7 +70,8 @@ void	ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list)
 		if ((*cmd)->argv[i])
 		{
 			str = handle_quotes((*cmd)->argv[i], env_list);
-			(*cmd)->argv[i] = ft_realloc((*cmd)->argv[i], ft_strlen((*cmd)->argv[i]) + 1, ft_strlen(str) + 1);
+			(*cmd)->argv[i] = ft_realloc((*cmd)->argv[i],
+					ft_strlen((*cmd)->argv[i]) + 1, ft_strlen(str) + 1);
 			ft_strcpy((*cmd)->argv[i], str);
 			free(str);
 		}
@@ -64,7 +79,7 @@ void	ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list)
 	}
 }
 
-void	handle_exit_code(char *output, int *j, char *variabile)
+void	handle_exit_code(t_env_vars **env_list, int *j, char *variabile)
 {
 	int		i;
 	int		e_code;
@@ -76,12 +91,12 @@ void	handle_exit_code(char *output, int *j, char *variabile)
 	{
 		e_code = errors_manager(GET_CODE, 0, NULL, NULL);
 		code_str = ft_itoa(e_code);
-		ft_strcpy(output, code_str);
+		ft_strcat((*env_list)->output, code_str);
 		(*j) += ft_strlen(code_str);
 		if (variabile[i + 1] != ' ' && variabile[i + 1])
 		{
 			while (variabile[i + 1] != ' ' && variabile[i + 1])
-				output[(*j)++] = variabile[++i];
+				(*env_list)->output[(*j)++] = variabile[++i];
 		}
 		free(code_str);
 	}

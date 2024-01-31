@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils_2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:40:00 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:40:05 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_set_env_var(t_env_vars ***env_list, char *env_str, int var_len)
@@ -20,7 +32,7 @@ void	ft_update_env_var(t_env_vars ***env_list, char *env_str, int var_len)
 {
 	t_env_vars	*curr;
 	char		*var_str;
-	
+
 	curr = **env_list;
 	var_str = ft_substr(env_str, 0, var_len);
 	while (ft_strcmp(curr->var, var_str))

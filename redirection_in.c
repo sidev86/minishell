@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection_in.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <sibrahim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:41:59 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/26 11:31:04 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	ft_redir_input(char *filename)
@@ -60,7 +72,8 @@ static void	ft_empty_in_other(t_command **cmd)
 	}
 }
 
-static void	handle_input_redirection(t_command **cmd, t_env_vars **env_list, int *fd_stdin, int i)
+static void	handle_input_redirection(t_command **cmd, t_env_vars **env_list,
+		int *fd_stdin, int i)
 {
 	if (!ft_strcmp((*cmd)->argv[i], "<"))
 	{
@@ -68,10 +81,7 @@ static void	handle_input_redirection(t_command **cmd, t_env_vars **env_list, int
 		*fd_stdin = ft_redir_input((*cmd)->argv[i + 1]);
 	}
 	else if (!ft_strcmp((*cmd)->argv[i], "<<"))
-	{
-		//printf("heredoc\n");
 		ft_heredoc(cmd, env_list);
-	}
 	free((*cmd)->argv[i]);
 	(*cmd)->argv[i] = NULL;
 	if ((*cmd)->argv[i + 1])
@@ -80,9 +90,7 @@ static void	handle_input_redirection(t_command **cmd, t_env_vars **env_list, int
 		(*cmd)->argv[i + 1] = NULL;
 	}
 	if ((*cmd)->num_redirs > 1)
-	{
 		ft_empty_in_other(cmd);
-	}
 }
 
 void	ft_check_input_redirs(t_command **cmd, t_env_vars **env_list)
@@ -97,14 +105,12 @@ void	ft_check_input_redirs(t_command **cmd, t_env_vars **env_list)
 	{
 		(*cmd)->redir_in = 1;
 		i = ft_last_in_redir(cmd);
-	}	
+	}
 	if ((*cmd)->argv[i])
 	{
 		if (!ft_strcmp((*cmd)->argv[i], "<") || !ft_strcmp((*cmd)->argv[i],
 				"<<"))
-		{
 			handle_input_redirection(cmd, env_list, &fd_stdin, i);
-		}
 	}
 	i++;
 	(*cmd)->fd_stdinput = fd_stdin;

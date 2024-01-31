@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:41:49 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:41:50 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	ft_init_first_cmd_node(t_command **command, t_tokens *cmd_line,
@@ -29,6 +41,7 @@ static void	ft_set_cmd_parameters(t_command **curr_cmd, t_command **cmd)
 	(*curr_cmd)->fd_terminal = STDOUT_FILENO;
 	(*curr_cmd)->fd_stdinput = STDIN_FILENO;
 	(*curr_cmd)->num_cmds = (*cmd)->num_cmds;
+	(*curr_cmd)->last_exit_code = errors_manager(GET_CODE, 0, NULL, NULL);
 }
 
 static void	ft_set_next_prev_nodes(t_command **curr_cmd, int arg_index,
@@ -58,47 +71,6 @@ static void	ft_set_cmd_type(t_command **curr_cmd)
 		(*curr_cmd)->is_builtin = 0;
 }
 
-int	ft_check_tokens_validity(t_command **cmd, t_tokens *cmd_line, int total_tokens)
-{
-	int	i; 
-	t_command *curr_cmd;
-	
-	i = 0; 
-	curr_cmd = *cmd;
-	while(curr_cmd)
-	{
-		i = 0;
-		while (i < curr_cmd->num_tokens)
-		{
-			
-			if (curr_cmd->argv[i][0] == '\\' || !ft_strcmp(curr_cmd->argv[i], ";"))
-			{
-				ft_free_tokens(cmd_line, total_tokens);
-				ft_free_all_commands(cmd);
-				errors_manager(SET_CODE, 2, NULL, NULL);
-				errors_manager(PRINT, 1, "Detected '\\' or ';' \n", "Error");
-				return (1);
-			}
-			i++;
-		}
-		curr_cmd = curr_cmd->next;
-	}
-	return (0);
-}
-
-void ft_free_all_tokens(t_tokens *cmd_line, int total_tokens)
-{
-	int	i; 
-	
-	i = 0;
-	while (i < total_tokens)
-	{
-		free(cmd_line[i].token);
-		i++;
-	}
-	free(cmd_line);
-}
-
 void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 		char **envp)
 {
@@ -119,13 +91,12 @@ void	ft_parse(t_tokens *cmd_line, int total_tokens, t_env_vars **env_list,
 		ft_set_cmd_parameters(&curr_cmd, &command);
 		i = ft_put_tokens_in_cmd(&curr_cmd, cmd_line, arg_index);
 		ft_set_cmd_type(&curr_cmd);
-		curr_cmd->argv[i] = NULL;
-		arg_index += curr_cmd->num_tokens + 1;
+		ft_set_args(&curr_cmd, &arg_index, i);
 		ft_set_next_prev_nodes(&curr_cmd, arg_index, total_tokens);
 	}
 	if (ft_check_tokens_validity(&command, cmd_line, total_tokens))
 		return ;
-	ft_free_all_tokens(cmd_line, total_tokens);
+	ft_free_tokens(cmd_line, total_tokens);
 	ft_execute(&command, env_list, envp);
 	ft_free_all_commands(&command);
 }

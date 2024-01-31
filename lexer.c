@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <sibrahim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:41:03 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/26 11:29:45 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	ft_check_missing_quotes(char *input)
@@ -77,12 +89,12 @@ void	ft_lex(char *input, t_env_vars **env_list, char **envp)
 	}
 	if (ft_wrong_pipe_token(input))
 	{
-		errors_manager(SET_CODE, 2, NULL, NULL);
-	    	errors_manager(PRINT, 1, "Syntax error near unexpected token '|'\n", "Error");
-	    	return ;
+		errors_manager(SET_CODE, 1, NULL, NULL);
+		errors_manager(PRINT, 1, "Syntax error near unexpected token '|'\n",
+			"Error");
+		return ;
 	}
 	tokens_total = ft_count_tokens(input);
-	//printf("numero tokens = %d\n", tokens_total);
 	if (tokens_total == 0)
 		return ;
 	cmd_line = malloc(sizeof(t_tokens) * (tokens_total));

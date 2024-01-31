@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection_out.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:42:08 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:42:10 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	ft_redir_output_overwrite(char *filename)
@@ -62,7 +74,8 @@ static int	ft_get_out_redirections(t_command **cmd)
 	return (redirs);
 }
 
-static void	handle_output_redirection(t_command **cmd, int *fd_stdout, int i, t_env_vars **env_list)
+static void	handle_output_redirection(t_command **cmd, int *fd_stdout, int i,
+		t_env_vars **env_list)
 {
 	(*cmd)->redir_out = 1;
 	if (!ft_strcmp((*cmd)->argv[i], ">"))

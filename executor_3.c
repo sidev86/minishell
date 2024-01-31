@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcat.c                                        :+:      :+:    :+:   */
+/*   executor_3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/09 14:27:50 by sibrahim          #+#    #+#             */
-/*   Updated: 2023/12/09 14:27:52 by sibrahim         ###   ########.fr       */
+/*   Created: 2024/01/26 15:05:45 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/26 15:05:47 by sibrahim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_strcat(char *dest, char *src)
+void	ft_in_child(t_command **curr_cmd, int *fd_pipe, t_env_vars **env_list,
+		char **envp)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	if (dest == NULL)
-		return (NULL);
-	while (dest[i] != '\0')
-		i++;
-	while (src[j] != '\0')
+	if (!ft_strcmp((*curr_cmd)->argv[0], "\"\"")
+		|| !ft_strcmp((*curr_cmd)->argv[0], "\'\'"))
 	{
-		dest[i + j] = src[j];
-		j++;
+		free((*curr_cmd)->argv[0]);
+		(*curr_cmd)->argv[0] = ft_strdup("\"\'\'\"");
 	}
-	dest[i + j] = '\0';
-	return (dest);
+	ft_execute_in_child(curr_cmd, fd_pipe, env_list, envp);
 }

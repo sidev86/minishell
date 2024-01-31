@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_memory.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <sibrahim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:40:47 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/26 12:12:50 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_free_env_list(t_env_vars **env_list)
@@ -29,7 +41,7 @@ void	ft_free_all_commands(t_command **cmd)
 
 	i = 0;
 	curr_cmd = *cmd;
-	while(curr_cmd->prev)
+	while (curr_cmd->prev)
 		curr_cmd = curr_cmd->prev;
 	while (curr_cmd)
 	{
@@ -44,11 +56,11 @@ void	ft_free_all_commands(t_command **cmd)
 	*cmd = NULL;
 }
 
-
-void ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list)
+void	ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list,
+		int signal)
 {
-	int	i; 
-	
+	int	i;
+
 	i = 0;
 	while (i < (*cmd)->heredoc_counter)
 		free((*cmd)->end_tokens[i++]);
@@ -66,14 +78,16 @@ void ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list)
 	free((*cmd)->end_tokens);
 	ft_free_all_commands(cmd);
 	ft_free_env_list(env_list);
-	exit(0);
+	if (signal)
+		exit(130);
+	else
+		exit(0);
 }
 
-
-void ft_free_tokens(t_tokens *cmd_line, int total_tokens)
+void	ft_free_tokens(t_tokens *cmd_line, int total_tokens)
 {
-	int	i; 
-	
+	int	i;
+
 	i = 0;
 	while (i < total_tokens)
 	{
@@ -83,15 +97,13 @@ void ft_free_tokens(t_tokens *cmd_line, int total_tokens)
 	free(cmd_line);
 }
 
-void ft_free_cmd(t_command **cmd)
+void	ft_free_cmd(t_command **cmd)
 {
-	int i; 
-	
+	int	i;
+
 	i = 0;
 	while (i < (*cmd)->num_tokens)
 		free((*cmd)->argv[i++]);
-	free((*cmd)->argv); 
+	free((*cmd)->argv);
 	free(*cmd);
 }
-
-

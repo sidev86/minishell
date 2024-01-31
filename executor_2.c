@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:40:39 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:40:40 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static void	exec_command_search_path(t_command **cmd, char **envp, t_env_vars **env_list, char **dirs)
+static void	exec_command_search_path(t_command **cmd, char **envp,
+		t_env_vars **env_list, char **dirs)
 {
 	int		i;
 	char	*path;
@@ -12,10 +25,10 @@ static void	exec_command_search_path(t_command **cmd, char **envp, t_env_vars **
 		path = ft_strjoin(dirs[i], "/");
 		full_path = ft_strjoin(path, (*cmd)->argv[0]);
 		if (ft_check_if_heredoc(cmd, path, full_path))
-			ft_free_heredoc(cmd, dirs, env_list);
+			ft_free_heredoc(cmd, dirs, env_list, 0);
 		if (access(full_path, F_OK | X_OK) == 0)
 		{
-			errors_manager(SET_CODE, 100, NULL, NULL);
+			errors_manager(SET_CODE, 0, NULL, NULL);
 			if (execve(full_path, (*cmd)->argv, envp) == -1)
 			{
 				errors_manager(PRINT, 126, "Execution error\n", "Error");
@@ -29,7 +42,8 @@ static void	exec_command_search_path(t_command **cmd, char **envp, t_env_vars **
 	}
 }
 
-static void	exec_command_direct_path(t_command **cmd, char **envp, t_env_vars **env_list, char *path)
+static void	exec_command_direct_path(t_command **cmd, char **envp,
+		t_env_vars **env_list, char *path)
 {
 	path = (*cmd)->argv[0];
 	if (access(path, F_OK | X_OK) == 0)
@@ -53,12 +67,26 @@ static void	exec_command_direct_path(t_command **cmd, char **envp, t_env_vars **
 	exit(127);
 }
 
+void	free_dirs(char **dirs)
+{
+	int	i;
+
+	i = 0;
+	if (dirs)
+	{
+		while (dirs[i])
+		{
+			free(dirs[i++]);
+		}
+		free(dirs);
+	}
+}
+
 void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 {
 	char	*path;
 	char	**dirs;
-	int	i;
-	
+
 	path = ft_get_path(env_list);
 	dirs = 0;
 	if (!ft_strchr((*cmd)->argv[0], '/'))
@@ -71,13 +99,7 @@ void	ft_exec_systemcmd(t_command **cmd, char **envp, t_env_vars **env_list)
 		errors_manager(PRINT, 127, "Command not found\n", (*cmd)->argv[0]);
 		ft_free_all_commands(cmd);
 		ft_free_env_list(env_list);
-		i = 0;
-		if (dirs)
-		{
-			while (dirs[i])
-				free(dirs[i++]);
-			free(dirs);
-		}
+		free_dirs(dirs);
 		exit(127);
 	}
 	else
@@ -105,5 +127,4 @@ void	ft_exec_builtin(t_command **cmd, t_env_vars ***env_list)
 		ft_free_all_commands(cmd);
 		ft_free_env_list(*env_list);
 	}
-	
 }

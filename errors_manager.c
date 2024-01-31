@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   errors_manager.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:40:14 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:40:16 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	errors_manager(int action, int code, char *msg, char *arg)
@@ -28,21 +40,21 @@ int	errors_manager(int action, int code, char *msg, char *arg)
 	return (0);
 }
 
-
-
 int	ft_wrong_pipe_token(char *input)
 {
-	int	i; 
-	
+	int	i;
+
 	i = 0;
-	if (input[0] == '|')
+	while (input[i] == ' ' || input[i] == '\t')
+		i++;
+	if (input[i] == '|')
 		return (1);
-	else
+	else if (input[i])
 	{
-		while(input[i])
+		while (input[i])
 			i++;
 		i--;
-		while(input[i] == ' ' || input[i] == '\t')
+		while ((input[i] == ' ' || input[i] == '\t') && input[i])
 			i--;
 		if (input[i] == '|')
 			return (1);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:39:10 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:39:13 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_cmd_builtin(char *cmd)
@@ -15,7 +27,7 @@ int	ft_cmd_builtin(char *cmd)
 	else if (!ft_strcmp(cmd, "env"))
 		return (1);
 	else if (!ft_strcmp(cmd, "exit"))
-		return (1); 
+		return (1);
 	else
 		return (0);
 }
@@ -39,14 +51,16 @@ static void	cd_to_home_directory(void)
 	}
 }
 
-static void	cd_to_custom_directory(char *directory)
+static int	cd_to_custom_directory(char *directory)
 {
 	if (chdir(directory) == -1)
 	{
 		errors_manager(SET_CODE, 1, NULL, NULL);
 		errors_manager(PRINT, 1, "No such file or directory\n", directory);
-		return ;
+		return (1);
 	}
+	else
+		return (0);
 }
 
 void	ft_cd(t_command **cmd)
@@ -58,7 +72,8 @@ void	ft_cd(t_command **cmd)
 	else if ((*cmd)->argc == 2)
 	{
 		cmd_name = (*cmd)->argv[1];
-		cd_to_custom_directory(cmd_name);
+		if (cd_to_custom_directory(cmd_name))
+			return ;
 	}
 	else
 	{
@@ -70,11 +85,10 @@ void	ft_cd(t_command **cmd)
 	errors_manager(SET_CODE, 0, NULL, NULL);
 }
 
-
-void ft_exit(t_command **cmd, t_env_vars ***env_list)
+void	ft_exit(t_command **cmd, t_env_vars ***env_list)
 {
-	int e_code;
-	
+	int	e_code;
+
 	e_code = 0;
 	if ((*cmd)->num_tokens > 2)
 	{
@@ -82,12 +96,12 @@ void ft_exit(t_command **cmd, t_env_vars ***env_list)
 		errors_manager(PRINT, 1, "Too many arguments\n", "exit");
 		if ((*cmd)->num_cmds > 1)
 			exit(1);
+		return ;
 	}
 	else if ((*cmd)->num_tokens > 1)
 		e_code = ft_atoi((*cmd)->argv[1]);
 	errors_manager(SET_CODE, e_code, NULL, NULL);
 	ft_free_all_commands(cmd);
 	ft_free_env_list(*env_list);
-	exit(e_code);		
+	exit(e_code);
 }
-

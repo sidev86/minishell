@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection_out_extra.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:42:20 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:42:21 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_last_out_redir(t_command **cmd)
@@ -21,8 +33,6 @@ int	ft_last_out_redir(t_command **cmd)
 	}
 	return (i);
 }
-
-
 
 static void	ft_empty_out_redir(t_command **cmd, int i, int *num_redir)
 {

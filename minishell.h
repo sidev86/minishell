@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <sibrahim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:43:10 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/26 15:09:12 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -7,6 +19,7 @@
 
 # include "libft/libft.h"
 # include <fcntl.h>
+# include <malloc.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>
@@ -15,7 +28,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <malloc.h>
 
 typedef struct s_tokens
 {
@@ -45,6 +57,7 @@ typedef struct s_command
 	int					redir_out;
 	int					redir_in;
 	int					last_exit_code;
+	int					line_count;
 	struct s_command	*next;
 	struct s_command	*prev;
 }						t_command;
@@ -55,6 +68,7 @@ typedef struct s_env_vars
 	char				*var;
 	char				*value;
 	struct s_env_vars	*next;
+	char				*output;
 }						t_env_vars;
 
 // STRING FUNCTIONS
@@ -101,6 +115,10 @@ int						ft_get_tokens_in_cmd(t_tokens *cmd_line, int index,
 							int total_tokens);
 int						ft_put_tokens_in_cmd(t_command **curr_cmd,
 							t_tokens *cmd_line, int arg_index);
+void					ft_set_args(t_command **curr_cmd, int *arg_index,
+							int i);
+int						ft_check_tokens_validity(t_command **cmd,
+							t_tokens *cmd_line, int total_tokens);
 
 // REDIRS
 int						ft_last_out_redir(t_command **cmd);
@@ -113,17 +131,25 @@ void					ft_exec_builtin(t_command **cmd,
 							t_env_vars ***env_list);
 void					ft_exec_systemcmd(t_command **cmd, char **envp,
 							t_env_vars **env_list);
+void					ft_execute_in_child(t_command **curr_cmd, int *fd_pipe,
+							t_env_vars **env_list, char **envp);
+void					ft_in_child(t_command **curr_cmd, int *fd_pipe,
+							t_env_vars **env_list, char **envp);
 // ERRORS
 int						errors_manager(int action, int code, char *msg,
 							char *arg);
-int					ft_wrong_pipe_token(char *input);
+int						ft_wrong_pipe_token(char *input);
 
 // CHECKERS
-int					check_var_validity(char *arg);
-void					ft_check_output_redirs(t_command **cmd, t_env_vars **env_list);
-void					ft_check_input_redirs(t_command **cmd, t_env_vars **env_list);
-void					ft_check_redir_to_pipe(t_command **curr_cmd, int *fd_pipe);
-int					ft_check_if_heredoc(t_command **cmd, char *path, char *full_path);
+int						check_var_validity(char *arg);
+void					ft_check_output_redirs(t_command **cmd,
+							t_env_vars **env_list);
+void					ft_check_input_redirs(t_command **cmd,
+							t_env_vars **env_list);
+void					ft_check_redir_to_pipe(t_command **curr_cmd,
+							int *fd_pipe);
+int						ft_check_if_heredoc(t_command **cmd, char *path,
+							char *full_path);
 
 // CHARACTER CHECK
 int						is_alphanumeric(char c);
@@ -135,31 +161,42 @@ int						ft_is_redir_pipe(char c);
 
 // QUOTES
 char					*handle_quotes(char *input, t_env_vars **env_list);
-void					ft_handle_quotes_alltokens(t_command **cmd, t_env_vars **env_list);
-void					ft_handle_quotes_single_token(t_command **cmd, t_env_vars **env_list, int i);
-void					extract_and_handle(char *output, int *j, char *input,
-							int *i, t_env_vars **env_list);
+void					ft_handle_quotes_alltokens(t_command **cmd,
+							t_env_vars **env_list);
+void					ft_handle_quotes_single_token(t_command **cmd,
+							t_env_vars **env_list, int i);
+void					extract_and_handle(int *j, char *input, int *i,
+							t_env_vars **env_list);
 // SIGNALS
 void					signal_handler(int sig);
-int					signal_no_input(int action, int code);
+int						signal_no_input(int action, int code);
+void					sigint_handler(int sig);
+int						ft_sigint_checker(int action, int code);
+void					ft_check_heredoc_signal(t_command **cmd,
+							t_env_vars **env_list);
 
 // FREE MEMORY
 void					ft_free_env_list(t_env_vars **env_list);
 void					ft_free_tokens(t_tokens *cmd_line, int total_tokens);
 void					ft_free_all_commands(t_command **cmd);
 void					ft_free_cmd(t_command **cmd);
-void					ft_free_heredoc(t_command **cmd, char **dirs, t_env_vars **env_list);
-void					ft_free_in_child_exec(t_command **curr_cmd, t_env_vars **env_list);
+void					ft_free_heredoc(t_command **cmd, char **dirs,
+							t_env_vars **env_list, int signal);
+void					ft_free_in_child_exec(t_command **curr_cmd,
+							t_env_vars **env_list);
 
 // HEREDOC
 void					ft_heredoc(t_command **cmd, t_env_vars **env_list);
-void					allocate_heredoc_output(char *input_line, char **output);
-void					allocate_heredoc_text(t_command **cmd, int line_count);
+void					allocate_heredoc_output(char *input_line,
+							t_env_vars **env_list);
+void					allocate_heredoc_text(t_command **cmd);
 
 // OTHER
-void					handle_exit_code(char *output, int *j, char *variabile);
+void					handle_exit_code(t_env_vars **env_list, int *j,
+							char *variabile);
 char					*ft_get_cmdname(char *str);
 char					*ft_get_path(t_env_vars **env_list);
-void					*ft_realloc(void *ptr, size_t prev_size, size_t new_size);
+void					*ft_realloc(void *ptr, size_t prev_size,
+							size_t new_size);
 
 #endif

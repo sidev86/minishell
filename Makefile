@@ -7,6 +7,7 @@ SRCS =	minishell.c \
 	parser.c \
 	executor.c \
 	executor_2.c \
+	executor_3.c \
 	redirection_out.c \
 	redirection_out_extra.c \
 	redirection_in.c \

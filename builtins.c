@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:38:51 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:38:57 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	print_echo_arguments(t_command *cmd, int *i)
@@ -33,8 +45,6 @@ void	ft_echo(t_command **cmd)
 	if (i < (*cmd)->argc || no_newline == 0)
 		printf("\n");
 	errors_manager(SET_CODE, 0, NULL, NULL);
-	//if ((*cmd)->num_cmds > 1)
-	//	exit(0);
 }
 
 void	ft_pwd(void)

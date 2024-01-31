@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/24 14:39:46 by sibrahim          #+#    #+#             */
+/*   Updated: 2024/01/24 14:39:48 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_create_env_list(t_env_vars **first, char **envp)
@@ -43,22 +55,17 @@ int	ft_env_var_exists(t_env_vars ***env_list, char *var)
 	return (0);
 }
 
-
 char	*ft_get_env_var_value(t_env_vars **env_list, char *var)
 {
-	t_env_vars *curr;
-	
+	t_env_vars	*curr;
+
 	curr = *env_list;
 	while (curr)
 	{
 		if (ft_strcmp(curr->var, var))
 			curr = curr->next;
 		else
-			return(curr->value);
+			return (curr->value);
 	}
 	return (NULL);
 }
-
-
-
-
