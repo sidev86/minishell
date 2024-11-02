@@ -24,7 +24,7 @@ Minishell is a project aimed at creating a minimal shell in C, simulating the fu
   <h4>Built-in Commands</h4>
     <ul>
       <li><code>echo</code> with <code>-n</code> option.</li>
-      <li><code>cd</code> with only relative or absolute paths.</li>
+      <li><code>cd</code> with relative or absolute paths.</li>
       <li><code>pwd</code> with no options.</li>
       <li><code>export</code>, <code>unset</code>, <code>env</code>, and <code>exit</code> without options.</li>
     </ul>
