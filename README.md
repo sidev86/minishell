@@ -13,7 +13,7 @@ Minishell is a project aimed at creating a minimal shell in C, simulating the fu
   <li><strong>Quote Handling</strong>: Supports single (<code>'</code>) and double (<code>"</code>) quotes to prevent the interpretation of metacharacters within quoted sequences.</li>
    <li><strong>Pipes</strong>: Supports pipelines (<code>|</code>), where the output of each command in the pipeline is connected to the input of the next.</li>
 </ul>
-  <h3>Redirections:</h3>
+  <h4>Redirections:</h4>
     <ul>
       <li><code>&lt;</code> for input redirection.</li>
       <li><code>&gt;</code> for output redirection.</li>
@@ -21,7 +21,7 @@ Minishell is a project aimed at creating a minimal shell in C, simulating the fu
       <li><code>&lt;&lt;</code> with a delimiter to read input until the specified delimiter line is reached. (heredoc)</li>
     </ul>
   
-  <h3>Built-in Commands</h3>
+  <h4>Built-in Commands</h4>
     <ul>
       <li><code>echo</code> with <code>-n</code> option.</li>
       <li><code>cd</code> with only relative or absolute paths.</li>
