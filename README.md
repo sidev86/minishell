@@ -29,3 +29,7 @@ Minishell is a project aimed at creating a minimal shell in C, simulating the fu
       <li><code>export</code>, <code>unset</code>, <code>env</code>, and <code>exit</code> without options.</li>
     </ul>
 
+<h2>Compilation Instructions</h2>
+
+Type <strong><code>make</code></strong> to generate the executable <strong><code>minishell</code></strong>
+
